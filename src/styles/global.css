@@ -1,0 +1,245 @@
+/* ---------------------------------------------------------------- tokens */
+:root {
+  --font-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
+  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
+
+  --bg: #faf9f7;
+  --surface: #ffffff;
+  --ink: #1c1c21;
+  --ink-2: #52525b;
+  --ink-3: #85858f;
+  --accent: #8e2433;
+  --accent-soft: #f3e4e6;
+  --hairline: #e5e2dc;
+  --code-bg: #f2f0eb;
+
+  --w-content: 44rem;
+  --w-wide: 62rem;
+}
+
+:root[data-theme='dark'] {
+  --bg: #131318;
+  --surface: #1b1b22;
+  --ink: #e9e7e3;
+  --ink-2: #a6a6b0;
+  --ink-3: #74747f;
+  --accent: #e08b96;
+  --accent-soft: #35222a;
+  --hairline: #2a2a33;
+  --code-bg: #1f1f28;
+  color-scheme: dark;
+}
+
+/* ---------------------------------------------------------------- base */
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  background: var(--bg);
+}
+
+body {
+  margin: 0;
+  background: var(--bg);
+  color: var(--ink);
+  font-family: var(--font-sans);
+  font-size: 1.0625rem;
+  line-height: 1.65;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+h1,
+h2,
+h3,
+h4 {
+  font-family: var(--font-serif);
+  font-variation-settings: 'opsz' 72;
+  font-weight: 500;
+  line-height: 1.15;
+  letter-spacing: -0.01em;
+  margin: 0;
+  text-wrap: balance;
+}
+
+p {
+  margin: 0;
+}
+
+a {
+  color: var(--accent);
+  text-decoration: none;
+}
+
+a:hover {
+  text-decoration: underline;
+  text-underline-offset: 3px;
+}
+
+img {
+  max-width: 100%;
+  height: auto;
+}
+
+::selection {
+  background: var(--accent);
+  color: var(--bg);
+}
+
+/* utility */
+.mono {
+  font-family: var(--font-mono);
+  font-size: 0.8125rem;
+  letter-spacing: 0.02em;
+}
+
+.container {
+  max-width: var(--w-wide);
+  margin-inline: auto;
+  padding-inline: 1.25rem;
+}
+
+/* ---------------------------------------------------------------- prose
+   Long-form article styling (blog posts, project bodies). */
+.prose {
+  max-width: var(--w-content);
+}
+
+.prose > * + * {
+  margin-top: 1.1em;
+}
+
+.prose h2 {
+  font-size: 1.65rem;
+  margin-top: 2.2em;
+}
+
+.prose h3 {
+  font-size: 1.25rem;
+  margin-top: 1.8em;
+}
+
+.prose blockquote {
+  margin: 1.5em 0;
+  padding: 0.2em 0 0.2em 1.25em;
+  border-left: 2px solid var(--accent);
+  color: var(--ink-2);
+  font-family: var(--font-serif);
+  font-size: 1.15em;
+  font-style: italic;
+}
+
+.prose ul,
+.prose ol {
+  padding-left: 1.4em;
+}
+
+.prose li + li {
+  margin-top: 0.35em;
+}
+
+.prose code {
+  font-family: var(--font-mono);
+  font-size: 0.85em;
+}
+
+.prose :not(pre) > code {
+  background: var(--code-bg);
+  border: 1px solid var(--hairline);
+  border-radius: 4px;
+  padding: 0.1em 0.35em;
+}
+
+.prose pre {
+  background: var(--code-bg) !important;
+  border: 1px solid var(--hairline);
+  border-radius: 8px;
+  padding: 1rem 1.25rem;
+  overflow-x: auto;
+  font-size: 0.85rem;
+  line-height: 1.6;
+}
+
+.prose table {
+  border-collapse: collapse;
+  width: 100%;
+  font-size: 0.9rem;
+}
+
+.prose th,
+.prose td {
+  text-align: left;
+  padding: 0.5rem 0.9rem 0.5rem 0;
+  border-bottom: 1px solid var(--hairline);
+}
+
+.prose th {
+  font-family: var(--font-mono);
+  font-size: 0.75rem;
+  text-transform: uppercase;
+  letter-spacing: 0.06em;
+  color: var(--ink-3);
+  font-weight: 500;
+}
+
+.prose figure {
+  margin: 1.8em 0;
+}
+
+.prose figcaption,
+.prose img + em {
+  display: block;
+  margin-top: 0.5em;
+  font-size: 0.85rem;
+  color: var(--ink-3);
+}
+
+.prose hr {
+  border: 0;
+  border-top: 1px solid var(--hairline);
+  margin: 2.5em 0;
+}
+
+/* KaTeX display math: allow horizontal scroll instead of page overflow */
+.prose .katex-display {
+  overflow-x: auto;
+  overflow-y: hidden;
+  padding: 0.25rem 0;
+}
+
+/* Mermaid diagrams */
+.prose .mermaid-figure {
+  margin: 1.8em 0;
+  overflow-x: auto;
+}
+
+.prose .mermaid-figure svg {
+  display: block;
+  margin-inline: auto;
+  max-width: 100%;
+  height: auto;
+}
+
+/* Shiki dual theme: follow site theme */
+:root[data-theme='dark'] .astro-code,
+:root[data-theme='dark'] .astro-code span {
+  color: var(--shiki-dark) !important;
+  background-color: transparent !important;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  html {
+    scroll-behavior: auto;
+  }
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    transition-duration: 0.01ms !important;
+  }
+}

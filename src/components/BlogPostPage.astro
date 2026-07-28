@@ -1,0 +1,145 @@
+---
+import { render, type CollectionEntry } from 'astro:content';
+import 'katex/dist/katex.min.css';
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  post: CollectionEntry<'blog'>;
+  /** Whether a translation with the same key exists in the other locale. */
+  hasTranslation: boolean;
+}
+
+const { locale, post, hasTranslation } = Astro.props;
+const { Content } = await render(post);
+
+const other: Locale = locale === 'en' ? 'vi' : 'en';
+const slug = post.id.replace(/^(en|vi)\//, '');
+const altPath = hasTranslation ? localePath(other, `/blog/${slug}/`) : undefined;
+
+const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
+  year: 'numeric',
+  month: 'long',
+  day: 'numeric',
+});
+---
+
+<Base locale={locale} title={`${post.data.title} — Canh-Trung Nguyen`} description={post.data.description} altPath={altPath}>
+  <article class="container">
+    <header class="head">
+      <p class="back mono"><a href={localePath(locale, '/blog/')}>{t(locale, 'blog.backToList')}</a></p>
+      <h1>{post.data.title}</h1>
+      <p class="meta mono">
+        <time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time>
+        {post.data.tags.length > 0 && <span> · {post.data.tags.map((tag) => `#${tag}`).join(' ')}</span>}
+      </p>
+      {
+        altPath && (
+          <p class="switch">
+            <a href={altPath} rel="alternate" hreflang={other}>
+              {t(locale, 'blog.readInOther')}
+            </a>
+          </p>
+        )
+      }
+    </header>
+    <div class="prose">
+      <Content />
+    </div>
+  </article>
+
+  <script>
+    import mermaid from 'mermaid';
+
+    const blocks = document.querySelectorAll<HTMLPreElement>('pre[data-language="mermaid"]');
+
+    if (blocks.length > 0) {
+      // Swap each highlighted <pre> for a container that remembers its source,
+      // so diagrams can be re-rendered when the theme changes.
+      blocks.forEach((pre, i) => {
+        const figure = document.createElement('div');
+        figure.className = 'mermaid-figure';
+        figure.dataset.source = pre.textContent ?? '';
+        figure.id = `mermaid-fig-${i}`;
+        pre.replaceWith(figure);
+      });
+
+      const renderAll = async () => {
+        const dark = document.documentElement.dataset.theme === 'dark';
+        const css = getComputedStyle(document.documentElement);
+        const v = (name: string) => css.getPropertyValue(name).trim();
+        mermaid.initialize({
+          startOnLoad: false,
+          theme: 'base',
+          themeVariables: {
+            darkMode: dark,
+            background: v('--bg'),
+            primaryColor: v('--code-bg'),
+            primaryTextColor: v('--ink'),
+            primaryBorderColor: v('--ink-3'),
+            secondaryColor: v('--accent-soft'),
+            tertiaryColor: v('--surface'),
+            lineColor: v('--ink-2'),
+            textColor: v('--ink'),
+            noteBkgColor: v('--accent-soft'),
+            noteTextColor: v('--ink'),
+            noteBorderColor: v('--hairline'),
+            actorBkg: v('--code-bg'),
+            actorBorder: v('--ink-3'),
+            actorTextColor: v('--ink'),
+            signalColor: v('--ink-2'),
+            signalTextColor: v('--ink'),
+            activationBkgColor: v('--accent-soft'),
+            fontSize: '14px',
+          },
+          fontFamily: 'JetBrains Mono, monospace',
+        });
+        const figures = document.querySelectorAll<HTMLElement>('.mermaid-figure');
+        for (const fig of figures) {
+          try {
+            const { svg } = await mermaid.render(`${fig.id}-svg-${Date.now()}`, fig.dataset.source ?? '');
+            fig.innerHTML = svg;
+          } catch {
+            fig.innerHTML = `<pre>${fig.dataset.source ?? ''}</pre>`;
+          }
+        }
+      };
+
+      renderAll();
+      window.addEventListener('themechange', renderAll);
+    }
+  </script>
+
+  <style>
+    .head {
+      padding-top: 4rem;
+      max-width: var(--w-content);
+    }
+    .back {
+      font-size: 0.75rem;
+      margin-bottom: 2rem;
+    }
+    .back a {
+      color: var(--ink-3);
+    }
+    .back a:hover {
+      color: var(--accent);
+    }
+    h1 {
+      font-size: clamp(2rem, 5vw, 2.8rem);
+    }
+    .meta {
+      margin-top: 1rem;
+      font-size: 0.75rem;
+      color: var(--ink-3);
+    }
+    .switch {
+      margin-top: 0.75rem;
+      font-size: 0.9rem;
+    }
+    .prose {
+      margin-top: 2.5rem;
+    }
+  </style>
+</Base>

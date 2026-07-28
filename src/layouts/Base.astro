@@ -1,0 +1,254 @@
+---
+import '@fontsource-variable/inter';
+import '@fontsource-variable/newsreader';
+import '@fontsource-variable/newsreader/opsz-italic.css';
+import '@fontsource/jetbrains-mono/400.css';
+import '@fontsource/jetbrains-mono/vietnamese-400.css';
+import '../styles/global.css';
+import { t, localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  title: string;
+  description: string;
+  /** Path of this page in the other locale; omit if no counterpart exists. */
+  altPath?: string;
+}
+
+const { locale, title, description, altPath } = Astro.props;
+const other: Locale = locale === 'en' ? 'vi' : 'en';
+const path = Astro.url.pathname;
+
+const nav = [
+  { href: localePath(locale, '/'), label: t(locale, 'nav.journey') },
+  { href: localePath(locale, '/projects/'), label: t(locale, 'nav.projects') },
+  { href: localePath(locale, '/blog/'), label: t(locale, 'nav.blog') },
+  { href: localePath(locale, '/about/'), label: t(locale, 'nav.about') },
+];
+
+const isActive = (href: string) =>
+  href === localePath(locale, '/') ? path === href : path.startsWith(href);
+---
+
+<!doctype html>
+<html lang={locale}>
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title>{title}</title>
+    <meta name="description" content={description} />
+    <meta name="author" content="Canh-Trung Nguyen" />
+    <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
+    <link rel="canonical" href={new URL(path, Astro.site)} />
+    {
+      altPath && (
+        <>
+          <link rel="alternate" hreflang={locale} href={new URL(path, Astro.site)} />
+          <link rel="alternate" hreflang={other} href={new URL(altPath, Astro.site)} />
+        </>
+      )
+    }
+    <link rel="alternate" type="application/rss+xml" title="Canh-Trung Nguyen" href="/rss.xml" />
+    <meta property="og:title" content={title} />
+    <meta property="og:description" content={description} />
+    <meta property="og:type" content="website" />
+    <meta property="og:url" content={new URL(path, Astro.site)} />
+    <script is:inline>
+      (() => {
+        const stored = localStorage.getItem('theme');
+        const theme =
+          stored ??
+          (matchMedia('(prefers-color-scheme: dark)').matches ? 'dark' : 'light');
+        document.documentElement.dataset.theme = theme;
+      })();
+    </script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="container header-inner">
+        <a class="brand mono" href={localePath(locale, '/')}>ctn<span class="cursor">_</span></a>
+        <nav aria-label="Main">
+          {
+            nav.map((item) => (
+              <a href={item.href} class:list={{ active: isActive(item.href) }}>
+                {item.label}
+              </a>
+            ))
+          }
+        </nav>
+        <div class="controls">
+          {
+            altPath ? (
+              <a class="lang mono" href={altPath} rel="alternate" hreflang={other}>
+                {other.toUpperCase()}
+              </a>
+            ) : (
+              <span class="lang mono lang-off">{other.toUpperCase()}</span>
+            )
+          }
+          <button id="theme-toggle" class="theme mono" aria-label="Toggle theme">◐</button>
+        </div>
+      </div>
+    </header>
+
+    <main>
+      <slot />
+    </main>
+
+    <footer class="site-footer">
+      <div class="container footer-inner">
+        <div class="mono footer-links">
+          <a href="mailto:nguyencanhtrung@me.com">nguyencanhtrung@me.com</a>
+          <a href="https://github.com/nguyencanhtrung" rel="me noopener">GitHub</a>
+          <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener">LinkedIn</a>
+          <a href="/rss.xml">RSS</a>
+        </div>
+        <p class="mono footer-meta">
+          © {new Date().getFullYear()} {t(locale, 'footer.rights')} · {t(locale, 'footer.builtwith')}
+        </p>
+      </div>
+    </footer>
+
+    <script>
+      const btn = document.getElementById('theme-toggle');
+      btn?.addEventListener('click', () => {
+        const root = document.documentElement;
+        const next = root.dataset.theme === 'dark' ? 'light' : 'dark';
+        root.dataset.theme = next;
+        localStorage.setItem('theme', next);
+        window.dispatchEvent(new CustomEvent('themechange', { detail: next }));
+      });
+    </script>
+
+    <style>
+      .site-header {
+        position: sticky;
+        top: 0;
+        z-index: 10;
+        background: color-mix(in srgb, var(--bg) 88%, transparent);
+        backdrop-filter: blur(8px);
+        border-bottom: 1px solid var(--hairline);
+      }
+      .header-inner {
+        display: flex;
+        align-items: center;
+        gap: 1.5rem;
+        height: 3.5rem;
+      }
+      .brand {
+        color: var(--ink);
+        font-size: 1rem;
+        font-weight: 500;
+      }
+      .brand:hover {
+        text-decoration: none;
+        color: var(--accent);
+      }
+      .cursor {
+        color: var(--accent);
+        animation: blink 1.2s steps(1) infinite;
+      }
+      @keyframes blink {
+        50% {
+          opacity: 0;
+        }
+      }
+      nav {
+        display: flex;
+        gap: 1.1rem;
+        flex: 1;
+        overflow-x: auto;
+      }
+      nav a {
+        color: var(--ink-2);
+        font-size: 0.9rem;
+        white-space: nowrap;
+      }
+      nav a:hover {
+        color: var(--ink);
+        text-decoration: none;
+      }
+      nav a.active {
+        color: var(--accent);
+      }
+      .controls {
+        display: flex;
+        align-items: center;
+        gap: 0.9rem;
+      }
+      .lang {
+        color: var(--ink-2);
+        border: 1px solid var(--hairline);
+        border-radius: 4px;
+        padding: 0.15rem 0.45rem;
+      }
+      .lang:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+        text-decoration: none;
+      }
+      .lang-off {
+        opacity: 0.35;
+        cursor: not-allowed;
+      }
+      .theme {
+        background: none;
+        border: 1px solid var(--hairline);
+        border-radius: 4px;
+        color: var(--ink-2);
+        font-size: 0.9rem;
+        padding: 0.1rem 0.45rem;
+        cursor: pointer;
+      }
+      .theme:hover {
+        color: var(--accent);
+        border-color: var(--accent);
+      }
+      main {
+        min-height: 70vh;
+      }
+      .site-footer {
+        border-top: 1px solid var(--hairline);
+        margin-top: 5rem;
+        padding: 2rem 0 3rem;
+      }
+      .footer-inner {
+        display: flex;
+        flex-direction: column;
+        gap: 0.75rem;
+      }
+      .footer-links {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 1.25rem;
+      }
+      .footer-links a {
+        color: var(--ink-2);
+      }
+      .footer-links a:hover {
+        color: var(--accent);
+      }
+      .footer-meta {
+        color: var(--ink-3);
+        font-size: 0.75rem;
+      }
+      @media (max-width: 640px) {
+        .header-inner {
+          flex-wrap: wrap;
+          height: auto;
+          padding-block: 0.55rem;
+          row-gap: 0.1rem;
+          gap: 1rem;
+        }
+        .controls {
+          margin-left: auto;
+        }
+        nav {
+          order: 3;
+          flex-basis: 100%;
+          gap: 0.85rem;
+        }
+      }
+    </style>
+  </body>
+</html>

@@ -1,0 +1,32 @@
+---
+import Base from '../layouts/Base.astro';
+import { t } from '../i18n/ui';
+---
+
+<Base locale="en" title="404 — Canh-Trung Nguyen" description={t('en', 'notfound.body')}>
+  <section class="container nf">
+    <p class="mono code">404</p>
+    <h1>{t('en', 'notfound.title')}</h1>
+    <p class="body">{t('en', 'notfound.body')} · {t('vi', 'notfound.body')}</p>
+    <p><a href="/">{t('en', 'notfound.home')}</a> · <a href="/vi/">{t('vi', 'notfound.home')}</a></p>
+  </section>
+</Base>
+
+<style>
+  .nf {
+    padding-top: 6rem;
+    max-width: var(--w-content);
+  }
+  .code {
+    color: var(--accent);
+    font-size: 0.9rem;
+  }
+  h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+    margin-top: 0.5rem;
+  }
+  .body {
+    margin: 1rem 0 1.5rem;
+    color: var(--ink-2);
+  }
+</style>

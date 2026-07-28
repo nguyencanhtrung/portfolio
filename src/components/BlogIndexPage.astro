@@ -1,0 +1,112 @@
+---
+import { getCollection } from 'astro:content';
+import Base from '../layouts/Base.astro';
+import { t, localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const posts = (await getCollection('blog', (p) => p.data.lang === locale && !p.data.draft)).sort(
+  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+);
+
+const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
+  year: 'numeric',
+  month: 'short',
+  day: 'numeric',
+});
+
+const slugOf = (id: string) => id.replace(/^(en|vi)\//, '');
+const altPath = locale === 'en' ? '/vi/blog/' : '/blog/';
+---
+
+<Base
+  locale={locale}
+  title={`${t(locale, 'blog.title')} — Canh-Trung Nguyen`}
+  description={t(locale, 'blog.description')}
+  altPath={altPath}
+>
+  <section class="container">
+    <header class="page-head">
+      <h1>{t(locale, 'blog.title')}</h1>
+      <p>{t(locale, 'blog.description')}</p>
+    </header>
+    <div class="posts">
+      {
+        posts.map((post) => (
+          <a class="post" href={localePath(locale, `/blog/${slugOf(post.id)}/`)}>
+            <time class="mono" datetime={post.data.date.toISOString()}>
+              {fmt.format(post.data.date)}
+            </time>
+            <div>
+              <h2>{post.data.title}</h2>
+              <p>{post.data.description}</p>
+              {post.data.tags.length > 0 && (
+                <p class="tags mono">{post.data.tags.map((tag) => `#${tag}`).join('  ')}</p>
+              )}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-top: 4rem;
+    max-width: var(--w-content);
+  }
+  .page-head h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+  .page-head p {
+    margin-top: 0.75rem;
+    color: var(--ink-2);
+  }
+  .posts {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .post {
+    display: grid;
+    grid-template-columns: 8rem 1fr;
+    gap: 1.5rem;
+    padding: 1.6rem 0.25rem;
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+  }
+  .post:hover {
+    text-decoration: none;
+  }
+  .post:hover h2 {
+    color: var(--accent);
+  }
+  .post time {
+    font-size: 0.75rem;
+    color: var(--ink-3);
+    padding-top: 0.4rem;
+  }
+  .post h2 {
+    font-size: 1.35rem;
+    transition: color 0.15s ease;
+  }
+  .post p {
+    margin-top: 0.4rem;
+    color: var(--ink-2);
+    max-width: 38rem;
+  }
+  .tags {
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+  @media (max-width: 640px) {
+    .post {
+      grid-template-columns: 1fr;
+      gap: 0.3rem;
+    }
+  }
+</style>

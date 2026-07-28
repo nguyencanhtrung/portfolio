@@ -1,0 +1,93 @@
+---
+import Base from '../layouts/Base.astro';
+import { projects } from '../data/projects';
+import { t, localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const list = projects[locale];
+const title = `${t(locale, 'projects.title')} — Canh-Trung Nguyen`;
+const altPath = locale === 'en' ? '/vi/projects/' : '/projects/';
+---
+
+<Base locale={locale} title={title} description={t(locale, 'projects.description')} altPath={altPath}>
+  <section class="container">
+    <header class="page-head">
+      <h1>{t(locale, 'projects.title')}</h1>
+      <p>{t(locale, 'projects.description')}</p>
+    </header>
+    <div class="list">
+      {
+        list.map((p) => (
+          <a class="row" href={localePath(locale, `/projects/${p.slug}/`)}>
+            <div>
+              <h2>{p.name}</h2>
+              <p class="one">{p.oneLiner}</p>
+              <p class="meta mono">
+                {p.role} · {p.period}
+              </p>
+            </div>
+            <span class="arrow mono" aria-hidden="true">
+              →
+            </span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-top: 4rem;
+    max-width: var(--w-content);
+  }
+  .page-head h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+  .page-head p {
+    margin-top: 0.75rem;
+    color: var(--ink-2);
+  }
+  .list {
+    margin-top: 2.5rem;
+    border-top: 1px solid var(--hairline);
+  }
+  .row {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 1rem;
+    padding: 1.6rem 0.25rem;
+    border-bottom: 1px solid var(--hairline);
+    color: inherit;
+  }
+  .row:hover {
+    text-decoration: none;
+  }
+  .row:hover h2,
+  .row:hover .arrow {
+    color: var(--accent);
+  }
+  .row h2 {
+    font-size: 1.35rem;
+    transition: color 0.15s ease;
+  }
+  .one {
+    margin-top: 0.4rem;
+    color: var(--ink-2);
+    max-width: 40rem;
+  }
+  .meta {
+    margin-top: 0.6rem;
+    font-size: 0.72rem;
+    color: var(--ink-3);
+  }
+  .arrow {
+    color: var(--ink-3);
+    flex-shrink: 0;
+  }
+</style>

@@ -1,0 +1,19 @@
+---
+import { getCollection } from 'astro:content';
+import BlogPostPage from '../../../components/BlogPostPage.astro';
+
+export async function getStaticPaths() {
+  const all = await getCollection('blog', (p) => !p.data.draft);
+  const enKeys = new Set(all.filter((p) => p.data.lang === 'en').map((p) => p.data.key));
+  return all
+    .filter((p) => p.data.lang === 'vi')
+    .map((post) => ({
+      params: { slug: post.id.replace(/^vi\//, '') },
+      props: { post, hasTranslation: enKeys.has(post.data.key) },
+    }));
+}
+
+const { post, hasTranslation } = Astro.props;
+---
+
+<BlogPostPage locale="vi" post={post} hasTranslation={hasTranslation} />

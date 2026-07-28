@@ -1,0 +1,117 @@
+---
+import Base from '../layouts/Base.astro';
+import type { Project } from '../data/projects';
+import { t, localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  project: Project;
+}
+
+const { locale, project } = Astro.props;
+const title = `${project.name} — Canh-Trung Nguyen`;
+const other: Locale = locale === 'en' ? 'vi' : 'en';
+const altPath = localePath(other, `/projects/${project.slug}/`);
+---
+
+<Base locale={locale} title={title} description={project.oneLiner} altPath={altPath}>
+  <article class="container">
+    <header class="head">
+      <p class="back mono"><a href={localePath(locale, '/projects/')}>{t(locale, 'project.back')}</a></p>
+      <h1>{project.name}</h1>
+      <p class="one">{project.oneLiner}</p>
+      <dl class="meta mono">
+        <div>
+          <dt>{t(locale, 'project.role')}</dt>
+          <dd>{project.role}</dd>
+        </div>
+        <div>
+          <dt>{t(locale, 'project.period')}</dt>
+          <dd>{project.period}</dd>
+        </div>
+      </dl>
+    </header>
+
+    <div class="prose">
+      {
+        project.sections.map((s) => (
+          <>
+            <h2>{s.heading}</h2>
+            {s.body.map((par) => (
+              <p>{par}</p>
+            ))}
+          </>
+        ))
+      }
+      <h2>{t(locale, 'project.stack')}</h2>
+      <ul class="stack" role="list">
+        {project.stack.map((item) => <li class="mono">{item}</li>)}
+      </ul>
+    </div>
+  </article>
+</Base>
+
+<style>
+  .head {
+    padding-top: 4rem;
+    max-width: var(--w-content);
+  }
+  .back {
+    font-size: 0.75rem;
+    margin-bottom: 2rem;
+  }
+  .back a {
+    color: var(--ink-3);
+  }
+  .back a:hover {
+    color: var(--accent);
+  }
+  h1 {
+    font-size: clamp(2rem, 5vw, 2.8rem);
+  }
+  .one {
+    margin-top: 0.9rem;
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 40;
+    font-style: italic;
+    font-size: 1.25rem;
+    color: var(--ink-2);
+  }
+  .meta {
+    display: flex;
+    gap: 3rem;
+    margin: 2rem 0 0;
+    padding: 1rem 0;
+    border-top: 1px solid var(--hairline);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .meta dt {
+    font-size: 0.68rem;
+    text-transform: uppercase;
+    letter-spacing: 0.1em;
+    color: var(--ink-3);
+  }
+  .meta dd {
+    margin: 0.3rem 0 0;
+    font-size: 0.8rem;
+    color: var(--accent);
+  }
+  .prose {
+    margin-top: 1rem;
+  }
+  .stack {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+  }
+  .stack li {
+    font-size: 0.75rem;
+    color: var(--ink-2);
+    background: var(--code-bg);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.3rem 0.8rem;
+  }
+</style>

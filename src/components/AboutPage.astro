@@ -1,0 +1,90 @@
+---
+import Base from '../layouts/Base.astro';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+
+const content = {
+  en: {
+    title: 'About',
+    heading: 'About me',
+    paras: [
+      'I’m Canh-Trung Nguyen — an engineer from Hanoi who has spent his career at the line where hardware meets systems. I started in FPGA design: 5G physical-layer channels closing timing at hundreds of megahertz, digital front-ends meeting 3GPP spectrum masks, image-processing accelerators in HLS.',
+      'Today I’m a tech lead at SoC.one, responsible for programs in connected driving (C-V2X sidelink), V2X protocol stacks, digital twins with ray-traced radio channels, and sim-to-real robotics. The common thread: systems where the computed world has to agree with the physical one — and teams that need both rigor and momentum.',
+      'This site is the story of that path, plus a blog where I share perspectives on connected driving, robotics, and AI. Opinions here are my own; current work is described only at the level of public technologies and standards.',
+    ],
+    eduLabel: 'Education',
+    edu: [
+      'M.S. Electrical & Computer Engineering — TU Kaiserslautern, Germany (embedded systems, grade 1.5)',
+      'B.Eng. Electrical & Electronics Engineering — Hanoi University of Science and Technology (microelectronics, 8.64/10)',
+    ],
+    contactLabel: 'Get in touch',
+    contact:
+      'The fastest way to reach me is email. I’m also on GitHub and LinkedIn.',
+  },
+  vi: {
+    title: 'Giới thiệu',
+    heading: 'Về tôi',
+    paras: [
+      'Tôi là Nguyễn Cảnh Trung — một kỹ sư Hà Nội, cả sự nghiệp đứng ở lằn ranh nơi phần cứng gặp hệ thống. Tôi khởi đầu từ thiết kế FPGA: các kênh lớp vật lý 5G đóng timing ở hàng trăm megahertz, digital front-end đạt mặt nạ phổ 3GPP, các bộ tăng tốc xử lý ảnh bằng HLS.',
+      'Hiện tại tôi là tech lead ở SoC.one, phụ trách các chương trình về connected driving (C-V2X sidelink), protocol stack V2X, digital twin với kênh vô tuyến ray-tracing, và robotics sim-to-real. Sợi chỉ chung: những hệ thống nơi thế giới tính toán phải khớp với thế giới vật lý — và những đội ngũ cần cả sự chặt chẽ lẫn đà tiến.',
+      'Trang này kể câu chuyện của con đường đó, kèm một blog nơi tôi chia sẻ góc nhìn về connected driving, robotics và AI. Quan điểm ở đây là của cá nhân tôi; công việc hiện tại chỉ được mô tả ở mức công nghệ và chuẩn công khai.',
+    ],
+    eduLabel: 'Học vấn',
+    edu: [
+      'Thạc sĩ Kỹ thuật Điện & Máy tính — TU Kaiserslautern, Đức (hệ thống nhúng, điểm 1.5)',
+      'Kỹ sư Điện — Điện tử — Đại học Bách khoa Hà Nội (vi điện tử, 8.64/10)',
+    ],
+    contactLabel: 'Liên hệ',
+    contact: 'Cách nhanh nhất để liên hệ với tôi là email. Tôi cũng có mặt trên GitHub và LinkedIn.',
+  },
+}[locale];
+
+const altPath = locale === 'en' ? '/vi/about/' : '/about/';
+---
+
+<Base
+  locale={locale}
+  title={`${content.title} — Canh-Trung Nguyen`}
+  description={content.paras[0]}
+  altPath={altPath}
+>
+  <section class="container">
+    <header class="page-head">
+      <h1>{content.heading}</h1>
+    </header>
+    <div class="prose">
+      {content.paras.map((p) => <p>{p}</p>)}
+      <h2>{content.eduLabel}</h2>
+      <ul>
+        {content.edu.map((e) => <li>{e}</li>)}
+      </ul>
+      <h2>{content.contactLabel}</h2>
+      <p>{content.contact}</p>
+      <p class="mono links">
+        <a href="mailto:nguyencanhtrung@me.com">nguyencanhtrung@me.com</a> ·{' '}
+        <a href="https://github.com/nguyencanhtrung" rel="me noopener">github.com/nguyencanhtrung</a> ·{' '}
+        <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener">linkedin.com/in/nguyencanhtrung</a>
+      </p>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .page-head {
+    padding-top: 4rem;
+  }
+  .page-head h1 {
+    font-size: clamp(2.2rem, 5vw, 3rem);
+  }
+  .prose {
+    margin-top: 2rem;
+  }
+  .links {
+    font-size: 0.8rem;
+  }
+</style>

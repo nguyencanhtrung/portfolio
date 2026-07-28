@@ -1,0 +1,241 @@
+---
+import Base from '../layouts/Base.astro';
+import Waveform from './Waveform.astro';
+import { journey } from '../data/journey';
+import { projects } from '../data/projects';
+import { localePath, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+}
+
+const { locale } = Astro.props;
+const c = journey[locale];
+const projectCards = projects[locale];
+const title =
+  locale === 'en'
+    ? 'Canh-Trung Nguyen — FPGA, 5G, V2X & Digital Twins'
+    : 'Nguyễn Cảnh Trung — FPGA, 5G, V2X & Digital Twin';
+const altPath = locale === 'en' ? '/vi/' : '/';
+---
+
+<Base locale={locale} title={title} description={c.heroIntro} altPath={altPath}>
+  <section class="hero container">
+    <p class="kicker mono">{c.heroKicker}</p>
+    <h1>{c.heroName}</h1>
+    <p class="tagline">{c.heroTagline}</p>
+    <Waveform />
+    <p class="intro">{c.heroIntro}</p>
+    <p class="role mono">{c.heroRole}</p>
+  </section>
+
+  <section class="journey container">
+    <h2 class="section-label mono" id="journey">{c.journeyLabel}</h2>
+    <ol class="chapters">
+      {
+        c.chapters.map((ch) => (
+          <li class="chapter">
+            <div class="marker" aria-hidden="true">
+              <span class="dot" />
+            </div>
+            <div class="body">
+              <p class="era mono">
+                {ch.era} <span class="years">{ch.years}</span>
+              </p>
+              <h3>{ch.title}</h3>
+              <p class="org">{ch.org}</p>
+              {ch.story.map((par) => (
+                <p class="story">{par}</p>
+              ))}
+              <ul class="metrics" role="list">
+                {ch.metrics.map((m) => (
+                  <li class="mono">{m}</li>
+                ))}
+              </ul>
+            </div>
+          </li>
+        ))
+      }
+    </ol>
+  </section>
+
+  <section class="current container">
+    <h2 class="section-label mono">{c.currentLabel}</h2>
+    <div class="cards">
+      {
+        projectCards.map((p) => (
+          <a class="card" href={localePath(locale, `/projects/${p.slug}/`)}>
+            <h3>{p.name}</h3>
+            <p>{p.oneLiner}</p>
+            <span class="more mono">→</span>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+</Base>
+
+<style>
+  .hero {
+    padding-top: 5rem;
+    max-width: var(--w-content);
+  }
+  .kicker {
+    color: var(--ink-3);
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    margin-bottom: 1.25rem;
+  }
+  h1 {
+    font-size: clamp(2.6rem, 7vw, 4.2rem);
+  }
+  .tagline {
+    font-family: var(--font-serif);
+    font-variation-settings: 'opsz' 40;
+    font-style: italic;
+    font-size: clamp(1.25rem, 3vw, 1.6rem);
+    color: var(--ink-2);
+    margin: 0.75rem 0 2rem;
+  }
+  .intro {
+    margin-top: 2rem;
+    font-size: 1.1rem;
+  }
+  .role {
+    margin-top: 1.5rem;
+    color: var(--accent);
+    font-size: 0.8rem;
+  }
+
+  .section-label {
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    border-bottom: 1px solid var(--hairline);
+    padding-bottom: 0.6rem;
+    margin: 5rem 0 0;
+  }
+
+  .chapters {
+    list-style: none;
+    margin: 0;
+    padding: 1rem 0 0;
+  }
+  .chapter {
+    display: grid;
+    grid-template-columns: 1.5rem 1fr;
+    gap: 1rem;
+  }
+  .marker {
+    position: relative;
+  }
+  .marker::before {
+    content: '';
+    position: absolute;
+    left: 50%;
+    top: 0;
+    bottom: 0;
+    width: 1px;
+    background: var(--hairline);
+  }
+  .chapter:last-child .marker::before {
+    bottom: auto;
+    height: 2.4rem;
+  }
+  .dot {
+    position: absolute;
+    left: 50%;
+    top: 2rem;
+    transform: translateX(-50%);
+    width: 9px;
+    height: 9px;
+    border-radius: 50%;
+    background: var(--bg);
+    border: 2px solid var(--accent);
+  }
+  .body {
+    padding: 1.6rem 0 2.4rem;
+    max-width: var(--w-content);
+  }
+  .era {
+    color: var(--accent);
+    font-size: 0.75rem;
+    letter-spacing: 0.1em;
+  }
+  .years {
+    color: var(--ink-3);
+    margin-left: 0.5rem;
+  }
+  .chapter h3 {
+    font-size: 1.8rem;
+    margin-top: 0.35rem;
+  }
+  .org {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    margin-top: 0.25rem;
+  }
+  .story {
+    margin-top: 1rem;
+  }
+  .metrics {
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    gap: 0.5rem;
+    padding: 0;
+    margin: 1.25rem 0 0;
+  }
+  .metrics li {
+    font-size: 0.72rem;
+    color: var(--ink-2);
+    background: var(--code-bg);
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    padding: 0.25rem 0.7rem;
+    white-space: nowrap;
+  }
+
+  .cards {
+    display: grid;
+    grid-template-columns: repeat(2, 1fr);
+    gap: 1rem;
+    margin-top: 1.5rem;
+  }
+  @media (max-width: 700px) {
+    .cards {
+      grid-template-columns: 1fr;
+    }
+  }
+  .card {
+    position: relative;
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    border-radius: 10px;
+    padding: 1.4rem 1.5rem 2.4rem;
+    color: inherit;
+    transition: border-color 0.15s ease, transform 0.15s ease;
+  }
+  .card:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    transform: translateY(-2px);
+  }
+  .card h3 {
+    font-size: 1.15rem;
+  }
+  .card p {
+    margin-top: 0.6rem;
+    font-size: 0.9rem;
+    color: var(--ink-2);
+  }
+  .more {
+    position: absolute;
+    right: 1.25rem;
+    bottom: 1rem;
+    color: var(--accent);
+  }
+</style>
