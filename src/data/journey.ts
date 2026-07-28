@@ -26,8 +26,8 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Canh-Trung Nguyen',
     heroTagline: 'From logic gates to connected systems.',
     heroIntro:
-      'I started by pushing bits through FPGAs at hundreds of megahertz, and grew into leading teams that connect vehicles, simulate radio worlds, and teach robots to cross the sim-to-real gap. This page is that story, in order.',
-    heroRole: 'Tech Lead — Connected Driving & Digital Twin · Hanoi, Vietnam',
+      'I started by pushing bits through FPGAs at hundreds of megahertz, and grew into leading the teams that connect vehicles, simulate radio worlds, and teach robots to cross the sim-to-real gap. This page is that story, in order.',
+    heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hanoi',
     journeyLabel: 'The journey',
     currentLabel: 'What I lead today',
     chapters: [
@@ -83,13 +83,18 @@ export const journey: Record<Locale, JourneyContent> = {
       {
         era: 'CH.05',
         years: 'Late 2024 — present',
-        title: 'Tech Lead',
+        title: 'Leading Verticals',
         org: 'SoC.one, Hanoi',
         story: [
-          'Since late 2024 I lead engineering across four programs: connected driving over the C-V2X PC5 sidelink, a standards-first V2X protocol stack, digital twins with ray-traced radio channels, and sim-to-real robotics. Different domains, one thread — systems where the physical world and the computed one must agree.',
+          'Since late 2024 I have led engineering across four programs: connected driving over the C-V2X PC5 sidelink, a standards-first V2X protocol stack, digital twins with ray-traced radio channels, and sim-to-real robotics. Today that responsibility is the Verticals Group, which I manage — the teams applying our silicon and systems across robotics, automotive, drones, and 5G/6G — while staying hands-on as tech lead of its key programs.',
           'The projects below are described at the level I can share publicly: technologies and standards, not customers or internals.',
         ],
-        metrics: ['4 programs', 'C-V2X · DT · Robotics · Protocols'],
+        metrics: [
+          'Verticals Group',
+          'robotics · automotive · drones · 5G/6G',
+          'Manager + tech lead',
+          '4 programs',
+        ],
       },
     ],
   },
@@ -98,8 +103,8 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Nguyễn Cảnh Trung',
     heroTagline: 'Từ cổng logic đến những hệ thống kết nối.',
     heroIntro:
-      'Tôi bắt đầu bằng việc đẩy từng bit qua FPGA ở tần số hàng trăm megahertz, rồi trưởng thành thành người dẫn dắt những đội ngũ kết nối xe hơi, mô phỏng thế giới sóng vô tuyến, và dạy robot vượt qua khoảng cách sim-to-real. Trang này kể lại câu chuyện đó, theo đúng trình tự.',
-    heroRole: 'Tech Lead — Connected Driving & Digital Twin · Hà Nội, Việt Nam',
+      'Tôi bắt đầu bằng việc đẩy từng bit qua FPGA ở tần số hàng trăm megahertz, rồi trưởng thành thành người dẫn dắt những đội ngũ làm connected driving, mô phỏng thế giới sóng vô tuyến, và dạy robot vượt qua khoảng cách sim-to-real. Trang này kể lại câu chuyện đó, theo đúng trình tự.',
+    heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hà Nội',
     journeyLabel: 'Hành trình',
     currentLabel: 'Những gì tôi đang dẫn dắt',
     chapters: [
@@ -109,7 +114,7 @@ export const journey: Record<Locale, JourneyContent> = {
         title: 'Nền móng',
         org: 'ĐH Bách khoa Hà Nội → TU Kaiserslautern, Đức',
         story: [
-          'Vi điện tử ở Bách khoa Hà Nội, rồi thạc sĩ hệ thống nhúng tại TU Kaiserslautern. Dự án định hình nhất đến từ nhóm nghiên cứu fintech: một bộ tăng tốc FPGA tính tương quan tài chính trong ngày — bước chậm nhất của pipeline đánh giá rủi ro — đẩy gần như mỗi chu kỳ một số dấu phẩy động qua datapath.',
+          'Vi điện tử ở Bách khoa Hà Nội, rồi thạc sĩ hệ thống nhúng tại TU Kaiserslautern. Dự án định hình nhất đến từ nhóm nghiên cứu fintech: một FPGA accelerator tính tương quan tài chính trong ngày — bước chậm nhất của pipeline đánh giá rủi ro — đẩy gần như mỗi chu kỳ một số dấu phẩy động qua datapath.',
           'Dự án ấy đặt ra chủ đề cho mọi thứ về sau: tìm ra điểm nghẽn, rồi đưa nó vào silicon.',
         ],
         metrics: ['Tăng tốc 68× @ 100 MHz', '1.087 chu kỳ / FLOP', 'Điểm M.S. 1.5 (~92%)'],
@@ -120,8 +125,8 @@ export const journey: Record<Locale, JourneyContent> = {
         title: '5G PHY & Radio',
         org: 'Viettel High Tech → VinSmart, Hà Nội',
         story: [
-          'Xây trạm gốc 5G NR từ lớp vật lý trở lên, trên FPGA Xilinx. Ở Viettel tôi dẫn dắt đội 5 kỹ sư triển khai kênh dữ liệu uplink L1 (PUSCH) và kênh điều khiển (PUCCH format 3), hoàn thành digital front-end 2T2R — DPD, CFR, DUC — đạt mặt nạ phổ theo chuẩn 3GPP.',
-          'Sang VinSmart, radio lớn dần: hai thế hệ khối thu phát vô tuyến (RRU) trên transceiver ADI, macrocell 8T8R, và đội 3 kỹ sư hoàn thành PDSCH bit-processing đóng timing ở 300 MHz với độ trễ đầu-cuối dưới 150 µs ở kích thước transport block tối đa.',
+          'Xây trạm gốc 5G NR từ lớp vật lý trở lên, trên FPGA Xilinx. Ở Viettel tôi dẫn dắt đội 5 kỹ sư triển khai kênh dữ liệu uplink L1 (PUSCH) và kênh điều khiển (PUCCH format 3), hoàn thành digital front-end 2T2R — DPD, CFR, DUC — đạt spectrum mask theo chuẩn 3GPP.',
+          'Sang VinSmart, radio lớn dần: hai thế hệ RRU trên transceiver ADI, macrocell 8T8R, và đội 3 kỹ sư hoàn thành PDSCH bit-processing đóng timing ở 300 MHz với độ trễ đầu-cuối dưới 150 µs ở transport block size tối đa.',
         ],
         metrics: [
           'PUSCH @ 250 MHz',
@@ -133,13 +138,13 @@ export const journey: Record<Locale, JourneyContent> = {
       {
         era: 'CH.03',
         years: '2021 — 2022',
-        title: 'Tăng tốc & Thị giác máy',
+        title: 'Acceleration & Vision',
         org: 'Techvico (cùng Pinnacle ISP, Mỹ) → Avnet',
         story: [
-          'Một bước leo thang trừu tượng có chủ đích: từ VHDL viết tay lên high-level synthesis. Cùng Pinnacle ISP, tôi triển khai các thuật toán xử lý ảnh mới — disparity, sửa điểm ảnh lỗi, biến đổi hình học — thành các bộ tăng tốc Vitis HLS, và dựng nguyên mẫu pipeline streaming ghép chúng với Xilinx DPU.',
+          'Một bước leo thang trừu tượng có chủ đích: từ VHDL viết tay lên high-level synthesis. Cùng Pinnacle ISP, tôi triển khai các thuật toán xử lý ảnh mới — disparity, defect-pixel correction, biến đổi hình học — thành các accelerator Vitis HLS, và dựng nguyên mẫu pipeline streaming ghép chúng với Xilinx DPU.',
           'Ở vai trò field application engineer tại Avnet, tôi phụ trách AMD-Xilinx khắp Đông Nam Á: demo AI vision trên Kria (nhận diện khuôn mặt, ANPR), PoC 5G testbed trên Quartus và Catapult, PCIe với MCDMA của Intel — và học cách giải thích silicon cho những người không viết RTL.',
         ],
-        metrics: ['3 bộ tăng tốc ISP bằng HLS', 'AI vision trên Kria (ANPR, khuôn mặt)', 'PoC 5G testbed'],
+        metrics: ['3 ISP accelerator bằng HLS', 'AI vision trên Kria (ANPR, khuôn mặt)', 'PoC 5G testbed'],
       },
       {
         era: 'CH.04',
@@ -148,20 +153,25 @@ export const journey: Record<Locale, JourneyContent> = {
         org: 'SoC.one, Hà Nội',
         story: [
           'Tôi gia nhập SoC.one năm 2021 — ban đầu part-time, đến cuối năm thì full-time — quay lại với 5G, nhưng lần này ở tầm hệ thống: tăng tốc 5G L1 trên FPGA, rồi dựng các nền tảng phần cứng O-DU và O-RU theo kiến trúc O-RAN.',
-          'Công việc chuyển từ việc làm một kênh đóng được timing sang việc làm cả một chiếc máy chạy được — phần cứng, các miền thời gian, fronthaul, và phần mềm phải tin tưởng được tất cả những thứ đó.',
+          'Công việc chuyển từ việc làm một kênh đóng được timing sang việc làm cả một chiếc máy chạy được — phần cứng, các timing domain, fronthaul, và phần mềm phải tin tưởng được tất cả những thứ đó.',
         ],
         metrics: ['Tăng tốc 5G L1 trên FPGA', 'Bring-up phần cứng O-DU / O-RU', 'Kiến trúc O-RAN'],
       },
       {
         era: 'CH.05',
         years: 'Cuối 2024 — nay',
-        title: 'Tech Lead',
+        title: 'Dẫn dắt Verticals',
         org: 'SoC.one, Hà Nội',
         story: [
-          'Từ cuối 2024, tôi dẫn dắt kỹ thuật của bốn chương trình: connected driving qua sidelink C-V2X PC5, một protocol stack V2X bám chặt chuẩn, digital twin với kênh vô tuyến ray-tracing, và robotics sim-to-real. Các lĩnh vực khác nhau, một sợi chỉ chung — những hệ thống nơi thế giới vật lý và thế giới tính toán phải khớp nhau.',
+          'Từ cuối 2024, tôi dẫn dắt kỹ thuật của bốn chương trình: connected driving qua C-V2X PC5 sidelink, một V2X protocol stack bám chặt chuẩn, digital twin với kênh vô tuyến ray-traced, và robotics sim-to-real. Hiện nay trách nhiệm đó là Verticals Group do tôi làm manager — các đội ngũ ứng dụng silicon và hệ thống của công ty vào robotics, automotive, drones và 5G/6G — trong khi vẫn trực tiếp làm tech lead cho các chương trình chủ chốt.',
           'Các dự án dưới đây được mô tả ở mức có thể chia sẻ công khai: công nghệ và chuẩn, không phải khách hàng hay chi tiết nội bộ.',
         ],
-        metrics: ['4 chương trình', 'C-V2X · DT · Robotics · Protocols'],
+        metrics: [
+          'Verticals Group',
+          'robotics · automotive · drones · 5G/6G',
+          'Manager + tech lead',
+          '4 chương trình',
+        ],
       },
     ],
   },

@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ProjectArt from './ProjectArt.astro';
 import type { Project } from '../data/projects';
 import { t, localePath, type Locale } from '../i18n/ui';
 
@@ -31,6 +32,11 @@ const altPath = localePath(other, `/projects/${project.slug}/`);
         </div>
       </dl>
     </header>
+
+    <figure class="banner">
+      <ProjectArt slug={project.slug} />
+      <figcaption class="mono">FIG. 01</figcaption>
+    </figure>
 
     <div class="prose">
       {
@@ -95,6 +101,21 @@ const altPath = localePath(other, `/projects/${project.slug}/`);
     margin: 0.3rem 0 0;
     font-size: 0.8rem;
     color: var(--accent);
+  }
+  .banner {
+    max-width: var(--w-content);
+    margin: 2.5rem 0 0;
+    padding: 1.5rem 1rem 0.75rem;
+    border: 1px solid var(--hairline);
+    border-radius: 12px;
+    background: var(--surface);
+  }
+  .banner figcaption {
+    margin-top: 0.5rem;
+    font-size: 0.68rem;
+    letter-spacing: 0.12em;
+    color: var(--ink-3);
+    text-align: right;
   }
   .prose {
     margin-top: 1rem;

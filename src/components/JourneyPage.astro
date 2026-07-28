@@ -1,6 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
 import Waveform from './Waveform.astro';
+import ChapterIcon from './ChapterIcon.astro';
+import ProjectArt from './ProjectArt.astro';
 import { journey } from '../data/journey';
 import { projects } from '../data/projects';
 import { localePath, type Locale } from '../i18n/ui';
@@ -33,7 +35,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     <h2 class="section-label mono" id="journey">{c.journeyLabel}</h2>
     <ol class="chapters">
       {
-        c.chapters.map((ch) => (
+        c.chapters.map((ch, i) => (
           <li class="chapter">
             <div class="marker" aria-hidden="true">
               <span class="dot" />
@@ -42,7 +44,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
               <p class="era mono">
                 {ch.era} <span class="years">{ch.years}</span>
               </p>
-              <h3>{ch.title}</h3>
+              <h3>
+                <ChapterIcon index={i} />
+                {ch.title}
+              </h3>
               <p class="org">{ch.org}</p>
               {ch.story.map((par) => (
                 <p class="story">{par}</p>
@@ -65,6 +70,9 @@ const altPath = locale === 'en' ? '/vi/' : '/';
       {
         projectCards.map((p) => (
           <a class="card" href={localePath(locale, `/projects/${p.slug}/`)}>
+            <div class="card-art">
+              <ProjectArt slug={p.slug} />
+            </div>
             <h3>{p.name}</h3>
             <p>{p.oneLiner}</p>
             <span class="more mono">→</span>
@@ -171,6 +179,9 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   .chapter h3 {
     font-size: 1.8rem;
     margin-top: 0.35rem;
+    display: flex;
+    align-items: center;
+    gap: 0.6rem;
   }
   .org {
     color: var(--ink-2);
@@ -195,7 +206,6 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     border: 1px solid var(--hairline);
     border-radius: 999px;
     padding: 0.25rem 0.7rem;
-    white-space: nowrap;
   }
 
   .cards {
@@ -223,6 +233,11 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     text-decoration: none;
     border-color: var(--accent);
     transform: translateY(-2px);
+  }
+  .card-art {
+    border-bottom: 1px solid var(--hairline);
+    margin: -0.4rem 0 1rem;
+    padding-bottom: 0.5rem;
   }
   .card h3 {
     font-size: 1.15rem;

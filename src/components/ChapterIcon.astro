@@ -1,0 +1,77 @@
+---
+// Small line icons marking each journey chapter.
+interface Props {
+  index: number;
+}
+
+const { index } = Astro.props;
+---
+
+<svg class="chapter-icon" viewBox="0 0 24 24" aria-hidden="true">
+  {
+    index === 0 && (
+      <g>
+        {/* chip */}
+        <rect x="7" y="7" width="10" height="10" rx="1.5" />
+        <path d="M 9.5 7 V 4 M 12 7 V 4 M 14.5 7 V 4 M 9.5 20 V 17 M 12 20 V 17 M 14.5 20 V 17 M 7 9.5 H 4 M 7 12 H 4 M 7 14.5 H 4 M 20 9.5 H 17 M 20 12 H 17 M 20 14.5 H 17" />
+      </g>
+    )
+  }
+  {
+    index === 1 && (
+      <g>
+        {/* antenna */}
+        <path d="M 12 21 V 10 M 9 21 H 15" />
+        <path d="M 9.5 8.5 A 3.5 3.5 0 0 1 14.5 8.5" />
+        <path d="M 7 6 A 7 7 0 0 1 17 6" />
+        <circle cx="12" cy="10" r="1.4" />
+      </g>
+    )
+  }
+  {
+    index === 2 && (
+      <g>
+        {/* camera / vision */}
+        <rect x="4" y="7" width="16" height="12" rx="2" />
+        <path d="M 9 7 L 10.5 4.5 H 13.5 L 15 7" />
+        <circle cx="12" cy="13" r="3.2" />
+      </g>
+    )
+  }
+  {
+    index === 3 && (
+      <g>
+        {/* rack */}
+        <rect x="6" y="4" width="12" height="16" rx="1.5" />
+        <path d="M 6 9.3 H 18 M 6 14.6 H 18" />
+        <path d="M 8.5 6.7 H 11 M 8.5 12 H 11 M 8.5 17.3 H 11" />
+      </g>
+    )
+  }
+  {
+    index === 4 && (
+      <g>
+        {/* network of verticals */}
+        <circle cx="12" cy="12" r="2.4" />
+        <circle cx="5" cy="5" r="1.7" />
+        <circle cx="19" cy="5" r="1.7" />
+        <circle cx="5" cy="19" r="1.7" />
+        <circle cx="19" cy="19" r="1.7" />
+        <path d="M 10.3 10.3 L 6.3 6.3 M 13.7 10.3 L 17.7 6.3 M 10.3 13.7 L 6.3 17.7 M 13.7 13.7 L 17.7 17.7" />
+      </g>
+    )
+  }
+</svg>
+
+<style>
+  .chapter-icon {
+    width: 1.35rem;
+    height: 1.35rem;
+    flex-shrink: 0;
+    fill: none;
+    stroke: var(--accent);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+</style>

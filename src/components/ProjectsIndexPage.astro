@@ -1,5 +1,6 @@
 ---
 import Base from '../layouts/Base.astro';
+import ProjectArt from './ProjectArt.astro';
 import { projects } from '../data/projects';
 import { t, localePath, type Locale } from '../i18n/ui';
 
@@ -29,6 +30,9 @@ const altPath = locale === 'en' ? '/vi/projects/' : '/projects/';
               <p class="meta mono">
                 {p.role} · {p.period}
               </p>
+            </div>
+            <div class="thumb" aria-hidden="true">
+              <ProjectArt slug={p.slug} />
             </div>
             <span class="arrow mono" aria-hidden="true">
               →
@@ -86,8 +90,18 @@ const altPath = locale === 'en' ? '/vi/projects/' : '/projects/';
     font-size: 0.72rem;
     color: var(--ink-3);
   }
+  .thumb {
+    width: 12rem;
+    flex-shrink: 0;
+    opacity: 0.9;
+  }
   .arrow {
     color: var(--ink-3);
     flex-shrink: 0;
+  }
+  @media (max-width: 720px) {
+    .thumb {
+      display: none;
+    }
   }
 </style>

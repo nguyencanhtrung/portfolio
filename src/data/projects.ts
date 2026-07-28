@@ -168,7 +168,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Chúng tôi xây gì',
           body: [
-            'Một giao diện sidelink PC5 thiết lập kết nối trực tiếp giữa các xe, và trên đó là các kịch bản connected-driving cốt lõi theo chuẩn SAE của Mỹ — trao đổi bản tin an toàn V2V đứng sau các use case như cảnh báo va chạm phía trước hay hỗ trợ qua giao lộ.',
+            'Một PC5 sidelink interface thiết lập kết nối trực tiếp giữa các xe, và trên đó là các kịch bản connected driving cốt lõi theo chuẩn SAE của Mỹ — trao đổi bản tin an toàn V2V đứng sau các use case như forward collision warning hay intersection assist.',
             'Phạm vi công việc trải từ các lớp giao thức sát radio lên tới bản tin ứng dụng, với định nghĩa kịch bản và tập bản tin bám theo họ chuẩn SAE J2735 / J2945.',
           ],
         },
@@ -181,9 +181,9 @@ export const projects: Record<Locale, Project[]> = {
       ],
       stack: [
         'C-V2X (3GPP sidelink)',
-        'Giao diện PC5',
+        'PC5 interface',
         'Họ chuẩn SAE J2735 / J2945',
-        'Kịch bản an toàn V2V day-1',
+        'V2V day-1 safety scenarios',
         '5G protocol stack',
       ],
     },
@@ -271,7 +271,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Vai trò của tôi',
           body: [
-            'Tech lead: thiết kế phương pháp luận và các cổng đánh giá, dẫn dắt đội xây cả twin lẫn pipeline học.',
+            'Tech lead: thiết kế phương pháp luận và các evaluation gate, dẫn dắt đội xây cả twin lẫn pipeline học.',
           ],
         },
       ],

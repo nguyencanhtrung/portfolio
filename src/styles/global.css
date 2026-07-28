@@ -169,6 +169,10 @@ img {
   border-collapse: collapse;
   width: 100%;
   font-size: 0.9rem;
+  /* ponytail: display:block turns the table into its own scroll container —
+     wide tables scroll instead of overflowing the page on mobile */
+  display: block;
+  overflow-x: auto;
 }
 
 .prose th,
