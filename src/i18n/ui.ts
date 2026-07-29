@@ -13,6 +13,10 @@ export const ui = {
       'Perspectives on connected driving, robotics, AI and the systems behind them.',
     'blog.readInOther': 'Đọc bài này bằng tiếng Việt →',
     'blog.backToList': '← All posts',
+    'blog.searchPlaceholder': 'Search posts — titles and full content…',
+    'blog.searchZero': 'No posts match',
+    'blog.newer': '← Newer posts',
+    'blog.older': 'Older posts →',
     'projects.title': 'Projects',
     'projects.description':
       'Selected work — described at the level I can talk about publicly.',
@@ -36,6 +40,10 @@ export const ui = {
       'Góc nhìn về connected driving, robotics, AI và những hệ thống phía sau chúng.',
     'blog.readInOther': 'Read this post in English →',
     'blog.backToList': '← Tất cả bài viết',
+    'blog.searchPlaceholder': 'Tìm bài viết — theo tiêu đề và cả nội dung…',
+    'blog.searchZero': 'Không có bài nào khớp',
+    'blog.newer': '← Bài mới hơn',
+    'blog.older': 'Bài cũ hơn →',
     'projects.title': 'Dự án',
     'projects.description':
       'Các dự án tiêu biểu — mô tả ở mức có thể chia sẻ công khai.',

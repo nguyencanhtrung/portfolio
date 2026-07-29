@@ -26,7 +26,7 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
 ---
 
 <Base locale={locale} title={`${post.data.title} — Canh-Trung Nguyen`} description={post.data.description} altPath={altPath}>
-  <article class="container">
+  <article class="container" data-pagefind-body>
     <header class="head">
       <p class="back mono"><a href={localePath(locale, '/blog/')}>{t(locale, 'blog.backToList')}</a></p>
       <h1>{post.data.title}</h1>

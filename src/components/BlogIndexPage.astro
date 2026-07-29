@@ -5,13 +5,19 @@ import { t, localePath, type Locale } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
+  /** 1-based page number; page 1 lives at /blog/, later pages at /blog/page/N/. */
+  page?: number;
 }
 
-const { locale } = Astro.props;
+const { locale, page = 1 } = Astro.props;
+// ponytail: PAGE_SIZE hardcoded here and in blog/page/[num].astro — keep in sync
+const PAGE_SIZE = 10;
 
-const posts = (await getCollection('blog', (p) => p.data.lang === locale && !p.data.draft)).sort(
+const all = (await getCollection('blog', (p) => p.data.lang === locale && !p.data.draft)).sort(
   (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
 );
+const totalPages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
+const posts = all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
 
 const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
   year: 'numeric',
@@ -20,7 +26,12 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
 });
 
 const slugOf = (id: string) => id.replace(/^(en|vi)\//, '');
+const pageHref = (n: number) =>
+  n === 1 ? localePath(locale, '/blog/') : localePath(locale, `/blog/page/${n}/`);
 const altPath = locale === 'en' ? '/vi/blog/' : '/blog/';
+
+const searchPlaceholder = t(locale, 'blog.searchPlaceholder');
+const searchZero = t(locale, 'blog.searchZero');
 ---
 
 <Base
@@ -34,6 +45,9 @@ const altPath = locale === 'en' ? '/vi/blog/' : '/blog/';
       <h1>{t(locale, 'blog.title')}</h1>
       <p>{t(locale, 'blog.description')}</p>
     </header>
+
+    <div id="search" class="search"></div>
+
     <div class="posts">
       {
         posts.map((post) => (
@@ -52,61 +66,136 @@ const altPath = locale === 'en' ? '/vi/blog/' : '/blog/';
         ))
       }
     </div>
-  </section>
-</Base>
 
-<style>
-  .page-head {
-    padding-top: 4rem;
-    max-width: var(--w-content);
-  }
-  .page-head h1 {
-    font-size: clamp(2.2rem, 5vw, 3rem);
-  }
-  .page-head p {
-    margin-top: 0.75rem;
-    color: var(--ink-2);
-  }
-  .posts {
-    margin-top: 2.5rem;
-    border-top: 1px solid var(--hairline);
-  }
-  .post {
-    display: grid;
-    grid-template-columns: 8rem 1fr;
-    gap: 1.5rem;
-    padding: 1.6rem 0.25rem;
-    border-bottom: 1px solid var(--hairline);
-    color: inherit;
-  }
-  .post:hover {
-    text-decoration: none;
-  }
-  .post:hover h2 {
-    color: var(--accent);
-  }
-  .post time {
-    font-size: 0.75rem;
-    color: var(--ink-3);
-    padding-top: 0.4rem;
-  }
-  .post h2 {
-    font-size: 1.35rem;
-    transition: color 0.15s ease;
-  }
-  .post p {
-    margin-top: 0.4rem;
-    color: var(--ink-2);
-    max-width: 38rem;
-  }
-  .tags {
-    font-size: 0.72rem;
-    color: var(--ink-3);
-  }
-  @media (max-width: 640px) {
-    .post {
-      grid-template-columns: 1fr;
-      gap: 0.3rem;
+    {
+      totalPages > 1 && (
+        <nav class="pager mono" aria-label="Pagination">
+          {page > 1 ? <a href={pageHref(page - 1)}>{t(locale, 'blog.newer')}</a> : <span />}
+          <span class="pageinfo">
+            {page} / {totalPages}
+          </span>
+          {page < totalPages ? <a href={pageHref(page + 1)}>{t(locale, 'blog.older')}</a> : <span />}
+        </nav>
+      )
     }
-  }
-</style>
+  </section>
+
+  <link rel="stylesheet" href="/pagefind/pagefind-ui.css" />
+  <script is:inline define:vars={{ searchPlaceholder, searchZero }}>
+    window.addEventListener('DOMContentLoaded', () => {
+      const el = document.getElementById('search');
+      if (!el) return;
+      const s = document.createElement('script');
+      s.src = '/pagefind/pagefind-ui.js';
+      s.onload = () => {
+        new PagefindUI({
+          element: '#search',
+          showImages: false,
+          showSubResults: true,
+          translations: {
+            placeholder: searchPlaceholder,
+            zero_results: searchZero + ' — "[SEARCH_TERM]"',
+          },
+        });
+      };
+      s.onerror = () => el.remove(); // dev mode: no pagefind index yet
+      document.head.append(s);
+    });
+  </script>
+
+  <style>
+    .page-head {
+      padding-top: 4rem;
+      max-width: var(--w-content);
+    }
+    .page-head h1 {
+      font-size: clamp(2.2rem, 5vw, 3rem);
+    }
+    .page-head p {
+      margin-top: 0.75rem;
+      color: var(--ink-2);
+    }
+    .posts {
+      margin-top: 2rem;
+      border-top: 1px solid var(--hairline);
+    }
+    .post {
+      display: grid;
+      grid-template-columns: 8rem 1fr;
+      gap: 1.5rem;
+      padding: 1.6rem 0.25rem;
+      border-bottom: 1px solid var(--hairline);
+      color: inherit;
+    }
+    .post:hover {
+      text-decoration: none;
+    }
+    .post:hover h2 {
+      color: var(--accent);
+    }
+    .post time {
+      font-size: 0.75rem;
+      color: var(--ink-3);
+      padding-top: 0.4rem;
+    }
+    .post h2 {
+      font-size: 1.35rem;
+      transition: color 0.15s ease;
+    }
+    .post p {
+      margin-top: 0.4rem;
+      color: var(--ink-2);
+      max-width: 38rem;
+    }
+    .tags {
+      font-size: 0.72rem;
+      color: var(--ink-3);
+    }
+    .pager {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-top: 2rem;
+      font-size: 0.8rem;
+    }
+    .pageinfo {
+      color: var(--ink-3);
+    }
+    @media (max-width: 640px) {
+      .post {
+        grid-template-columns: 1fr;
+        gap: 0.3rem;
+      }
+    }
+  </style>
+
+  <style is:global>
+    .search {
+      margin-top: 2.5rem;
+      max-width: var(--w-content);
+      --pagefind-ui-scale: 0.9;
+      --pagefind-ui-primary: var(--accent);
+      --pagefind-ui-text: var(--ink);
+      --pagefind-ui-background: var(--surface);
+      --pagefind-ui-border: var(--hairline);
+      --pagefind-ui-tag: var(--code-bg);
+      --pagefind-ui-border-width: 1px;
+      --pagefind-ui-border-radius: 8px;
+      --pagefind-ui-font: var(--font-sans);
+    }
+    .search .pagefind-ui__search-input::placeholder {
+      color: var(--ink-3);
+      opacity: 1;
+    }
+    .search .pagefind-ui__result-link {
+      color: var(--accent);
+    }
+    .search .pagefind-ui--reset mark,
+    .search mark {
+      background: var(--accent-soft);
+      color: var(--accent);
+      border-radius: 3px;
+      padding: 0 2px;
+    }
+  </style>
+</Base>

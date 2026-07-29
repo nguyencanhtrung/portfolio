@@ -1,0 +1,16 @@
+---
+import { getCollection } from 'astro:content';
+import BlogIndexPage from '../../../../components/BlogIndexPage.astro';
+
+export async function getStaticPaths() {
+  const posts = await getCollection('blog', (p) => p.data.lang === 'vi' && !p.data.draft);
+  const totalPages = Math.ceil(posts.length / 10);
+  return Array.from({ length: Math.max(totalPages - 1, 0) }, (_, i) => ({
+    params: { num: String(i + 2) },
+  }));
+}
+
+const page = Number(Astro.params.num);
+---
+
+<BlogIndexPage locale="vi" page={page} />
