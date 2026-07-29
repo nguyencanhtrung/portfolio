@@ -12,7 +12,10 @@ interface Props {
 }
 
 const { locale, post, hasTranslation } = Astro.props;
-const { Content } = await render(post);
+const { Content, headings } = await render(post);
+// ponytail: h2-only TOC by decision (posts have 3–7 h2s; h3 would blow past a screen)
+const toc = headings.filter((h) => h.depth === 2);
+const showToc = toc.length >= 2;
 
 const other: Locale = locale === 'en' ? 'vi' : 'en';
 const slug = post.id.replace(/^(en|vi)\//, '');
@@ -26,7 +29,23 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
 ---
 
 <Base locale={locale} title={`${post.data.title} — Canh-Trung Nguyen`} description={post.data.description} altPath={altPath}>
-  <article class="container" data-pagefind-body>
+  <article class:list={['container', { 'has-toc': showToc }]} data-pagefind-body>
+    {
+      showToc && (
+        <aside class="toc" data-pagefind-ignore>
+          <nav aria-label={t(locale, 'blog.toc')}>
+            <p class="toc-label mono">{t(locale, 'blog.toc')}</p>
+            <ol id="toc-list">
+              {toc.map((h) => (
+                <li>
+                  <a href={`#${h.slug}`}>{h.text}</a>
+                </li>
+              ))}
+            </ol>
+          </nav>
+        </aside>
+      )
+    }
     <header class="head">
       <p class="back mono"><a href={localePath(locale, '/blog/')}>{t(locale, 'blog.backToList')}</a></p>
       <h1>{post.data.title}</h1>
@@ -44,10 +63,58 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
         )
       }
     </header>
+    {
+      showToc && (
+        <details class="toc-m" data-pagefind-ignore>
+          <summary class="mono">{t(locale, 'blog.toc')}</summary>
+          <ol>
+            {toc.map((h) => (
+              <li>
+                <a href={`#${h.slug}`}>{h.text}</a>
+              </li>
+            ))}
+          </ol>
+        </details>
+      )
+    }
     <div class="prose">
       <Content />
     </div>
   </article>
+
+  <script>
+    // Sidebar TOC scroll state: sections above the reading line dim, the current one highlights.
+    const list = document.getElementById('toc-list');
+    if (list) {
+      const links = Array.from(list.querySelectorAll('a'));
+      const heads = links
+        .map((a) => document.getElementById(decodeURIComponent(a.hash.slice(1))))
+        .filter((h): h is HTMLElement => h !== null);
+
+      let ticking = false;
+      const update = () => {
+        ticking = false;
+        const line = window.innerHeight * 0.3; // reading line: 30% down the viewport
+        let current = -1;
+        for (let i = 0; i < heads.length; i++) {
+          if (heads[i].getBoundingClientRect().top <= line) current = i;
+        }
+        links.forEach((a, i) => {
+          a.classList.toggle('is-active', i === current);
+          a.classList.toggle('is-past', i < current);
+        });
+      };
+      const onScroll = () => {
+        if (!ticking) {
+          ticking = true;
+          requestAnimationFrame(update);
+        }
+      };
+      window.addEventListener('scroll', onScroll, { passive: true });
+      window.addEventListener('resize', onScroll, { passive: true });
+      update();
+    }
+  </script>
 
   <script>
     import mermaid from 'mermaid';
@@ -140,6 +207,110 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
     }
     .prose {
       margin-top: 2.5rem;
+    }
+
+    /* --- Table of contents --- */
+    /* Mobile / narrow: collapsed block above the prose. */
+    .toc {
+      display: none;
+    }
+    .toc-m {
+      margin-top: 2rem;
+      border: 1px solid var(--hairline);
+      border-radius: 8px;
+      background: var(--surface);
+      max-width: var(--w-content);
+    }
+    .toc-m summary {
+      cursor: pointer;
+      padding: 0.7rem 1rem;
+      font-size: 0.72rem;
+      letter-spacing: 0.14em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .toc-m ol {
+      list-style: none;
+      margin: 0;
+      padding: 0.25rem 1rem 0.9rem;
+    }
+    .toc-m li + li {
+      margin-top: 0.45rem;
+    }
+    .toc-m a {
+      color: var(--ink-2);
+      font-size: 0.9rem;
+    }
+
+    /* Wide: sticky sidebar left of the content column. */
+    @media (min-width: 1150px) {
+      .toc-m {
+        display: none;
+      }
+      article.has-toc {
+        display: grid;
+        grid-template-columns: 13rem minmax(0, 1fr);
+        column-gap: 3rem;
+      }
+      article.has-toc > .head,
+      article.has-toc > .prose {
+        grid-column: 2;
+      }
+      .toc {
+        display: block;
+        grid-column: 1;
+        grid-row: 1 / span 2;
+      }
+      .toc nav {
+        position: sticky;
+        top: 4.5rem;
+        padding-top: 4rem;
+      }
+      .toc-label {
+        font-size: 0.72rem;
+        letter-spacing: 0.14em;
+        text-transform: uppercase;
+        color: var(--ink-3);
+        border-bottom: 1px solid var(--hairline);
+        padding-bottom: 0.6rem;
+      }
+      .toc ol {
+        list-style: none;
+        margin: 0.9rem 0 0;
+        padding: 0;
+      }
+      .toc li + li {
+        margin-top: 0.55rem;
+      }
+      .toc a {
+        display: block;
+        font-size: 0.82rem;
+        line-height: 1.4;
+        color: var(--ink-2);
+        border-left: 2px solid transparent;
+        padding-left: 0.75rem;
+        margin-left: -0.75rem;
+        transition: color 0.2s ease, opacity 0.2s ease, border-color 0.2s ease;
+      }
+      .toc a:hover {
+        color: var(--accent);
+        text-decoration: none;
+      }
+      .toc a.is-past {
+        color: var(--ink-3);
+        opacity: 0.6;
+      }
+      .toc a.is-active {
+        color: var(--accent);
+        border-left-color: var(--accent);
+      }
+    }
+  </style>
+
+  <style is:global>
+    /* Anchor jumps must clear the sticky header (smooth scroll is set globally). */
+    .prose h2 {
+      scroll-margin-top: 5.5rem;
     }
   </style>
 </Base>
