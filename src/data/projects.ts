@@ -89,7 +89,7 @@ export const projects: Record<Locale, Project[]> = {
       period: 'Ongoing',
       role: 'Tech Lead',
       oneLiner:
-        'Ray-traced radio channels inside vehicular digital twins — testing connectivity before the first drive.',
+        'GPU ray-traced radio channels for network and vehicle digital twins — and the ISAC sensing research built on top.',
       sections: [
         {
           heading: 'Why it matters',
@@ -119,7 +119,7 @@ export const projects: Record<Locale, Project[]> = {
       period: 'Ongoing',
       role: 'Tech Lead',
       oneLiner:
-        'Closing the gap between a simulated robot and the real one — measured, not assumed.',
+        'Closing the gap between a simulated robot and the real one — measured, not assumed, and carried from virtual prototype to silicon.',
       sections: [
         {
           heading: 'Why it matters',
@@ -223,7 +223,7 @@ export const projects: Record<Locale, Project[]> = {
       period: 'Đang triển khai',
       role: 'Tech Lead',
       oneLiner:
-        'Kênh vô tuyến ray-tracing bên trong digital twin của xe — kiểm thử kết nối trước khi xe lăn bánh.',
+        'Kênh vô tuyến ray-traced trên GPU cho digital twin của mạng và của xe — cùng hướng nghiên cứu ISAC sensing dựng trên đó.',
       sections: [
         {
           heading: 'Vì sao quan trọng',
@@ -253,7 +253,7 @@ export const projects: Record<Locale, Project[]> = {
       period: 'Đang triển khai',
       role: 'Tech Lead',
       oneLiner:
-        'Thu hẹp khoảng cách giữa robot mô phỏng và robot thật — bằng đo đạc, không bằng cảm giác.',
+        'Thu hẹp khoảng cách giữa robot mô phỏng và robot thật — bằng đo đạc, và mang xuyên suốt từ virtual prototype tới silicon.',
       sections: [
         {
           heading: 'Vì sao quan trọng',
