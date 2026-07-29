@@ -26,7 +26,7 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Canh-Trung Nguyen',
     heroTagline: 'From logic gates to connected systems.',
     heroIntro:
-      'I started by pushing bits through FPGAs at hundreds of megahertz, and grew into leading the teams that connect vehicles, simulate radio worlds, and teach robots to cross the sim-to-real gap. This page is that story, in order.',
+      'I started by pushing bits through FPGAs at hundreds of megahertz, and grew into leading the teams that connect vehicles, simulate radio worlds, and teach robots to cross the sim-to-real gap. This page is that story, told from today back to the beginning.',
     heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hanoi',
     journeyLabel: 'The journey',
     currentLabel: 'What I lead today',
@@ -103,7 +103,7 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Nguyễn Cảnh Trung',
     heroTagline: 'Từ cổng logic đến những hệ thống kết nối.',
     heroIntro:
-      'Tôi bắt đầu bằng việc đẩy từng bit qua FPGA ở tần số hàng trăm megahertz, rồi trưởng thành thành người dẫn dắt những đội ngũ làm connected driving, mô phỏng thế giới sóng vô tuyến, và dạy robot vượt qua khoảng cách sim-to-real. Trang này kể lại câu chuyện đó, theo đúng trình tự.',
+      'Tôi bắt đầu bằng việc đẩy từng bit qua FPGA ở tần số hàng trăm megahertz, rồi trưởng thành thành người dẫn dắt những đội ngũ làm connected driving, mô phỏng thế giới sóng vô tuyến, và dạy robot vượt qua khoảng cách sim-to-real. Trang này kể lại câu chuyện đó, từ hiện tại ngược về những ngày đầu.',
     heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hà Nội',
     journeyLabel: 'Hành trình',
     currentLabel: 'Những gì tôi đang dẫn dắt',

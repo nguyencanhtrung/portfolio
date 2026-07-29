@@ -13,6 +13,8 @@ interface Props {
 
 const { locale } = Astro.props;
 const c = journey[locale];
+// Newest first: reverse for display, keep original index for the chapter icon.
+const chapters = c.chapters.map((ch, iconIndex) => ({ ch, iconIndex })).reverse();
 const projectCards = projects[locale];
 const title =
   locale === 'en'
@@ -35,7 +37,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     <h2 class="section-label mono" id="journey">{c.journeyLabel}</h2>
     <ol class="chapters">
       {
-        c.chapters.map((ch, i) => (
+        chapters.map(({ ch, iconIndex }) => (
           <li class="chapter">
             <div class="marker" aria-hidden="true">
               <span class="dot" />
@@ -45,7 +47,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
                 {ch.era} <span class="years">{ch.years}</span>
               </p>
               <h3>
-                <ChapterIcon index={i} />
+                <ChapterIcon index={iconIndex} />
                 {ch.title}
               </h3>
               <p class="org">{ch.org}</p>
