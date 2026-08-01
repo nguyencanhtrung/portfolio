@@ -1,11 +1,11 @@
 ---
 import Base from '../layouts/Base.astro';
-import Waveform from './Waveform.astro';
+import HeroScene from './HeroScene.astro';
 import ChapterIcon from './ChapterIcon.astro';
 import ProjectArt from './ProjectArt.astro';
 import { journey } from '../data/journey';
 import { projects } from '../data/projects';
-import { localePath, type Locale } from '../i18n/ui';
+import { t, localePath, type Locale } from '../i18n/ui';
 
 interface Props {
   locale: Locale;
@@ -24,13 +24,18 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 ---
 
 <Base locale={locale} title={title} description={c.heroIntro} altPath={altPath}>
-  <section class="hero container">
-    <p class="kicker mono">{c.heroKicker}</p>
-    <h1>{c.heroName}</h1>
-    <p class="tagline">{c.heroTagline}</p>
-    <Waveform />
-    <p class="intro">{c.heroIntro}</p>
-    <p class="role mono">{c.heroRole}</p>
+  <section class="hero">
+    <div class="container hero-copy">
+      <p class="kicker mono">{c.heroKicker}</p>
+      <h1>{c.heroName}</h1>
+      <p class="tagline">{c.heroTagline}</p>
+      <p class="intro">{c.heroIntro}</p>
+      <p class="role mono">{c.heroRole}</p>
+      <a class="cta mono" href="#journey">{t(locale, 'hero.cta')} <span class="arrow">↓</span></a>
+    </div>
+    <div class="scene">
+      <HeroScene />
+    </div>
   </section>
 
   <section class="journey container">
@@ -86,9 +91,57 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 </Base>
 
 <style>
+  /* Full-viewport hero: copy on top, panorama pinned to the bottom edge. */
   .hero {
-    padding-top: 5rem;
+    min-height: calc(100svh - 4.2rem);
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    gap: 2.5rem;
+  }
+  .hero-copy {
+    padding-top: clamp(2rem, 6vh, 4rem);
+    max-width: none;
+  }
+  .hero-copy > * {
     max-width: var(--w-content);
+  }
+  .cta {
+    display: inline-block;
+    margin-top: 1.75rem;
+    padding: 0.65rem 1.3rem;
+    border: 1px solid var(--hairline);
+    border-radius: 999px;
+    font-size: 0.75rem;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    transition: border-color 0.15s ease, color 0.15s ease;
+  }
+  .cta:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .cta .arrow {
+    display: inline-block;
+    transition: transform 0.15s ease;
+  }
+  .cta:hover .arrow {
+    transform: translateY(3px);
+  }
+  .scene {
+    width: 100%;
+    overflow: hidden;
+  }
+  /* Narrow screens: keep the panorama legible by right-cropping to the
+     "today" end of the drawing instead of shrinking it to a sliver. */
+  @media (max-width: 760px) {
+    .scene :global(svg) {
+      width: 210%;
+      max-width: none;
+      margin-left: -110%; /* show the right (today) end of the panorama */
+    }
   }
   .kicker {
     color: var(--ink-3);
@@ -108,16 +161,17 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     margin: 0.75rem 0 2rem;
   }
   .intro {
-    margin-top: 2rem;
+    margin-top: 1.25rem;
     font-size: 1.1rem;
   }
   .role {
-    margin-top: 1.5rem;
+    margin-top: 1.25rem;
     color: var(--accent);
     font-size: 0.8rem;
   }
 
   .section-label {
+    scroll-margin-top: 5rem;
     font-size: 0.75rem;
     font-weight: 400;
     letter-spacing: 0.14em;

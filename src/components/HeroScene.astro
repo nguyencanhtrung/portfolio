@@ -1,0 +1,271 @@
+---
+/**
+ * Full-width hero panorama: the career as one continuous signal.
+ * Left → right: logic gates → FPGA → 5G waveform/antenna → digital-twin world
+ * (V2X cars, drone, robot). The right zone is mirrored below the ground line
+ * as a dashed reflection — the "digital twin" — reusing the site convention
+ * of dashed = simulated, solid = real.
+ */
+---
+
+<svg
+  class="hero-scene"
+  viewBox="0 0 1600 448"
+  preserveAspectRatio="xMidYMax slice"
+  fill="none"
+  xmlns="http://www.w3.org/2000/svg"
+  aria-hidden="true"
+>
+  <!-- ══ ground line ══ -->
+  <path class="sk thin" d="M 0 330 H 1600" />
+
+  <!-- ══ zone 1: gates & FPGA (the past) ══ -->
+  <g class="sf appear a1">
+    <!-- AND gate -->
+    <path d="M 64 282 h 20 a 16 16 0 0 1 0 32 h -20 Z" />
+    <path d="M 52 288 h 12 M 52 308 h 12 M 100 298 h 18" />
+    <circle class="via" cx="118" cy="298" r="2.5" />
+    <!-- stray PCB traces off the chip -->
+    <path d="M 230 168 v -22 h 38" />
+    <circle class="via" cx="268" cy="146" r="2.5" />
+    <path d="M 230 264 v 26 h -42" />
+    <circle class="via" cx="188" cy="290" r="2.5" />
+  </g>
+
+  <!-- FPGA package -->
+  <g class="sk">
+    <rect x="182" y="168" width="96" height="96" rx="8" />
+    <rect class="sf" x="200" y="186" width="60" height="60" rx="2" />
+    <!-- pins -->
+    <path d="M 174 192 h 8 M 174 216 h 8 M 174 240 h 8" />
+    <path d="M 278 192 h 8 M 278 216 h 8 M 278 240 h 8" />
+    <path d="M 206 160 v 8 M 230 160 v 8 M 254 160 v 8" />
+    <path d="M 206 264 v 8 M 230 264 v 8 M 254 264 v 8" />
+  </g>
+  <text class="lbl" x="230" y="222" text-anchor="middle" dominant-baseline="middle">FPGA</text>
+
+  <!-- ══ zone 2: 5G PHY (the radio years) ══ -->
+  <!-- OFDM resource grid -->
+  <g class="sf appear a2">
+    <rect x="560" y="146" width="72" height="48" />
+    <path d="M 572 146 v 48 M 584 146 v 48 M 596 146 v 48 M 608 146 v 48 M 620 146 v 48" />
+    <path d="M 560 158 h 72 M 560 170 h 72 M 560 182 h 72" />
+  </g>
+  <g class="soft appear a2">
+    <rect x="572" y="158" width="12" height="12" />
+    <rect x="596" y="146" width="12" height="12" />
+    <rect x="620" y="170" width="12" height="12" />
+  </g>
+  <!-- spectrum mask -->
+  <g class="appear a2">
+    <path class="sf" d="M 430 272 v 40 h 100" />
+    <path class="sf dash" d="M 436 296 h 16 v -18 h 48 v 18 h 16" />
+    <path class="sk" d="M 438 308 C 462 264 502 264 526 308" />
+  </g>
+  <!-- DFE box -->
+  <g class="sk appear a2">
+    <rect x="660" y="192" width="48" height="48" rx="4" />
+  </g>
+  <text class="lbl appear a2" x="684" y="218" text-anchor="middle" dominant-baseline="middle">DFE</text>
+  <!-- antenna mast -->
+  <g class="sk">
+    <path d="M 740 330 V 150" />
+    <path d="M 732 166 L 740 148 L 748 166" />
+  </g>
+
+  <!-- ══ the signal: square wave → modulated carrier → up the mast ══ -->
+  <path
+    class="sa sig"
+    pathlength="1"
+    d="M 8 216 h 26 v -26 h 30 v 26 h 30 v -26 h 26 v 26 h 26 h 36"
+  />
+  <path
+    class="sa sig sig2"
+    pathlength="1"
+    d="M 286 216 h 32
+       c 26 -46 52 -46 78 0
+       c 26 46 52 46 78 0
+       c 26 -46 52 -46 78 0
+       h 30 M 708 216 h 32 v -66"
+  />
+
+  <!-- ══ rays into the twin world ══ -->
+  <g class="sa dash rays appear a3">
+    <path d="M 740 150 L 1224 182" />
+    <path d="M 740 150 L 966 182 L 1162 288" />
+    <path d="M 1252 200 L 1348 286" />
+  </g>
+
+  <!-- ══ zone 3: the world (today) ══ -->
+  <g id="hs-world">
+    <g class="sf">
+      <rect x="872" y="214" width="64" height="116" />
+      <path d="M 888 214 v 116 M 904 214 v 116 M 920 214 v 116" />
+      <rect x="948" y="178" width="58" height="152" />
+      <path d="M 948 200 h 58 M 948 226 h 58 M 948 252 h 58 M 948 278 h 58 M 948 304 h 58" />
+      <rect x="1018" y="238" width="70" height="92" />
+    </g>
+    <!-- car A -->
+    <g class="sk">
+      <rect x="1150" y="288" width="100" height="26" rx="10" />
+      <rect x="1172" y="270" width="48" height="20" rx="6" />
+      <circle cx="1174" cy="316" r="10" />
+      <circle cx="1228" cy="316" r="10" />
+    </g>
+    <!-- car B -->
+    <g class="sk">
+      <rect x="1330" y="288" width="100" height="26" rx="10" />
+      <rect x="1352" y="270" width="48" height="20" rx="6" />
+      <circle cx="1354" cy="316" r="10" />
+      <circle cx="1408" cy="316" r="10" />
+    </g>
+    <!-- drone -->
+    <g class="sk">
+      <rect x="1231" y="180" width="28" height="12" rx="4" />
+      <path d="M 1231 184 L 1213 176 M 1259 184 L 1277 176" />
+      <path d="M 1199 172 h 30 M 1261 172 h 30" />
+      <path d="M 1214 172 v 6 M 1276 172 v 6" />
+    </g>
+    <!-- micro-doppler ticks off the rotor -->
+    <g class="sa thin">
+      <path d="M 1300 160 q 7 9 0 18" />
+      <path d="M 1312 156 q 9 13 0 26" />
+      <path d="M 1324 152 q 11 17 0 34" />
+    </g>
+    <!-- robot arm + cube -->
+    <g class="sk">
+      <rect x="1458" y="314" width="44" height="16" rx="3" />
+      <path d="M 1480 314 L 1498 262 L 1544 244" />
+      <circle cx="1480" cy="314" r="5" />
+      <circle cx="1498" cy="262" r="5" />
+      <path d="M 1544 244 l 12 -8 M 1544 244 l 14 4" />
+      <rect x="1560" y="252" width="20" height="20" />
+    </g>
+  </g>
+
+  <!-- PC5 link between the cars -->
+  <g class="sa dash pulse">
+    <path d="M 1206 262 Q 1264 216 1322 262" />
+    <circle class="dot" cx="1206" cy="262" r="3.5" />
+    <circle class="dot" cx="1322" cy="262" r="3.5" />
+  </g>
+
+  <!-- ══ the twin: dashed mirror of the world below ground ══ -->
+  <g class="mirror appear a4">
+    <use href="#hs-world" transform="translate(0, 660) scale(1, -1)" />
+  </g>
+
+  <!-- zone captions -->
+  <text class="lbl" x="230" y="368">RTL · HLS</text>
+  <text class="lbl" x="560" y="368">5G PHY · O-RAN</text>
+  <text class="lbl acc appear a4" x="1240" y="424">digital twin · V2X · ISAC · robotics</text>
+
+  <style>
+    .hero-scene {
+      display: block;
+      width: 100%;
+      /* Fit the space left under the copy; slice-crop sky, keep the ground. */
+      height: clamp(210px, 31vh, 420px);
+    }
+    .hero-scene * {
+      vector-effect: non-scaling-stroke;
+    }
+    .sk {
+      stroke: var(--ink-2);
+      stroke-width: 1.6;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .sf {
+      stroke: var(--ink-3);
+      stroke-width: 1.2;
+      stroke-linecap: round;
+      opacity: 0.55;
+    }
+    .thin {
+      stroke-width: 1.1;
+    }
+    .sa {
+      stroke: var(--accent);
+      stroke-width: 1.7;
+      stroke-linecap: round;
+      stroke-linejoin: round;
+    }
+    .dash {
+      stroke-dasharray: 5 7;
+    }
+    .soft rect {
+      fill: var(--accent-soft);
+    }
+    .dot {
+      fill: var(--accent);
+      stroke: none;
+    }
+    .via {
+      fill: var(--ink-3);
+      stroke: none;
+    }
+    .mirror {
+      opacity: 0.25;
+    }
+    .mirror use {
+      stroke-dasharray: 3 5;
+    }
+    .lbl {
+      fill: var(--ink-3);
+      font-family: var(--font-mono);
+      font-size: 11px;
+      letter-spacing: 0.16em;
+      text-transform: uppercase;
+      text-anchor: middle;
+      stroke: none;
+    }
+    .lbl.acc {
+      fill: var(--accent);
+      opacity: 0.8;
+    }
+
+    /* Motion: draw the signal, then reveal rays and the reflection. */
+    @media (prefers-reduced-motion: no-preference) {
+      .sig {
+        stroke-dasharray: 1;
+        stroke-dashoffset: 1;
+        animation: hs-draw 0.9s cubic-bezier(0.4, 0, 0.2, 1) forwards;
+      }
+      .sig2 {
+        animation-delay: 0.75s;
+        animation-duration: 1s;
+      }
+      .appear {
+        opacity: 0;
+        animation: hs-fade 0.7s ease forwards;
+      }
+      .a1 { animation-delay: 0.3s; }
+      .a2 { animation-delay: 0.9s; }
+      .a3 { animation-delay: 1.7s; }
+      .a4 { animation-delay: 2.1s; }
+      /* .appear overrides base opacity; restore the faint layers' target */
+      .sf.appear { animation-name: hs-fade-soft; }
+      .mirror.appear { animation-name: hs-fade-mirror; }
+      .pulse path {
+        animation: hs-pulse 3.2s ease-in-out 2.6s infinite;
+      }
+    }
+    @keyframes hs-draw {
+      to { stroke-dashoffset: 0; }
+    }
+    @keyframes hs-fade {
+      to { opacity: 1; }
+    }
+    @keyframes hs-fade-soft {
+      to { opacity: 0.55; }
+    }
+    @keyframes hs-fade-mirror {
+      to { opacity: 0.25; }
+    }
+    @keyframes hs-pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.35; }
+    }
+  </style>
+</svg>
