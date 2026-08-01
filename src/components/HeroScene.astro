@@ -11,7 +11,7 @@
 <svg
   class="hero-scene"
   viewBox="0 0 1600 448"
-  preserveAspectRatio="xMidYMax slice"
+  preserveAspectRatio="xMidYMax meet"
   fill="none"
   xmlns="http://www.w3.org/2000/svg"
   aria-hidden="true"
@@ -164,8 +164,10 @@
     .hero-scene {
       display: block;
       width: 100%;
-      /* Fit the space left under the copy; slice-crop sky, keep the ground. */
-      height: clamp(210px, 31vh, 420px);
+      /* 28vw = the drawing's own aspect (1600:448), so the panorama is
+         never cropped: it fills the width, and on short windows the whole
+         drawing scales down (meet) instead of losing its top or sides. */
+      height: min(28vw, 38vh, 420px);
     }
     .hero-scene * {
       vector-effect: non-scaling-stroke;

@@ -134,15 +134,6 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     width: 100%;
     overflow: hidden;
   }
-  /* Narrow screens: keep the panorama legible by right-cropping to the
-     "today" end of the drawing instead of shrinking it to a sliver. */
-  @media (max-width: 760px) {
-    .scene :global(svg) {
-      width: 210%;
-      max-width: none;
-      margin-left: -110%; /* show the right (today) end of the panorama */
-    }
-  }
   .kicker {
     color: var(--ink-3);
     font-size: 0.75rem;

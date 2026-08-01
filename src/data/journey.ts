@@ -27,7 +27,7 @@ export const journey: Record<Locale, JourneyContent> = {
     heroTagline: 'From logic gates to digital twins.',
     heroIntro:
       'For a decade I made radio work in silicon: 5G physical layers closing timing at 300 MHz, O-RAN radio units coming up on the bench. Today I lead the group that builds the digital twins those systems are tested inside — and applies them across robotics, automotive, drones and 5G/6G. The useful part is the overlap: simulation people rarely built the hardware, and hardware people rarely build the simulator.',
-    heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hanoi',
+    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, Hanoi',
     journeyLabel: 'The journey',
     currentLabel: 'Programs I lead today',
     chapters: [
@@ -113,7 +113,7 @@ export const journey: Record<Locale, JourneyContent> = {
     heroTagline: 'Từ cổng logic đến digital twin.',
     heroIntro:
       'Mười năm đầu, tôi làm cho sóng vô tuyến chạy được trong silicon: các lớp vật lý 5G đóng timing ở 300 MHz, những chiếc O-RAN radio unit sáng đèn trên bàn thí nghiệm. Hôm nay tôi dẫn dắt group xây chính những digital twin dùng để kiểm thử các hệ thống đó — và mang chúng vào robotics, automotive, drones và 5G/6G. Phần có giá trị nằm ở chỗ giao nhau: người làm mô phỏng hiếm khi từng dựng phần cứng, còn người làm phần cứng hiếm khi tự viết được simulator.',
-    heroRole: 'Manager, Verticals Group — Robotics · Automotive · Drones · 5G/6G · SoC.one, Hà Nội',
+    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, Hà Nội',
     journeyLabel: 'Hành trình',
     currentLabel: 'Những chương trình tôi đang dẫn dắt',
     chapters: [
