@@ -91,16 +91,20 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 </Base>
 
 <style>
-  /* Full-viewport hero: copy on top, panorama pinned to the bottom edge. */
+  /* Full-viewport hero. The copy centres in the "sky" above the panorama
+     and the panorama tucks up behind it, so the two read as one scene
+     instead of two blocks with a void between them. */
   .hero {
     min-height: calc(100svh - 4.2rem);
     display: flex;
     flex-direction: column;
-    justify-content: space-between;
-    gap: 2.5rem;
   }
   .hero-copy {
-    padding-top: clamp(2rem, 6vh, 4rem);
+    flex: 1;
+    display: flex;
+    flex-direction: column;
+    justify-content: center;
+    padding-top: 1.5rem;
     max-width: none;
   }
   .hero-copy > * {
@@ -108,6 +112,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   }
   .cta {
     display: inline-block;
+    align-self: flex-start;
     margin-top: 1.75rem;
     padding: 0.65rem 1.3rem;
     border: 1px solid var(--hairline);
@@ -132,7 +137,16 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   }
   .scene {
     width: 100%;
+    flex-shrink: 0;
     overflow: hidden;
+  }
+  /* The drawing's top third is empty sky — let it rise behind the CTA
+     so the copy stands on the scene. Skip on small screens where the
+     scaled-down sky band is too shallow to clear the text. */
+  @media (min-width: 900px) {
+    .scene {
+      margin-top: clamp(-7rem, -8vh, -2rem);
+    }
   }
   .kicker {
     color: var(--ink-3);
