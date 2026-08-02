@@ -8,13 +8,31 @@ interface Props {
 
 const { locale } = Astro.props;
 
+// Citations are the same in both languages; only the section label is localised.
+const publications = [
+  {
+    authors: ['Thanh Phung Truong', 'Hieu Hoang Van', 'Trung Nguyen Canh', 'Hieu V. Nguyen', 'Sungrae Cho'],
+    title: 'Reinforcement Learning for RAN Intelligent Controller: A Case Study on Traffic Steering',
+    venue:
+      'Intelligence of Things: Technologies and Applications, Lecture Notes on Data Engineering and Communications Technologies, Springer, 2026, pp. 31–42',
+    href: 'https://doi.org/10.1007/978-3-032-13254-3_3',
+  },
+  {
+    authors: ['Trung Nguyen Canh', 'Hieu Hoang Van', 'Trang Cao Minh', 'Russ Klein'],
+    title: 'Fast, Efficient 5G with High-Level Synthesis',
+    venue:
+      'Proceedings of the Wireless Congress 2023: Systems & Applications, Munich, ISBN 978-3-645-50196-5',
+  },
+];
+const me = 'Trung Nguyen Canh';
+
 const content = {
   en: {
     title: 'About',
     heading: 'About me',
     paras: [
-      'I’m Canh-Trung Nguyen — an engineer from Hanoi who has spent his career at the line where hardware meets systems. I started in FPGA design: 5G physical-layer channels closing timing at hundreds of megahertz, digital front-ends meeting 3GPP spectrum masks, image-processing accelerators in HLS.',
-      'Today I manage the Verticals Group at SoC.one — teams working across robotics, automotive, drones, and 5G/6G — while staying hands-on as tech lead for its key programs: connected driving (C-V2X sidelink), V2X protocol stacks, digital twins with ray-traced radio channels, and sim-to-real robotics. The common thread: systems where the computed world has to agree with the physical one — and teams that need both rigor and momentum.',
+      'I’m Canh-Trung Nguyen — an engineer from Vietnam who has spent my career at the line where hardware meets systems. I started in FPGA design: 5G physical-layer channels closing timing at hundreds of megahertz, digital front-ends meeting 3GPP spectrum masks, and image-processing accelerators in HLS.',
+      'Today, I manage the Verticals Group at SoC.one — teams working across robotics, automotive, drones, and 5G/6G — while staying hands-on as tech lead for its key programs: connected driving (C-V2X sidelink), V2X protocol stacks, digital twins with ray-traced radio channels, and sim-to-real robotics. The common thread: systems where the computed world has to agree with the physical one — and teams that need both rigor and momentum.',
       'This site is the story of that path, plus a blog where I share perspectives on connected driving, robotics, and AI. Opinions here are my own; current work is described only at the level of public technologies and standards.',
     ],
     eduLabel: 'Education',
@@ -22,6 +40,7 @@ const content = {
       'M.S. Electrical & Computer Engineering — TU Kaiserslautern, Germany (Embedded Computing Systems)',
       'B.Eng. Electrical & Electronics Engineering — Hanoi University of Science and Technology (Microelectronics)',
     ],
+    pubLabel: 'Publications',
     contactLabel: 'Get in touch',
     contact:
       'The fastest way to reach me is email. I’m also on GitHub and LinkedIn.',
@@ -30,15 +49,16 @@ const content = {
     title: 'Giới thiệu',
     heading: 'Về tôi',
     paras: [
-      'Tôi là Nguyễn Cảnh Trung — một kỹ sư đến từ Hà Nội. Tôi khởi đầu từ thiết kế FPGA: các kênh lớp vật lý 5G với timing closure ở hàng trăm megahertz, digital front-end đạt spectrum mask 3GPP, các accelerator xử lý ảnh bằng HLS.',
-      'Hiện tại tôi là manager của Verticals Group tại SoC.one — các đội ngũ làm việc trên robotics, automotive, drones và 5G/6G — đồng thời trực tiếp làm tech lead cho các chương trình chủ chốt: connected driving (C-V2X sidelink), V2X protocol stack, digital twin với kênh vô tuyến ray-traced, và robotics sim-to-real. Sợi chỉ chung: những hệ thống nơi thế giới tính toán phải khớp với thế giới vật lý — và những đội ngũ cần cả sự chặt chẽ lẫn đà tiến.',
-      'Trang này kể câu chuyện của con đường đó, kèm một blog nơi tôi chia sẻ góc nhìn về connected driving, robotics và AI. Quan điểm ở đây là của cá nhân tôi; công việc hiện tại chỉ được mô tả ở mức công nghệ và chuẩn công khai.',
+      'Tôi là Nguyễn Cảnh Trung — một kỹ sư đến từ Hải Phòng - Hạ Long. Tôi khởi đầu sự nghiệp với mảng thiết kế FPGA: từ các kênh lớp vật lý 5G đạt timing closure ở hàng trăm megahertz, digital front-end đáp ứng spectrum mask 3GPP, cho đến các accelerator xử lý ảnh viết bằng HLS.',
+      'Hiện tại, tôi dẫn dắt Verticals Group tại SoC.one — với các đội ngũ phát triển trên robotics, automotive, drones và 5G/6G — đồng thời trực tiếp làm tech lead cho những chương trình chủ chốt: connected driving (C-V2X sidelink), V2X protocol stack, digital twin với kênh vô tuyến ray-traced, và robotics sim-to-real. Điểm chung cốt lõi: đây đều là những hệ thống nơi thế giới mô phỏng phải khớp với thế giới vật lý — và đòi hỏi những đội ngũ vừa kỷ luật và vừa năng động.',
+      'Trang web này kể lại câu chuyện của chặng đường đó, kèm một blog nơi tôi chia sẻ góc nhìn về connected driving, robotics và AI. Các quan điểm ở đây thuộc về cá nhân tôi; công việc hiện tại chỉ được đề cập ở phạm vi các công nghệ và tiêu chuẩn kỹ thuật công khai.',
     ],
     eduLabel: 'Học vấn',
     edu: [
       'Thạc sĩ Kỹ thuật Điện & Máy tính — TU Kaiserslautern, Đức (chuyên ngành hệ thống nhúng)',
       'Kỹ sư Điện — Điện tử — Đại học Bách khoa Hà Nội (chuyên ngành vi điện tử)',
     ],
+    pubLabel: 'Công bố khoa học',
     contactLabel: 'Liên hệ',
     contact: 'Cách nhanh nhất để liên hệ với tôi là email. Tôi cũng có mặt trên GitHub và LinkedIn.',
   },
@@ -63,6 +83,19 @@ const altPath = locale === 'en' ? '/vi/about/' : '/about/';
       <ul>
         {content.edu.map((e) => <li>{e}</li>)}
       </ul>
+      <h2>{content.pubLabel}</h2>
+      <ul class="pubs">
+        {
+          publications.map((p) => (
+            <li>
+              {p.authors.map((a, i) => (
+                <>{i > 0 && ', '}{a === me ? <strong>{a}</strong> : a}</>
+              ))}{', “'}{p.href ? <a href={p.href} rel="noopener">{p.title}</a> : p.title}{'”, '}
+              <em>{p.venue}</em>.
+            </li>
+          ))
+        }
+      </ul>
       <h2>{content.contactLabel}</h2>
       <p>{content.contact}</p>
       <p class="mono links">
@@ -86,5 +119,9 @@ const altPath = locale === 'en' ? '/vi/about/' : '/about/';
   }
   .links {
     font-size: 0.8rem;
+  }
+  .pubs li {
+    margin-top: 0.6rem;
+    line-height: 1.6;
   }
 </style>
