@@ -1,6 +1,6 @@
-# bibo.id.vn — Portfolio & Blog
+# Portfolio & Blog
 
-Portfolio cá nhân của Nguyễn Cảnh Trung. Astro 5, song ngữ EN (`/`) / VI (`/vi/`),
+Portfolio cá nhân được build với Astro 5, song ngữ EN (`/`) / VI (`/vi/`),
 host trên GitHub Pages, domain qua Cloudflare.
 
 ## Yêu cầu
@@ -10,11 +10,11 @@ host trên GitHub Pages, domain qua Cloudflare.
 
 ## Lệnh hằng ngày
 
-| Lệnh | Làm gì |
-|---|---|
-| `npm run dev` | Dev server (mặc định `localhost:4321`), hot-reload khi sửa file. **Search không chạy ở chế độ này** — ô search tự ẩn. |
-| `npm run build` | Build production vào `dist/` **và** sinh index Pagefind cho search. |
-| `npm run preview` | Phục vụ `dist/` đã build — đây là cách xem search chạy trên máy. |
+| Lệnh               | Làm gì                                                                                                                                    |
+| ------------------- | ------------------------------------------------------------------------------------------------------------------------------------------- |
+| `npm run dev`     | Dev server (mặc định`localhost:4321`), hot-reload khi sửa file. **Search không chạy ở chế độ này** — ô search tự ẩn. |
+| `npm run build`   | Build production vào`dist/` **và** sinh index Pagefind cho search.                                                                |
+| `npm run preview` | Phục vụ`dist/` đã build — đây là cách xem search chạy trên máy.                                                               |
 
 Quy trình xem đúng bản production trên máy:
 
@@ -57,15 +57,15 @@ draft: false        # true = không publish
 
 ## Sửa nội dung portfolio
 
-| File | Nội dung |
-|---|---|
-| `src/data/journey.ts` | Hero + 5 chương timeline (cả EN lẫn VI) |
-| `src/data/projects.ts` | 4 trang dự án (cả EN lẫn VI) |
-| `src/i18n/ui.ts` | Nhãn giao diện (nav, nút, placeholder…) |
-| `src/components/HeroScene.astro` | Bức panorama SVG ở hero |
-| `src/components/ChapterArt.astro` | 5 hình minh hoạ chương Journey |
-| `src/components/ProjectArt.astro` | 4 hình minh hoạ trang dự án |
-| `src/styles/global.css` | Token màu/chữ (light + dark), style chung |
+| File                                | Nội dung                                   |
+| ----------------------------------- | ------------------------------------------- |
+| `src/data/journey.ts`             | Hero + 5 chương timeline (cả EN lẫn VI) |
+| `src/data/projects.ts`            | 4 trang dự án (cả EN lẫn VI)            |
+| `src/i18n/ui.ts`                  | Nhãn giao diện (nav, nút, placeholder…) |
+| `src/components/HeroScene.astro`  | Bức panorama SVG ở hero                   |
+| `src/components/ChapterArt.astro` | 5 hình minh hoạ chương Journey          |
+| `src/components/ProjectArt.astro` | 4 hình minh hoạ trang dự án             |
+| `src/styles/global.css`           | Token màu/chữ (light + dark), style chung |
 
 Quy tắc nội dung: không tên customer, không codename/KPI nội bộ — mô tả ở mức
 nói được ở hội thảo. Bản VI giữ nguyên thuật ngữ kỹ thuật tiếng Anh.

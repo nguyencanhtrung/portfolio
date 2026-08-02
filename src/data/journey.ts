@@ -26,8 +26,8 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Canh-Trung Nguyen',
     heroTagline: 'From logic gates to digital twins.',
     heroIntro:
-      'For a decade I made radio work in silicon: 5G physical layers closing timing at 300 MHz, O-RAN radio units coming up on the bench. Today I lead the group that builds the digital twins those systems are tested inside — and applies them across robotics, automotive, drones and 5G/6G. The useful part is the overlap: simulation people rarely built the hardware, and hardware people rarely build the simulator.',
-    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, Hanoi',
+      'For a decade, I engineered radio systems in silicon—developing 5G physical layers and bringing O-RAN RUs and DUs up on the bench. Today, I lead a group building the digital twins used to test those very systems, extending their application across robotics, automotive, drones, and 5G/6G. My edge lies in the intersection: simulation engineers rarely build hardware, and hardware engineers rarely build simulators.',
+    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, USA - Hanoi Office',
     journeyLabel: 'The journey',
     currentLabel: 'Programs I lead today',
     chapters: [
@@ -35,19 +35,19 @@ export const journey: Record<Locale, JourneyContent> = {
         era: 'CH.01',
         years: '2008 — 2017',
         title: 'Foundations — the gate',
-        org: 'HUST, Hanoi → TU Kaiserslautern, Germany',
+        org: 'HUST, Hanoi, Vietnam → TU Kaiserslautern, Germany',
         story: [
           'Microelectronics at HUST, then embedded systems at TU Kaiserslautern — graduating at the top of the German scale.',
           'FPGA accelerator for intraday financial risk: 68× over the software it replaced, near one FLOP per cycle.',
           'Two habits started here: find the bottleneck first, and prove every speedup against a reference.',
         ],
-        metrics: ['68× speedup @ 100 MHz', '1.087 cycles / FLOP', 'M.S. grade 1.5 — top band'],
+        metrics: ['68× speedup @ 100 MHz', '1.087 cycles / FLOP'],
       },
       {
         era: 'CH.02',
         years: '2017 — 2021',
         title: '5G PHY & Radio — the block',
-        org: 'Viettel High Tech → VinSmart, Hanoi',
+        org: 'Viettel High Tech → VinSmart, Hanoi, Vietnam',
         story: [
           '5G NR base stations from the physical layer up, on Xilinx FPGAs.',
           'Led five engineers on PUSCH and PUCCH F3; a 2T2R digital front-end meeting the 3GPP spectrum mask.',
@@ -65,7 +65,7 @@ export const journey: Record<Locale, JourneyContent> = {
         era: 'CH.03',
         years: '2021 — 2022',
         title: 'Acceleration & Vision — the ladder',
-        org: 'Techvico (with a US imaging partner) → Avnet',
+        org: 'Techvico (Taiwan - USA) → Avnet (Singapore)',
         story: [
           'A deliberate step up the ladder: hand-written VHDL to Vitis HLS.',
           'Three novel image-processing accelerators — disparity, defect-pixel, geometric transform — plus a streaming pipeline with the Xilinx DPU.',
@@ -82,7 +82,7 @@ export const journey: Record<Locale, JourneyContent> = {
         era: 'CH.04',
         years: '2021 — 2024',
         title: 'O-RAN Systems — the box',
-        org: 'SoC.one, Hanoi',
+        org: 'SoC.one, USA - Hanoi Office',
         story: [
           'Joined SoC.one in 2021 — back to 5G, but as whole systems rather than blocks.',
           'FPGA acceleration for the 5G L1; O-DU and O-RU hardware platform bring-up.',
@@ -91,7 +91,7 @@ export const journey: Record<Locale, JourneyContent> = {
         ],
         metrics: [
           '5G L1 FPGA acceleration',
-          'O-DU / O-RU hardware bring-up',
+          'O-DU / O-RU hardware',
           'O-RAN fronthaul & timing',
         ],
       },
@@ -99,18 +99,17 @@ export const journey: Record<Locale, JourneyContent> = {
         era: 'CH.05',
         years: 'Late 2024 — present',
         title: 'Digital Twins & Verticals — the world',
-        org: 'SoC.one, Hanoi',
+        org: 'SoC.one, USA - Hanoi Office',
         story: [
           'Run the Verticals Group — robotics, automotive, drones, 5G/6G — as manager, and tech lead where the decisions are hardest.',
           'Build the world before the product: GPU ray-traced radio channels inside network and vehicle digital twins.',
           'ISAC sensing models and a V2X sidelink stack traced clause by clause to 3GPP, ETSI and SAE.',
-          'Sim-to-real robotics with measured transfer gates; the largest program grew 9 → ~20 engineers.',
+          'Sim-to-real and hardware/software co-design in robotics.',
         ],
         metrics: [
           'Verticals Group — 4 programs',
           'robotics · automotive · drones · 5G/6G',
-          'largest program 9 → ~20 engineers',
-          'Manager + hands-on tech lead',
+          '30 engineers',
         ],
       },
     ],
@@ -120,27 +119,27 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Nguyễn Cảnh Trung',
     heroTagline: 'Từ cổng logic đến digital twin.',
     heroIntro:
-      'Mười năm đầu, tôi làm cho sóng vô tuyến chạy được trong silicon: các lớp vật lý 5G đóng timing ở 300 MHz, những chiếc O-RAN radio unit sáng đèn trên bàn thí nghiệm. Hôm nay tôi dẫn dắt group xây chính những digital twin dùng để kiểm thử các hệ thống đó — và mang chúng vào robotics, automotive, drones và 5G/6G. Phần có giá trị nằm ở chỗ giao nhau: người làm mô phỏng hiếm khi từng dựng phần cứng, còn người làm phần cứng hiếm khi tự viết được simulator.',
-    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, Hà Nội',
+      'Trong mười năm đầu sự nghiệp, tôi tập trung vào lĩnh vực xử lý tín hiệu số trên nền tảng FPGA: từ việc tối ưu hóa (offload) lớp vật lý 5G cho đến phát triển mẫu thử nghiệm (prototype) O-RU and O-DU đầu tiên tại Việt Nam. Hiện tại, tôi đang dẫn dắt một nhóm kỹ sư phát triển các hệ thống bản sao số (digital twin) để kiểm thử những nền tảng trên — đồng thời ứng dụng chúng vào robotics, xe tự hành, drone và mạng 5G/6G. Tôi tin rằng giá trị cốt lõi nằm ở sự giao thoa này: bởi người làm mô phỏng hiếm khi có kinh nghiệm làm phần cứng thực tế, còn kỹ sư phần cứng lại ít khi tự xây dựng được hệ thống giả lập.',
+    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, USA - Hanoi Office',
     journeyLabel: 'Hành trình',
     currentLabel: 'Những chương trình tôi đang dẫn dắt',
     chapters: [
       {
         era: 'CH.01',
         years: '2008 — 2017',
-        title: 'Nền móng — cổng logic',
+        title: 'Nền móng',
         org: 'ĐH Bách khoa Hà Nội → TU Kaiserslautern, Đức',
         story: [
-          'Tốt nghiệp Vi điện tử ở Bách khoa Hà Nội, sau đó hoàn thành thạc sĩ hệ thống nhúng tại TU Kaiserslautern — Đức.',
-          'FPGA accelerator cho đánh giá rủi ro tài chính trong ngày: nhanh gấp 68 lần phần mềm nó thay thế, gần một FLOP mỗi chu kỳ.',
+          'Tốt nghiệp Vi điện tử ở Bách khoa Hà Nội, sau đó chương trình thạc sĩ hệ thống nhúng tại TU Kaiserslautern, Đức.',
+          'Phát triển FPGA accelerator cho đánh giá rủi ro tài chính trong ngày: nhanh gấp 68 lần phần mềm nó thay thế, gần một FLOP mỗi chu kỳ.',
           'Hai thói quen bắt đầu từ đây: tìm điểm nghẽn trước đã, và mọi mức tăng tốc phải chứng minh bằng reference.',
         ],
-        metrics: ['Tăng tốc 68× @ 100 MHz', '1.087 chu kỳ / FLOP', 'Điểm M.S. 1.5 — mức cao nhất'],
+        metrics: ['Tăng tốc 68× @ 100 MHz', '1.087 chu kỳ / FLOP'],
       },
       {
         era: 'CH.02',
         years: '2017 — 2021',
-        title: '5G PHY & Radio — khối logic',
+        title: '5G PHY & Radio',
         org: 'Viettel High Tech → VinSmart, Hà Nội',
         story: [
           'Trạm gốc 5G NR từ lớp vật lý trở lên, trên FPGA Xilinx.',
@@ -158,8 +157,8 @@ export const journey: Record<Locale, JourneyContent> = {
       {
         era: 'CH.03',
         years: '2021 — 2022',
-        title: 'Acceleration & Vision — nấc thang',
-        org: 'Techvico (cùng đối tác ISP tại Mỹ) → Avnet',
+        title: 'Acceleration & Vision',
+        org: 'Techvico (Taiwan - USA) → Avnet (Singapore)',
         story: [
           'Bước leo thang trừu tượng có chủ đích: từ VHDL viết tay lên Vitis HLS.',
           'Ba accelerator xử lý ảnh mới — disparity, defect-pixel, biến đổi hình học — cùng pipeline streaming ghép Xilinx DPU.',
@@ -175,8 +174,8 @@ export const journey: Record<Locale, JourneyContent> = {
       {
         era: 'CH.04',
         years: '2021 — 2024',
-        title: 'Hệ thống O-RAN — cả chiếc máy',
-        org: 'SoC.one, Hà Nội',
+        title: 'Hệ thống O-RAN',
+        org: 'SoC.one, USA - Hanoi Office',
         story: [
           'Gia nhập SoC.one năm 2021 — quay lại 5G, nhưng ở tầm cả hệ thống thay vì từng khối.',
           'Tăng tốc 5G L1 trên FPGA; bring-up nền tảng phần cứng O-DU và O-RU.',
@@ -192,19 +191,18 @@ export const journey: Record<Locale, JourneyContent> = {
       {
         era: 'CH.05',
         years: 'Cuối 2024 — nay',
-        title: 'Digital Twin & Verticals — cả thế giới',
-        org: 'SoC.one, Hà Nội',
+        title: 'Digital Twin & Verticals',
+        org: 'SoC.one, USA - Hanoi Office',
         story: [
-          'Điều hành Verticals Group — robotics, automotive, drones, 5G/6G — làm manager, và tech lead ở nơi quyết định khó nhất.',
-          'Dựng thế giới trước khi dựng sản phẩm: kênh vô tuyến ray-traced trên GPU trong digital twin của mạng và của xe.',
+          'Điều hành Verticals Group — robotics, automotive, drones, 5G/6G — với vai trò manager, và tech lead nơi những quyết định khó khăn nhất.',
+          'Dựng mô phỏng trước khi dựng sản phẩm: kênh vô tuyến ray-traced trên GPU trong digital twin của mạng và của xe.',
           'Mô hình ISAC sensing và V2X sidelink stack truy vết từng clause về 3GPP, ETSI, SAE.',
-          'Robotics sim-to-real với gate chuyển giao đo được; chương trình lớn nhất từ 9 lên ~20 kỹ sư.',
+          'Robotics sim-to-real và hardware/software co-design.',
         ],
         metrics: [
           'Verticals Group — 4 chương trình',
           'robotics · automotive · drones · 5G/6G',
-          'chương trình lớn nhất 9 → ~20 kỹ sư',
-          'Manager + tech lead trực chiến',
+          '30 kỹ sư',
         ],
       },
     ],

@@ -272,11 +272,25 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     transform: translate(50%, -50%);
   }
   @media (max-width: 900px) {
+    /* Reading order on small screens: era + title + org, then the art,
+       then bullets and chips. The body dissolves (display: contents) so
+       its children can be reordered around the art. */
     .chapter,
     .chapter:nth-child(even) {
-      display: block;
+      display: flex;
+      flex-direction: column;
+      align-items: stretch; /* desktop rule centres items; undo it here */
       padding: 0.5rem 0 2rem 1.5rem;
     }
+    .body {
+      display: contents;
+    }
+    .era { order: 1; margin-top: 1rem; }
+    .chapter h3 { order: 2; }
+    .org { order: 3; }
+    .art { order: 4; }
+    .story { order: 5; margin-top: 0; }
+    .metrics { order: 6; }
     /* One continuous left spine on small screens — no room for the wave. */
     .chapter:nth-child(even)::before {
       left: 0;
