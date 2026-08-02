@@ -236,10 +236,10 @@
 
     /* Motion: draw the signal, then reveal rays and the reflection. */
     @media (prefers-reduced-motion: no-preference) {
-      /* The signal re-fires on a loop: draws in, holds ~5s, then sweeps off
-         the end of the chain and starts over. The scene itself stays put —
+      /* The signal re-fires on a loop: draws in, holds, then sweeps off the
+         end of the chain and starts over. The scene itself stays put —
          re-fading the whole drawing would make the page feel unstable.
-         Both traces share the period so sig2 keeps its 0.75s lag forever. */
+         Both traces share the period, so sig2 keeps its lag on every cycle. */
       .sig {
         stroke-dasharray: 1;
         stroke-dashoffset: 1;
@@ -277,11 +277,13 @@
         animation: hs-pulse 3.2s ease-in-out 2.6s infinite;
       }
     }
+    /* Percentages of the duration above: 1.9s draw, 5.7s hold, 1.9s sweep
+       at 9.5s — all three stretch together when the duration changes. */
     @keyframes hs-sweep {
       0% { stroke-dashoffset: 1; }    /* off-screen ahead of the path */
-      23% { stroke-dashoffset: 0; }   /* drawn (2.2s) */
-      76% { stroke-dashoffset: 0; }   /* held (~5s) */
-      100% { stroke-dashoffset: -1; } /* swept off the end (2.3s) */
+      20% { stroke-dashoffset: 0; }   /* drawn */
+      80% { stroke-dashoffset: 0; }   /* held */
+      100% { stroke-dashoffset: -1; } /* swept off the end */
     }
     @keyframes hs-fade {
       to { opacity: 1; }
