@@ -42,7 +42,7 @@
     <path d="M 206 160 v 8 M 230 160 v 8 M 254 160 v 8" />
     <path d="M 206 264 v 8 M 230 264 v 8 M 254 264 v 8" />
   </g>
-  <text class="lbl" x="230" y="222" text-anchor="middle" dominant-baseline="middle">FPGA</text>
+  <text class="lbl lbl-in" x="230" y="222" text-anchor="middle" dominant-baseline="middle">FPGA</text>
 
   <!-- ══ zone 2: 5G PHY (the radio years) ══ -->
   <!-- OFDM resource grid -->
@@ -66,7 +66,7 @@
   <g class="sk appear a2">
     <rect x="660" y="192" width="48" height="48" rx="4" />
   </g>
-  <text class="lbl appear a2" x="684" y="218" text-anchor="middle" dominant-baseline="middle">DFE</text>
+  <text class="lbl lbl-in appear a2" x="684" y="218" text-anchor="middle" dominant-baseline="middle">DFE</text>
   <!-- antenna mast -->
   <g class="sk">
     <path d="M 740 330 V 150" />
@@ -89,9 +89,21 @@
        c 26 -46 52 -46 78 0
        c 26 46 52 46 78 0
        c 26 -46 52 -46 78 0
-       h 78"
+       h 108"
   />
   <path class="sa sig sig3" pathlength="1" d="M 708 216 h 32 v -66" />
+  <!-- Phone-only: the same chain as one unbroken path, including the runs
+       through the FPGA and DFE packages. A short bright dash travels along
+       it instead of the line drawing itself — see .sig-pulse. -->
+  <path
+    class="sa sig-pulse"
+    pathlength="1"
+    d="M 8 216 h 26 v -26 h 30 v 26 h 30 v -26 h 26 v 26 h 26 h 140 h 32
+       c 26 -46 52 -46 78 0
+       c 26 46 52 46 78 0
+       c 26 -46 52 -46 78 0
+       h 156 h 32 v -66"
+  />
 
   <!-- ══ rays into the twin world ══ -->
   <g class="sa dash rays appear a3">
@@ -164,7 +176,13 @@
   <text class="lbl" x="560" y="368">5G PHY · O-RAN</text>
   <text class="lbl acc appear a4" x="1240" y="424">digital twin · V2X · ISAC · robotics</text>
 
-  <style>
+</svg>
+
+<!-- The style block must stay OUTSIDE the <svg>: Astro leaves a <style> nested
+     inside SVG markup alone, so its rules ship unscoped and global. Class names
+     here (.lbl, .sk, .sa …) are shared with ChapterArt and ProjectArt, so an
+     unscoped rule silently reaches into those drawings too. -->
+<style>
     .hero-scene {
       display: block;
       width: 100%;
@@ -200,6 +218,18 @@
     .dash {
       stroke-dasharray: 5 7;
     }
+    /* Off everywhere except phones (and never without motion) — see below.
+       vector-effect must stay off here: with non-scaling-stroke the dash
+       lengths are measured in screen pixels while pathLength normalises to
+       the path's user-space length, so a short dash lands past the end of
+       the path and never renders. That also means the width is in user
+       units — ~3px once the panorama is scaled to a phone. */
+    .hero-scene .sig-pulse {
+      display: none;
+      /* Must out-specify `.hero-scene *` above, which sets non-scaling-stroke. */
+      vector-effect: none;
+      stroke-width: 15;
+    }
     .soft rect {
       fill: var(--accent-soft);
     }
@@ -230,11 +260,22 @@
       fill: var(--accent);
       opacity: 0.8;
     }
-    /* At phone widths the panorama is ~100px tall; the zone captions shrink
-       below legibility and read as smudges — drop them. */
+    /* At phone widths the panorama scales to about a fifth, taking the 11px
+       captions down to ~2px. Scale them up in user units instead of hiding
+       them, and pull the long one back from the right edge so it still fits. */
     @media (max-width: 700px) {
       .lbl {
-        display: none;
+        font-size: 34px;
+        letter-spacing: 0.1em;
+      }
+      .lbl.acc {
+        transform: translateX(-440px);
+      }
+      /* These two sit inside small packages — the zone-caption size would
+         spill past the box walls. */
+      .lbl-in {
+        font-size: 22px;
+        letter-spacing: 0.06em;
       }
     }
 
@@ -258,12 +299,29 @@
       .sig1 { animation-name: hs-sweep-1; }
       .sig2 { animation-name: hs-sweep-2; }
       .sig3 { animation-name: hs-sweep-3; }
-      /* On a phone the drawing is a third of the size, so the same sweep
-         covers too little distance to read as motion — stretch it out.
-         Percentages scale with the duration, so the hand-off still holds. */
+      /* Phones need a different idea, not a slower one. The whole chain is
+         ~180px wide there and the square wave only ~38px of it, so watching
+         a line draw itself over 38px reads as a blink while the longer
+         carrier visibly draws — the two look out of step even though they
+         are not. So: leave the chain drawn, and send a short pulse down it.
+         A moving object stays legible at any size. */
       @media (max-width: 700px) {
         .sig {
-          animation-duration: 14s;
+          animation: none;
+          stroke-dasharray: none;
+          stroke-dashoffset: 0;
+          /* The resting chain recedes so the pulse crossing it is the thing
+             that reads — same hue, so contrast has to come from weight. */
+          opacity: 0.4;
+        }
+        /* Same selector shape as the base rule above, or it loses on
+           specificity and the pulse stays hidden. */
+        .hero-scene .sig-pulse {
+          display: block;
+          /* dash 0.1 + gap 1.1 = one pulse on a path of length 1, with a
+             pause before the next enters. */
+          stroke-dasharray: 0.1 1.1;
+          animation: hs-travel 7s linear infinite;
         }
       }
       .appear {
@@ -282,31 +340,37 @@
       }
     }
     /* One pulse crossing the whole chain at a constant speed. Each segment's
-       share of the cycle is its share of the 812 units of path: 278 for the
-       square wave, 436 for the carrier, 98 for the mast riser. Head travels
+       share of the cycle is its share of the 842 units of path: 278 for the
+       square wave, 466 for the carrier, 98 for the mast riser. Head travels
        0–31.6%, the line holds, then the tail follows on the same schedule
        shifted by 57.9% — and the last segment clears before the cycle wraps,
        so a new pulse never starts while the old one is still leaving. */
     @keyframes hs-sweep-1 {
       0% { stroke-dashoffset: 1; }
-      10.8% { stroke-dashoffset: 0; }
+      10.4% { stroke-dashoffset: 0; }
       57.9% { stroke-dashoffset: 0; }
-      68.7% { stroke-dashoffset: -1; }
+      68.3% { stroke-dashoffset: -1; }
       100% { stroke-dashoffset: -1; }
     }
     @keyframes hs-sweep-2 {
-      0%, 10.8% { stroke-dashoffset: 1; }
-      27.8% { stroke-dashoffset: 0; }
-      68.7% { stroke-dashoffset: 0; }
-      85.7% { stroke-dashoffset: -1; }
+      0%, 10.4% { stroke-dashoffset: 1; }
+      27.9% { stroke-dashoffset: 0; }
+      68.3% { stroke-dashoffset: 0; }
+      85.8% { stroke-dashoffset: -1; }
       100% { stroke-dashoffset: -1; }
     }
     @keyframes hs-sweep-3 {
-      0%, 27.8% { stroke-dashoffset: 1; }
+      0%, 27.9% { stroke-dashoffset: 1; }
       31.6% { stroke-dashoffset: 0; }
-      85.7% { stroke-dashoffset: 0; }
+      85.8% { stroke-dashoffset: 0; }
       89.5% { stroke-dashoffset: -1; }
       100% { stroke-dashoffset: -1; }
+    }
+    /* One shift of the whole dash pattern: the pulse enters at the gates,
+       leaves at the mast, then the gap holds the path empty for a beat. */
+    @keyframes hs-travel {
+      from { stroke-dashoffset: 0; }
+      to { stroke-dashoffset: -1.2; }
     }
     @keyframes hs-fade {
       to { opacity: 1; }
@@ -321,5 +385,4 @@
       0%, 100% { opacity: 1; }
       50% { opacity: 0.35; }
     }
-  </style>
-</svg>
+</style>
