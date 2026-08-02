@@ -1,67 +1,56 @@
 ---
-title: 'Series - Setup KVM with PCIe passthrough - p4'
-description: 'Phần 4: khi mainboard không hỗ trợ ACS, cả nhóm thiết bị dính chung một IOMMU group và không tách ra được. Cách vá kernel bằng ACS override, build và cài kernel đã vá.'
+title: 'Setup KVM with PCIe passthrough - part 4: splitting the IOMMU group'
+description: 'Part 4: when the motherboard has no ACS support, a whole set of devices shares one IOMMU group and cannot be separated. Patching the kernel with the ACS override, building it and installing it.'
 date: 2023-09-28
-lang: vi
+lang: en
 key: journey-to-install-kvm-with-pcie-passthrough-p4
 tags: ['kvm']
 series: 'Setup KVM with PCIe passthrough'
 seriesOrder: 4
 ---
-## 1. Tách IOMMU group
+## 1. Splitting IOMMU group
 
-Cuối phần 3, card Xilinx nằm chung IOMMU group với card đồ hoạ NVIDIA. Vì mọi
-thiết bị trong cùng group phải đi cùng nhau vào một máy ảo, tôi không thể đưa
-card Xilinx vào máy ảo mà vẫn giữ GPU cho host. Phần này tách nhóm đó ra.
+### 1.1 PCIe ACS override
 
-### 1.1 PCIe ACS override là gì
+PCIe ACS (Access Control Services) Override is a feature in Linux-based systems and server systems that use PCIe (Peripheral Component Interconnect Express) ports. This feature allows you to override or modify the configuration of the ACS protocol within the PCIe system. ACS is part of the PCIe standard and plays a role in controlling access to PCIe devices, especially when using PCIe passthrough in virtualization.
 
-ACS (Access Control Services) là một phần của chuẩn PCIe. Nó cho phép một PCIe
-switch hoặc root port khẳng định rằng các thiết bị phía dưới **không** nói
-chuyện trực tiếp với nhau mà mọi giao dịch đều phải đi ngược lên trên. Chỉ khi
-có bảo đảm đó, kernel mới dám xếp mỗi thiết bị vào một IOMMU group riêng.
+Specifically, the PCIe ACS Override feature allows you to:
 
-Khi mainboard không khai báo ACS — rất phổ biến với board desktop — kernel buộc
-phải giả định các thiết bị có thể nói chuyện trực tiếp với nhau, nên gộp tất cả
-vào chung một group. Đó chính xác là tình huống ở phần 3.
+**Override:** Modify the ACS configuration to eliminate or modify access constraints between PCIe devices. This can be useful when you want to share PCIe devices among virtual machines or different Linux systems and need to disable or adjust ACS constraints.
 
-`pcie_acs_override` là một patch cho phép ép kernel bỏ qua giả định thận trọng
-đó và tách group ra như thể phần cứng có hỗ trợ ACS.
+**Configuration Management:** Adjust how the system manages access to PCIe devices. You can specify access rights for virtual machines or physical devices to specific PCIe devices.
 
-Cần nói rõ đây là đánh đổi về bảo mật, không phải bản vá miễn phí. Sự cô lập mà
-ACS đảm bảo vốn nằm ở phần cứng; ép override nghĩa là ta tự cam kết rằng các
-thiết bị trong nhóm không tấn công lẫn nhau qua đường peer-to-peer. Với một máy
-lab do mình toàn quyền kiểm soát thì chấp nhận được. Với máy chủ chạy khối lượng
-công việc của người khác thì không nên.
+**Customization:** PCIe ACS Override enables you to customize the ACS configuration based on your specific needs, especially when using PCIe passthrough in a virtualized environment.
 
-### 1.2 Bật PCIe ACS override
+Please note that using PCIe ACS Override should be done carefully and following the specific guidelines of your system and virtualization management software, such as KVM/QEMU or VMware. Adjusting the ACS configuration can affect the stability and security of the PCIe system, so it should be performed knowledgeably, taking into account its impact on the system.
 
-Mở file cấu hình grub:
+### 1.2 Enable PCIe ACS override
+
+Open the grub configuration file:
 
 ```shell
 sudo nano /etc/default/grub
 ```
 
-Thêm cờ `pcie_acs_override=downstream,multifunction` vào biến
-`GRUB_CMDLINE_LINUX_DEFAULT`:
+Add the `pcie_acs_override=downstream,multifunction` flags to the `GRUB_CMDLINE_LINUX` variable:
 
 ```shell
 GRUB_CMDLINE_LINUX_DEFAULT="quiet intel_iommu=on pcie_acs_override=downstream,multifunction vfio-pci.ids=10ee:5000,10ee:5001"
 ```
 
-Cập nhật grub:
+Update grub:
 
 ```shell
 sudo update-grub
 ```
 
-hoặc:
+or
 
 ```shell
 sudo grub-mkconfig -o /boot/grub/grub.cfg
 ```
 
-Kiểm tra lại kernel command line:
+Check the new content of Grub by
 
 ```shell
 cat /proc/cmdline
@@ -69,13 +58,13 @@ cat /proc/cmdline
 BOOT_IMAGE=/boot/vmlinuz-5.15.0-acso root=UUID=2006ace4-1a9a-4d7f-aa7c-685cae3abe4c ro quiet intel_iommu=on pcie_acs_override=downstream,multifunction vfio-pci.ids=10ee:5000,10ee:5001
 ```
 
-Sau đó reboot host:
+Then, reboot the host.
 
 ```shell
 sudo reboot now
 ```
 
-Reboot xong, kiểm tra lại IOMMU group:
+After rebooting, re-check IOMMU group:
 
 ```shell
 ./iommu_viewer.sh
@@ -96,20 +85,15 @@ Group:  4   0000:00:14.0 USB controller [0c03]: Intel Corporation Cannon Lake PC
 ...
 ```
 
-Và nhóm vẫn y nguyên. Lý do: kernel Ubuntu tiêu chuẩn **không có** patch
-`pcie_acs_override` — tham số đó chỉ tồn tại nếu kernel đã được vá. Thêm cờ vào
-grub trên một kernel chưa vá thì kernel đơn giản là bỏ qua nó, không báo lỗi gì
-cả. Máy tôi dùng mainboard Z390 Gigabyte Wifi Pro với CPU 9900K, và đây chính là
-tình huống đó.
+Unfortunately, it DID NOT work since my machine which includes a MOBO (Z390 Gigabyte Wifi Pro + CPU 9900K) does not support `pcie_acs_override`. 
 
-Vậy nên phương án còn lại là tự build một kernel có patch ACS rồi boot bằng
-kernel đó.
+The last solution would be rebuild the host's kernel that patched ACS feature and use that kernel instead. Luckily, I found a way to do so.
 
-## 2. Build kernel đã vá ACS
+## 2. Build patched ACS kernel
 
-### 2.1 Tải patch ACS và mã nguồn kernel
+### 2.1 Download ACS patch and original kernel to build
 
-Trên máy host:
+On the host machine, 
 
 ```shell
 sudo apt update && sudo apt upgrade
@@ -122,7 +106,7 @@ wget https://github.com/torvalds/linux/archive/refs/tags/v5.15.zip
 unzip v5.15.zip
 ```
 
-### 2.2 Sửa file config để tránh lỗi build
+### 2.2 Editing config file to avoid building error
 
 
 ```shell
@@ -133,25 +117,18 @@ ls /boot | grep config
 sudo nano .config
 ```
 
-Dùng `Ctrl+w` trong nano để tìm `CONFIG_SYSTEM_TRUSTED_KEYS`, rồi comment dòng
-đó lại:
-
+Use `Ctrl+w` to search for `CONFIG_SYSTEM_TRUSTED_KEYS` on nano and comment out the line like:
 `#CONFIG_SYSTEM_TRUSTED_KEYS`
-
-`Ctrl+x` để lưu và thoát.
-
-Bước này là bắt buộc: file config sao chép từ kernel Ubuntu đang chạy có trỏ tới
-khoá ký của Canonical, mà máy mình không có khoá đó nên quá trình build sẽ dừng
-giữa chừng.
+`Ctrl+x` to Save & Exit
 
 
-### 2.3 Áp patch ACS
+### 2.3 Apply patches ACS
 
 ```shell
 patch -p1 < ../acso.patch
 ```
 
-Kết quả mong đợi:
+Output should be something like this:
 
 
 ```shell
@@ -162,29 +139,23 @@ Hunk #1 succeeded at 3515 with fuzz 2 (offset -29 lines).
 Hunk #2 succeeded at 5049 with fuzz 1 (offset 153 lines).
 ```
 
-`fuzz` và `offset` ở đây là bình thường: patch được viết cho một phiên bản
-kernel khác nên vị trí các dòng bị lệch, và `patch` tự dò ra chỗ đúng. Chỉ cần
-không có dòng nào báo `FAILED` là ổn.
+This shows a successful patch that required a fuzz (slight offset change) because the patch was made for an earlier kernel version. As long as there isn't an error this should be okay.
+Run the following command to build the kernel:
 
-Tiếp theo là build kernel:
-
-### 2.4 Build kernel
+### 2.4 Build patched kernel
 
 ```shell
 sudo make -j `getconf _NPROCESSORS_ONLN` bindeb-pkg LOCALVERSION=-acso KDEB_PKGVERSION=$(make kernelversion)-1
 ```
 
-Cứ nhấn `Enter` cho mọi câu hỏi cấu hình. Quá trình này mất khá lâu — trên máy
-tôi khoảng một tiếng.
+Press Enter for all prompts.
 
-**Lưu ý:** nếu build lỗi, bỏ phần ``-j `getconf _NPROCESSORS_ONLN` `` khỏi lệnh
-`make` rồi chạy lại. Build tuần tự sẽ cho thông báo lỗi rõ ràng thay vì bị trộn
-lẫn giữa nhiều tiến trình song song.
+**Note:** If you get a build failure remove the "-j `getconf _NPROCESSORS_ONLN`"" part from the make line and run it again to see the error with more detail and fix it.
 
 
-### 2.5 Cài kernel đã vá
+### 2.5 Install the patched kernel
 
-Build xong thì cài kernel mới:
+When you get a successful build run the following to install the kernel:
 
 ```shell
 ls ../linux-*.deb
@@ -205,26 +176,24 @@ update-initramfs -u
 reboot
 ```
 
-Khi máy khởi động lại, giữ `SHIFT` để vào menu grub rồi chọn kernel đã vá:
-`Advanced Ubuntu` > `5.15.0-acso`.
+When the system rebooting, hold `SHIFT` to entering the patched kernel  `Advanced Ubuntu` > `5.15.0-acso`
 
-### 2.6 Nếu máy treo khi boot (tuỳ trường hợp)
+### 2.6 In case booting hang (optional)
 
-Khởi động lại, giữ `SHIFT` để vào kernel đã vá `Advanced Ubuntu` > `5.15.0-acso`.
+Reboot the system hold `SHIFT` to entering the patched kernel  `Advanced Ubuntu` > `5.15.0-acso`
 
-Nhấn `e` để sửa dòng lệnh grub.
+Press `e` to edit the grub
 
-Thêm `nomodeset` vào cuối dòng lệnh. Tham số này bảo kernel đừng nạp driver đồ
-hoạ ở giai đoạn sớm — chính driver đó gây treo khi GPU vừa bị tách IOMMU group:
+Appending `nomodeset` in the command line (watch video in the following reference to know the detail)
 
 ```
 linux     /boot/vmlinuz ....    .... downstream nomodeset ...
 ```
 
-Nhấn `F10` để lưu và boot tiếp.
+Then press `F10` to save and reload.
 
 
-Boot xong, kiểm tra lại IOMMU group:
+After rebooting, let's check IOMMU group now
 
 ```shell
 tesla@tesla:~/kvm$ ./iommu_viewer.sh 
@@ -254,32 +223,29 @@ Group:  16  0000:03:00.0 Non-Volatile memory controller [0108]: Samsung Electron
 Group:  17  0000:05:00.0 Non-Volatile memory controller [0108]: Samsung Electronics Co Ltd NVMe SSD Controller SM981/PM981/PM983 [144d:a808]   Driver: nvme
 ```
 
-Đến đây card Xilinx và card NVIDIA đã nằm ở hai IOMMU group khác nhau — đúng
-thứ cần đạt được. Giờ có thể đưa riêng card Xilinx vào máy ảo mà vẫn giữ GPU
-cho host.
+Now, Xilinx card and Nvidia card are in different IOMMU groups
 
-### 2.7 Đặt grub tự boot vào kernel đã vá
+### 2.7 Change Grub to auto boot to patched kernel
 
 ```shell
 sudo nano /etc/default/grub
 ```
 
-Sửa dòng sau trong `/etc/default/grub`:
+Change
 
 ```shell
 GRUB_DEFAULT="1>4"
 
 ```
 
-Rồi cập nhật lại grub:
+Then,
 
 ```bash
 sudo update-grub
 reboot
 ```
 
-**Lưu ý:** chỉ số `1` và `4` được đếm theo đúng thứ tự các mục trong menu grub
-(giữ `SHIFT` khi khởi động để xem). Đếm sai một nấc là boot nhầm kernel.
+**Note:** The index `1` or `4` is counted based on the order in the menu (after rebooting, hold `SHIFT`).
 
 ```
 Ubuntu              (index = 0)
@@ -292,7 +258,7 @@ Advanced Ubuntu     (index = 1)
 ...
 ```
 
-## 3. Tham khảo
+## 3. References
 
 Visit [video](https://www.youtube.com/watch?v=JBEzshbGPhQ)
 

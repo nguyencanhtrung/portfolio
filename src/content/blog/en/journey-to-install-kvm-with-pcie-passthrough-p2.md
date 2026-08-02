@@ -1,55 +1,54 @@
 ---
-title: 'Series - Setup KVM with PCIe passthrough - p2'
-description: 'Phần 2: cài KVM, libvirt và bộ công cụ đi kèm trên Ubuntu, kiểm tra CPU có hỗ trợ ảo hoá, cấp quyền cho user, dựng mạng NAT và mạng bridge, rồi tạo máy ảo đầu tiên bằng virt-install.'
+title: 'Setup KVM with PCIe passthrough - part 2: installing KVM'
+description: 'Part 2: installing KVM, libvirt and the surrounding tools on Ubuntu, checking the CPU can virtualise, granting the user permissions, setting up NAT and bridged networking, then creating the first guest with virt-install.'
 date: 2023-09-28
-lang: vi
+lang: en
 key: journey-to-install-kvm-with-pcie-passthrough-p2
 tags: ['kvm']
 series: 'Setup KVM with PCIe passthrough'
 seriesOrder: 2
 ---
-## 1. Giới thiệu
+## 1. Introduction
 
-Phần 1 đã nói vì sao phải đưa hẳn một card PCIe vào máy ảo, và VFIO cùng IOMMU
-đóng vai trò gì. Phần này dựng cỗ máy sẽ nhận card đó: cài bộ KVM, xác nhận host
-thật sự chạy được ảo hoá phần cứng, dựng mạng và storage, rồi tạo máy ảo đầu
-tiên bằng `virt-install`. Phần passthrough sẽ bắt đầu từ bài 3.
+Part 1 explained why a PCIe device has to be handed to a guest, and what VFIO
+and IOMMU do. This part builds the machine that will receive it: installing the
+KVM stack, confirming the host can actually accelerate, wiring up networking and
+storage, then creating a first guest with `virt-install`. The passthrough itself
+comes in parts 3 to 5.
 
-## 2. Điều kiện cần
+## 2. Prerequisites
 
-Trước khi bắt đầu, cần đảm bảo đủ ba thứ sau:
+Before getting started, ensure that you meet the following prerequisites:
 
-1. **Hệ điều hành**: Ubuntu 20.04, kernel v5.15.
+1. **Linux System**: Ubuntu 20.04 - kernel v5.15.
 
-2. **BIOS**: bật Intel Virtualization Technology (Intel VT) và Intel VT-d trong
-   BIOS của server. Thiếu VT-d thì phần passthrough ở các bài sau sẽ không chạy.
+2. **Bios**: Make sure Intel Virtualization Technology (Intel VT) and Intel ® VT-d must be enabled from server BIOS
 
-3. **CPU**: kiểm tra CPU có hỗ trợ ảo hoá và IOMMU hay không:
+3. **CPU Support**: Check if your CPU supports virtualization and IOMMU (Input-Output Memory Management Unit) by running:
 
 ```bash
 egrep -c '(vmx|svm)' /proc/cpuinfo
 ```
-Kết quả trả về `0` nghĩa là CPU không chạy được KVM. Bất kỳ số nào khác `0` đều
-hợp lệ — con số đó chính là số core có hỗ trợ.
+If the command returns a value of 0, your processor is not capable of running KVM. On the other hand, any other number means you can proceed with the installation.
 
-Đủ ba điều kiện trên là cài được.
+You are now ready to start installing KVM.
 
-## 3. Cài đặt KVM
+## 3. KVM Installation
 
-### 3.1 Cài KVM và bộ công cụ đi kèm
+### 3.1 Install KVM and assorted tools
 
 ```shell
 sudo apt update
 sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system virtinst bridge-utils cpu-checker virt-viewer virt-manager qemu-system
 ```
 
-### 3.2 Kiểm tra hệ thống dùng được KVM acceleration chưa
+### 3.2 Check whether your system can use KVM acceleration
 
 ```shell
 sudo kvm-ok
 ```
 
-Kết quả mong đợi:
+The output should look like this:
 
 ```shell
 tesla@tesla:~/kvm$ kvm-ok
@@ -57,10 +56,7 @@ INFO: /dev/kvm exists
 KVM acceleration can be used
 ```
 
-Sau đó chạy `virt-host-validate` để soát toàn bộ các điều kiện ảo hoá cùng một
-lượt. Dòng đáng quan tâm nhất cho loạt bài này là
-`Checking for device assignment IOMMU support` — nó phải `PASS`, nếu không thì
-quay lại BIOS bật VT-d.
+Then run the virt-host-validate utility to run a whole set of checks against your virtualization ability and KVM readiness.
 
 ```shell
 $ sudo virt-host-validate
@@ -104,10 +100,9 @@ QEMU: Checking for device assignment IOMMU support                         : PAS
  LXC: Checking if device /sys/fs/fuse/connections exists                   : PASS
 ```
 
-### 3.3 Thêm user vào các group libvirt
+### 3.3 Add user to libvirt groups
 
-Để quản lý máy ảo mà không phải gõ `sudo` mỗi lần, thêm user hiện tại vào tất cả
-các group `libvirt*` và cả group `kvm`:
+To allow the current user to manage the guest VM without sudo, we can add ourselves to all of the libvirt groups (e.g. libvirt, libvirt-qemu) and the kvm group
 
 ```shell
 cat /etc/group | grep libvirt | awk -F':' {'print $1'} | xargs -n1 sudo adduser $USER
@@ -120,28 +115,24 @@ exec su -l $USER
 id | grep libvirt
 ```
 
-Thay đổi group chỉ có hiệu lực sau khi đăng nhập lại. Nếu lệnh `id` chưa thấy
-các group `libvirt*` thì logout rồi login lại, hoặc dùng `exec su -l $USER`.
+Group membership requires a user to log back in, so if the `id` command does not show your libvirt* group membership, logout and log back in, or try `exec su -l $USER`.
 
-### 3.4 Trỏ QEMU về system daemon
+### 3.4 QEMU connection to system
 
-Nếu không khai báo rõ, QEMU ở userspace sẽ kết nối tới `qemu:///session` chứ
-không phải `qemu:///system`. Hệ quả là chạy `virsh` bằng user thường và bằng
-`sudo` sẽ thấy hai tập domain, network và storage pool hoàn toàn khác nhau —
-một nguồn nhầm lẫn kinh điển khi máy ảo "biến mất".
+If not explicitly set, the userspace QEMU connection will be to `qemu:///session`, and not to `qemu:///system`.  This will cause you to see different domains, networks, and disk pool when executing virsh as your regular user versus sudo.
 
-Thêm biến môi trường sau vào profile để mọi phiên đăng nhập đều dùng chung một
-kết nối:
+Modify your profile so that the environment variable below is exported to your login sessions.
 
 ```shell
 # use same connection and objects as sudo
 export LIBVIRT_DEFAULT_URI=qemu:///system
 ```
 
-### 3.5 Mạng mặc định
+### 3.5 Default network
 
-Mặc định KVM tạo một virtual switch, hiện ra trên host dưới dạng interface
-`virbr0` với dải 192.168.122.0/24. Kiểm tra bằng `ip`:
+By default, KVM creates a virtual switch that shows up as a host interface named `virbr0` using 192.168.122.0/24.
+
+This interface should be visible from the Host using the “ip” command below.
 
 ```shell
 $ ip addr show virbr0
@@ -151,17 +142,13 @@ $ ip addr show virbr0
        valid_lft forever preferred_lft forever
 ```
 
-`virbr0` chạy ở chế độ NAT: máy ảo đi ra ngoài được, nhưng chiều ngược lại thì
-chỉ host (và các máy ảo cùng subnet) mới kết nối vào được.
+`virbr0` operates in NAT mode, which allows the guest OS to communicate out, but only allowing the Host(and those VMs in its subnet) to make incoming connections.
 
-### 3.6 Mạng bridge
+### 3.6 Bridge network
 
-Muốn máy ảo nằm cùng lớp mạng với host — để máy khác trong LAN truy cập thẳng
-vào máy ảo — thì phải tạo bridge tới interface vật lý (`eth0`, `ens4`,
-`enp1s0`…).
+To enable guest VMs on the same network as the Host, you should create a bridged network to your physical interface (e.g. eth0, ens4, epn1s0).
 
-Trước hết dùng NetPlan để bridge interface vật lý thành `br0` ở mức hệ điều
-hành, sau đó tạo một libvirt network tên `host-bridge` trỏ vào `br0`:
+Read my article here for how to use NetPlan on Ubuntu to bridge your physical network interface to `br0` at the OS level.  And then use that to create a libvirt network named `host-bridge` that uses `br0`.
 
 ```shell
 # bridge to physical network
@@ -175,13 +162,13 @@ $ virsh net-dumpxml host-bridge
 </network>
 ```
 
-`host-bridge` sẽ được dùng lại ở các bài sau.
+This `host-bridge` will be required in later articles.
 
-Hướng dẫn tạo `br0` bằng NetPlan xem [tại đây](https://fabianlee.org/2019/04/01/kvm-creating-a-bridged-network-with-netplan-on-ubuntu-bionic/).
+Instruction to setup host's OS to create `br0` [here](https://fabianlee.org/2019/04/01/kvm-creating-a-bridged-network-with-netplan-on-ubuntu-bionic/)
 
-### 3.7 Bật IPv4 forwarding trên host
+### 3.7 Enable IPv4 forwarding on KVM host
 
-Để host định tuyến được cho NAT network, phải bật IPv4 forwarding:
+In order to handle NAT and routed networks for KVM, enable IPv4 forwarding on this host.
 
 ```shell
 # this needs to be "1"
@@ -193,13 +180,11 @@ echo net.ipv4.ip_forward=1 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 ```
 
-### 3.8 Storage pool
+### 3.8 Default storage pool
 
-Storage pool mặc định cho ổ đĩa máy ảo là `/var/lib/libvirt/images`. Dùng để thử
-nghiệm thì ổn, nhưng nếu muốn đặt đĩa máy ảo lên một ổ khác (SSD chẳng hạn) thì
-nên tạo pool riêng.
+The “default” storage pool for guest disks is `/var/lib/libvirt/images`.   This is fine for test purposes, but if you have another mount that you want to use for guest OS disks, then you should create a custom storage pool.
 
-Dưới đây là các lệnh tạo pool tên `kvmpool` trên SSD mount tại `/data/kvm/pool`:
+Below are the commands to create a “kvmpool” on an SSD mounted at `/data/kvm/pool`.
 
 ```shell
 $ virsh pool-list --all
@@ -221,19 +206,18 @@ $ virsh pool-list --all
 ```
 
 
-## 4. Tạo máy ảo bằng `virt-install`
+## 4. VM creation using `virt-install`
 
-### 4.1 Tải ISO Ubuntu 20.04
+### 4.1 Download ubuntu 20.04 focal iso
 
-Cần một image để boot. Ở đây dùng luôn ISO Ubuntu 20.04, tải về thành file
-`~/kvm/mini.iso`:
+In order to test you need an OS boot image.  Since we are on an Ubuntu host, let’s download the ISO for the network installer of Ubuntu 20.04 Focal. When complete, you should have a local file named `~/kvm/mini.iso`
 
 
 ```shell
 wget https://releases.ubuntu.com/20.04.6/ubuntu-20.04.6-desktop-amd64.iso -O ~/kvm/mini.iso
 ```
 
-Trước khi tạo, liệt kê xem host đang có máy ảo nào:
+First list what virtual machines are running on our host:
 
 ```shell
 # chown is only necessary if virsh was run previously as sudo
@@ -244,18 +228,15 @@ sudo chown -R $USER:$USER ~/.virtinst
 virsh list --all
 ```
 
-Danh sách sẽ rỗng vì chưa có máy ảo nào được tạo.
+This should return an empty list of VMs, because no guest OS have been deployed. 
 
-### 4.2 Cài máy ảo `ukvm2004`
+### 4.2 Installing `ukvm2004` VM
 
 ```shell
 virt-install --virt-type=kvm --name=ukvm2004 --ram 8192 --vcpus=4 --virt-type=kvm --hvm --cdrom ~/kvm/mini.iso --network network=default --disk pool=default,size=20,bus=virtio,format=qcow2 --noautoconsole --machine q35
 ```
 
-Lưu ý quan trọng: phải chọn machine type `q35`. Đây là điều kiện để máy ảo có
-PCIe đầy đủ — nếu tạo máy ảo bằng `virt-manager` thì cũng phải chọn `q35`, không
-dùng mặc định `i440fx`. Chọn sai ở bước này thì tới bài 5 sẽ không gắn được card
-vào máy ảo.
+Note: When creating VM's using virt-manager, make sure to also select `q35` as the machine type for full support of pcie in your guests.
 
 * VM name:   `ukvm2004`
 * VCPU: `4`
@@ -264,22 +245,21 @@ vào máy ảo.
 * Pool storage:  `default` and size = 20GB
 * Graphic: `default` - spice
 
-### 4.3 Mở máy ảo
+### 4.3 Open the VM
 
 ```shell
 # open console to VM
 virt-viewer ukvm2004
 ```
 
-`virt-viewer` mở một cửa sổ hiển thị màn hình máy ảo. Click chuột vào cửa sổ rồi
-nhấn `Enter` sẽ thấy màn hình cài đặt Ubuntu.
+`virt-viewer` will popup a window for the Guest OS, when you click the mouse in the window and then press <ENTER> you will see the initial Ubuntu network install screen.
 
-`virt-manager` là giao diện đồ hoạ để tạo và quản lý máy ảo; những máy ảo tạo
-bằng `virt-install` từ dòng lệnh cũng hiện trong danh sách này.
+`virt-manager` provides a convenient interface for creating or managing a guest OS, and any guest OS you create from the CLI using virt-install will show up in this list also.
 
-### 4.4 Dừng và xoá máy ảo
 
-Muốn xoá hẳn máy ảo, đóng cửa sổ `virt-viewer` rồi chạy:
+### 4.4 Stop and delete VM
+
+If you want to delete this guest OS completely, close the GUI window opened with virt-viewer, then use the following commands:
 
 ```shell
 virsh destroy ukvm2004
@@ -287,6 +267,6 @@ virsh undefine ukvm2004
 ```
 
 
-## 5. Tham khảo
+## 5. References
 
-Xem thêm [tổng hợp lệnh KVM](https://fabianlee.org/2018/08/27/kvm-bare-metal-virtualization-on-ubuntu-with-kvm/)  and [Xilinx instruction](https://www.xilinx.com/developer/articles/using-alveo-data-center-accelerator-cards-in-a-kvm-environment.html)
+Visit [kvm all commands](https://fabianlee.org/2018/08/27/kvm-bare-metal-virtualization-on-ubuntu-with-kvm/)  and [Xilinx instruction](https://www.xilinx.com/developer/articles/using-alveo-data-center-accelerator-cards-in-a-kvm-environment.html)

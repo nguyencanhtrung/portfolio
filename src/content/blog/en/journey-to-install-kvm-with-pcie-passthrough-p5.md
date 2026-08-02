@@ -1,33 +1,32 @@
 ---
-title: 'Series - Setup KVM with PCIe passthrough - p5'
-description: 'Phần 5: gắn card PCIe vào máy ảo. Xác định thiết bị, tách khỏi host, chuyển địa chỉ domain/bus/slot/function sang hex và khai báo hostdev trong file XML của máy ảo.'
+title: 'Setup KVM with PCIe passthrough - part 5: attaching the card'
+description: 'Part 5: attaching the PCIe card to the guest. Identifying the device, detaching it from the host, converting the domain, bus, slot and function to hex, and declaring the hostdev entry in the guest XML.'
 date: 2023-09-28
-lang: vi
+lang: en
 key: journey-to-install-kvm-with-pcie-passthrough-p5
 tags: ['kvm']
 series: 'Setup KVM with PCIe passthrough'
 seriesOrder: 5
 ---
 
-Có hai cách gắn hoặc gỡ card PCIe khỏi máy ảo KVM:
+There are 2 ways to attach or detach PCIe devices to/from KVM which are
 
-* qua giao diện đồ hoạ (virt-manager)
-* qua dòng lệnh
+* GUI method
+* Commandline method
 
 
-Bài này đi theo cách dòng lệnh vì nó cho thấy rõ từng bước thực sự diễn ra. Cả
-hai cách đều được mô tả trong [tài liệu của SUSE](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html).
+GUI and commandline method are described [here](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html).
 
-## 1. Gắn card PCIe vào máy ảo bằng dòng lệnh
+## 1. Command line method to assign PCIe device to VM Guest
 
-### 1.1 Xác định thiết bị PCI trên host
+### 1.1 Identify the host PCI device to assign to the VM Guest
 
 ```bash
 lspci -nn | grep "Xilinx"
 
 ```
 
-Kết quả:
+The output is
 
 ```console
 tesla@tesla:~/kvm$ sudo lspci -nn | grep "Xilinx"
@@ -35,10 +34,9 @@ tesla@tesla:~/kvm$ sudo lspci -nn | grep "Xilinx"
 01:00.1 Processing accelerators [1200]: Xilinx Corporation Device [10ee:5001]
 ```
 
-Card Xilinx hiện ra thành hai function: `01:00.0` (management) và `01:00.1`
-(user). Cả hai đều phải được xử lý cùng nhau.
+Xilinx has 2 IDs: (`01:00.0`  and `01:00.1`)
 
-### 1.2 Lấy thông tin chi tiết của thiết bị
+### 1.2 Gather detailed information about the device
 
 
 ```console
@@ -72,45 +70,36 @@ $ virsh nodedev-dumpxml pci_0000_01_00_0
 ```
 
 
-và làm tương tự với function còn lại:
+and, do the same with the other
 
 ```console
 $ virsh nodedev-dumpxml pci_0000_01_00_1
 ```
 
-Ghi lại bốn giá trị `domain`, `bus`, `slot` và `function` — bước sau sẽ cần.
+Write down the values for domain, bus, slot and function.
 
-### 1.3 Tách thiết bị khỏi host
+### 1.3 Detach the device from the host system
 
 ```bash
 virsh nodedev-detach pci_0000_01_00_0
 ```
 
-**Với thiết bị nhiều function**
+**Tip: Multi-function PCI devices**
 
-Nếu thiết bị có nhiều function mà không hỗ trợ FLR (function level reset) hoặc
-PM reset, phải tách **tất cả** các function khỏi host. Lý do là vì phần cứng chỉ
-reset được ở mức toàn thiết bị, nên để sót một function đang được host dùng là
-để hở một đường truy cập. libvirt sẽ từ chối gán thiết bị nếu còn function nào
-đang bị host hoặc một máy ảo khác chiếm.
+When using a multi-function PCI device that does not support FLR (function level reset) or PM (power management) reset, you need to detach all its functions from the VM Host Server. The whole device must be reset for security reasons. libvirt will refuse to assign the device if one of its functions is still in use by the VM Host Server or another VM Guest.
 
-**Lưu ý:** trong cấu hình của loạt bài này, `detach` và `reattach` gần như không
-còn ý nghĩa, vì card đã được ghim cứng vào `vfio-pci` ngay từ dòng lệnh grub ở
-phần 3 — host chưa bao giờ thực sự chiếm nó.
+**Note:**
 
-Nếu muốn dùng card ở cả host lẫn máy ảo tuỳ lúc, thì làm ngược lại: bỏ tham số
-`vfio-pci.ids` khỏi grub, để host bind driver bình thường, rồi dùng
-`virsh nodedev-detach` mỗi lần cần chuyển card sang máy ảo và
-`virsh nodedev-reattach` khi muốn trả về host.
+Trong trường hợp của ta, `detach` or `reattach` không có ý nghĩa, vì ta đã cố định card FPGA với `VFIO` ở GRUB. Tôi sẽ thử bỏ command đó đi và chạy theo flow này xem ntn. Vì với flow này có thể sử dụng card FPGA ở cả host lẫn VM.
 
-### 1.4 Chuyển domain, bus, slot, function từ thập phân sang hex
+### 1.4 Convert the domain, bus, slot and function from dec to hex
 
 ```bash
 printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 0
 printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 1
 ```
 
-Kết quả:
+Output:
 
 ```console
 tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 0
@@ -120,14 +109,13 @@ tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' functio
 
 ```
 
-### 1.5 Sửa file XML của máy ảo
+### 1.5 Run `virsh edit`
 
 ```bash
 virsh edit ukvm2004
 ```
 
-Thêm khối thiết bị sau vào trong phần `<devices>`, dùng đúng các giá trị hex vừa
-tính được ở bước trên:
+Add the following device entry in the <devices> section using the result from the previous step:
 
 ```xml
 <hostdev mode='subsystem' type='pci' managed='yes'>
@@ -179,7 +167,7 @@ virsh nodedev-reattach pci_0000_01_00_0
 Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host thì ngon quá.
 
 
-## 2. Một cách khác để gắn card PCIe
+## 2. Another way to attach PCIe devices
 
 Create a file named `pass-user.xml` and pasting the following content
 
@@ -236,6 +224,6 @@ lspci -nn
 ```
 
 
-## 3. Tham khảo
+## 3. References
 
 Visit [the instruction](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html) and [Xilinx instruction](https://www.xilinx.com/developer/articles/using-alveo-data-center-accelerator-cards-in-a-kvm-environment.html)
