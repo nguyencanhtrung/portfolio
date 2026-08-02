@@ -48,9 +48,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
             <div class="art" aria-hidden="true">
               <ChapterArt index={iconIndex} />
             </div>
-            <div class="spine" aria-hidden="true">
-              <span class="dot" />
-            </div>
+            <span class="dot" aria-hidden="true" />
             <div class="body">
               <p class="era mono">
                 {ch.era} <span class="years">{ch.years}</span>
@@ -198,93 +196,113 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     margin: 0;
     padding: 1rem 0 0;
   }
-  /* Zigzag spread: art one side, condensed text the other, alternating,
-     stitched by a dashed centre spine. */
+  /* Square-wave timeline: the dashed line runs down the outer edge of each
+     spread — left for odd chapters, right for even — then crosses the full
+     width to the other side, enclosing art and text like a clock signal. */
   .chapter {
-    display: grid;
-    grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr);
-    column-gap: 2.5rem;
-    align-items: center;
-    padding: 1rem 0;
-  }
-  .art {
-    grid-column: 1;
-    grid-row: 1;
-    max-width: 30rem;
-    justify-self: end;
-    width: 100%;
-  }
-  .body {
-    grid-column: 3;
-    grid-row: 1;
-    padding: 1.6rem 0;
-    max-width: var(--w-content);
-  }
-  .chapter:nth-child(even) .art {
-    grid-column: 3;
-    justify-self: start;
-  }
-  .chapter:nth-child(even) .body {
-    grid-column: 1;
-    justify-self: end;
-  }
-  .spine {
-    grid-column: 2;
-    grid-row: 1;
     position: relative;
-    height: 100%;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
+    column-gap: 3rem;
+    align-items: center;
+    padding: 2.5rem 3rem 3.25rem;
   }
-  .spine::before {
+  .chapter::before {
     content: '';
     position: absolute;
-    left: 50%;
     top: 0;
     bottom: 0;
+    left: 0;
     border-left: 1px dashed var(--ink-3);
     opacity: 0.5;
   }
-  .chapter:first-child .spine::before {
-    top: 2.6rem;
+  .chapter::after {
+    content: '';
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    right: 0;
+    border-top: 1px dashed var(--ink-3);
+    opacity: 0.5;
   }
-  .chapter:last-child .spine::before {
-    bottom: auto;
-    height: 2.6rem;
+  .chapter:first-child::before {
+    top: 2.7rem;
+  }
+  .chapter:last-child::after {
+    display: none;
+  }
+  .body {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: var(--w-content);
+  }
+  .art {
+    grid-column: 2;
+    grid-row: 1;
+    max-width: 30rem;
+    width: 100%;
+    justify-self: start;
+  }
+  .chapter:nth-child(even)::before {
+    left: auto;
+    right: 0;
+  }
+  .chapter:nth-child(even) .body {
+    grid-column: 2;
+  }
+  .chapter:nth-child(even) .art {
+    grid-column: 1;
+    grid-row: 1;
+    justify-self: end;
   }
   .dot {
     position: absolute;
-    left: 50%;
-    top: 2.2rem;
-    transform: translateX(-50%);
+    top: 2.7rem;
+    left: 0;
+    transform: translate(-50%, -50%);
     width: 9px;
     height: 9px;
     border-radius: 50%;
     background: var(--bg);
     border: 2px solid var(--accent);
   }
+  .chapter:nth-child(even) .dot {
+    left: auto;
+    right: 0;
+    transform: translate(50%, -50%);
+  }
   @media (max-width: 900px) {
     .chapter,
     .chapter:nth-child(even) {
       display: block;
-      padding: 0 0 0 1.5rem;
-      position: relative;
+      padding: 0.5rem 0 2rem 1.5rem;
     }
-    .spine {
-      position: absolute;
+    /* One continuous left spine on small screens — no room for the wave. */
+    .chapter:nth-child(even)::before {
       left: 0;
-      top: 0;
-      bottom: 0;
-      height: auto;
+      right: auto;
     }
-    .chapter:last-child .spine::before {
-      height: 2.6rem;
+    .chapter::after {
+      display: none;
+    }
+    .chapter:nth-child(even) .dot {
+      left: 0;
+      right: auto;
+      transform: translate(-50%, -50%);
+    }
+    .dot {
+      top: 1.6rem;
+    }
+    .chapter:first-child::before {
+      top: 1.6rem;
     }
     .art,
     .chapter:nth-child(even) .art {
       max-width: 24rem;
-      margin: 1.5rem 0 0;
+      margin: 1rem 0 0;
     }
     .body {
-      padding: 0.8rem 0 2rem;
+      padding: 0.8rem 0 0;
     }
   }
   .era {
