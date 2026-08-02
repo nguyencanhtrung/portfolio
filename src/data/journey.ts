@@ -10,7 +10,6 @@ export interface Chapter {
 }
 
 export interface JourneyContent {
-  heroKicker: string;
   heroName: string;
   heroTagline: string;
   heroIntro: string;
@@ -22,7 +21,6 @@ export interface JourneyContent {
 
 export const journey: Record<Locale, JourneyContent> = {
   en: {
-    heroKicker: 'FPGA · 5G / O-RAN · V2X · DIGITAL TWINS · ISAC · ROBOTICS',
     heroName: 'Canh-Trung Nguyen',
     heroTagline: 'From logic gates to digital twins.',
     heroIntro:
@@ -115,7 +113,6 @@ export const journey: Record<Locale, JourneyContent> = {
     ],
   },
   vi: {
-    heroKicker: 'FPGA · 5G / O-RAN · V2X · DIGITAL TWIN · ISAC · ROBOTICS',
     heroName: 'Nguyễn Cảnh Trung',
     heroTagline: 'Từ cổng logic đến digital twin.',
     heroIntro:

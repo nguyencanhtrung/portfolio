@@ -27,7 +27,6 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 <Base locale={locale} title={title} description={c.heroIntro} altPath={altPath}>
   <section class="hero">
     <div class="container hero-copy">
-      <p class="kicker mono">{c.heroKicker}</p>
       <div class="hero-grid">
         <div class="name-col">
           <h1>{c.heroName}</h1>
@@ -182,12 +181,6 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     .scene {
       margin-top: clamp(-7rem, -8vh, -2rem);
     }
-  }
-  .kicker {
-    color: var(--ink-3);
-    font-size: 0.75rem;
-    letter-spacing: 0.14em;
-    margin-bottom: 1.25rem;
   }
   h1 {
     font-size: clamp(2.6rem, 7vw, 4.2rem);
