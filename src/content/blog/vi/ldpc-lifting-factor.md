@@ -9,7 +9,7 @@ tags: ['5g']
 
 ## 1. Overview
 
-Lifting factor hay expansion factor $$ Z_c $$ (có nhiều tài liệu ký hiệu là $$Z$$) là tham số được sử dụng để quyết định kích thước của ma trận cơ sở ($$B$$) sẽ được mở rộng bao nhiêu lần. Việc sử dụng <a href="https://bobibo.one/blog/2022/ldpc-base-matrix/">ma trận cơ sở $$B$$</a> để mô tả parity check matrices là một phương pháp hiệu quả giúp giảm tài nguyên nhớ. Về mặt lý thuyết, phương pháp này giảm được $$Z^2_c$$ phần tử nhớ (trong thực tế, tài nguyên nhớ sử dụng còn tiếp tục được tối ưu hơn nữa, do việc tính toán chỉ cần sử dụng một phần của ma trận cơ bản bao gồm ma trận $$A, E, C_1, C_2$$).
+Lifting factor hay expansion factor $$ Z_c $$ (có nhiều tài liệu ký hiệu là $$Z$$) là tham số được sử dụng để quyết định kích thước của ma trận cơ sở ($$B$$) sẽ được mở rộng bao nhiêu lần. Việc sử dụng [ma trận cơ sở $$B$$](/vi/blog/ldpc-base-matrix/) để mô tả parity check matrices là một phương pháp hiệu quả giúp giảm tài nguyên nhớ. Về mặt lý thuyết, phương pháp này giảm được $$Z^2_c$$ phần tử nhớ (trong thực tế, tài nguyên nhớ sử dụng còn tiếp tục được tối ưu hơn nữa, do việc tính toán chỉ cần sử dụng một phần của ma trận cơ bản bao gồm ma trận $$A, E, C_1, C_2$$).
 
 Phần sau sẽ mô tả cách tính $$Z_c$$ được mô tả trong tài liệu 3GPP.
 

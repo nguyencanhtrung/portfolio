@@ -27,7 +27,7 @@ Ma trận cơ sở B là một trong những thông tin cần phải được hi
 | $$ Zc > a > 0 $$| Ma trận I được shift phải $$ a $$ lần|
 
 <br />
-Hình dưới đây là một ví dụ. Với expansion factor = 5 hay Zc = 5 (Một số tài liệu họ gọi là lifting factor hay có thể ký hiệu là Z). Chi tiết về Zc có thể xem tại <a href="https://bobibo.one/blog/2022/ldpc-lifting-factor/">đây</a>.
+Hình dưới đây là một ví dụ. Với expansion factor = 5 hay Zc = 5 (Một số tài liệu họ gọi là lifting factor hay có thể ký hiệu là Z). Chi tiết về Zc có thể xem tại [đây](/vi/blog/ldpc-lifting-factor/).
 
 ![](/images/blog/ldpc-base-matrix/1.png)
 
@@ -66,7 +66,7 @@ Ma trận $$ O, I $$ có thể bỏ qua trong quá trình tính toán.
 
 ![](/images/blog/ldpc-base-matrix/4.png)
 
-Ma trận $$E$$ là một ma trận đặc biệt có tên gọi "Ma trận đường chéo đôi" (Double diagonal matrix). Đặc tính của ma trận này, giúp việc tính toán 4 parity bits ($$p_a$$) trở lên đơn giản và hiệu quả hơn. Cụ thể, quá trình tính toán sẽ được mô tả ở bài viết [5G LDPC encoder](www.bobibo.one).
+Ma trận $$E$$ là một ma trận đặc biệt có tên gọi "Ma trận đường chéo đôi" (Double diagonal matrix). Đặc tính của ma trận này, giúp việc tính toán 4 parity bits ($$p_a$$) trở lên đơn giản và hiệu quả hơn. Cụ thể, quá trình tính toán sẽ được mô tả ở bài viết 5G LDPC encoder.
 
 ## 4. How to construct 5G LDPC base matrices
 Ma trận cơ sở B sẽ được xây dựng dựa trên ba tham số { <b>`NBG`, $$ i_{LS} $$, $$ Z_{c} $$</b> }
@@ -122,8 +122,8 @@ $$
 
 ## 5. Precomputed base matrices
 
-102 ma trận cơ sở của 5G LDPC có thể xem tại [đây](www.bobibo.one) 
+102 ma trận cơ sở của 5G LDPC có thể xem tại [đây](https://bibo.id.vn/) 
 
 
 ## 6. References
-<a href="https://panel.castle.cloud/view_spec/38212-f11/">3GPP - 38.212 - section 5.3.2</a>
+[3GPP TS 38.212, section 5.3.2](https://www.3gpp.org/ftp/Specs/archive/38_series/38.212/)

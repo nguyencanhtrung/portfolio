@@ -8,13 +8,13 @@ tags: ['docker']
 ---
 ## 1. Workflow với docker
 
-Step 1: Pull image về máy với `docker pull`. Tương tự như file cài đặt.
+Bước 1: Pull image về máy với `docker pull`. Tương tự như file cài đặt.
 
-Step 2: Khởi tạo và chạy một container với image được kéo về ở bước 1. 
+Bước 2: Khởi tạo và chạy một container với image được kéo về ở bước 1. 
 
-Step 3: Cài đặt tools trong container và làm các tác vụ cần thiết với container này. Có thể `stop` container, `exit` container ...
+Bước 3: Cài đặt tools trong container và làm các tác vụ cần thiết với container này. Có thể `stop` container, `exit` container ...
 
-Step 4: Commit để lưu thành 1 images mới chứa bộ tools đã được cài đặt cũng như tất cả dữ liệu khi thực hiện các tác vụ với `docker commit`. Images này có thể dùng ở các máy khác nhau với toàn bộ tools cũng như dữ liệu tại thời điểm thực hiện commit.
+Bước 4: Commit để lưu thành 1 images mới chứa bộ tools đã được cài đặt cũng như tất cả dữ liệu khi thực hiện các tác vụ với `docker commit`. Images này có thể dùng ở các máy khác nhau với toàn bộ tools cũng như dữ liệu tại thời điểm thực hiện commit.
 
 Một container có thể hiểu như là một phần mềm đã được cài đặt từ bộ cài `image`. Có một điều khác biệt căn bản ở so sánh trên là: một bộ cài chỉ cài được duy nhất 1 phần mềm trên 1 máy tính, nhưng với docker, một image có thể tạo được không giới hạn các container trên cùng một máy tính.
 

@@ -24,7 +24,7 @@ Makefile bao gồm những thành phần sau để thực hiện được việc
 | Debugger  | `$(MGC_HOME)/bin/gdb`               |
 
 
-Makefile example:
+Ví dụ Makefile:
 
 ```bash
 IDIR =$(MGC_HOME)/shared/include
@@ -135,7 +135,7 @@ int main()
 
 ```
 
-Compiling status
+Kết quả compile
 
 ```bash
 [administrator@centos lab1]$ make tb0
@@ -200,7 +200,7 @@ int main()
 }
 ```
 
-Compiling status
+Kết quả compile
 
 ```bash
 make tb1
