@@ -130,9 +130,9 @@ export const journey: Record<Locale, JourneyContent> = {
         title: 'Nền móng',
         org: 'ĐH Bách khoa Hà Nội → TU Kaiserslautern, Đức',
         story: [
-          'Tốt nghiệp Vi điện tử ở Bách khoa Hà Nội, sau đó chương trình thạc sĩ hệ thống nhúng tại TU Kaiserslautern, Đức.',
-          'Phát triển FPGA accelerator cho đánh giá rủi ro tài chính trong ngày: nhanh gấp 68 lần phần mềm nó thay thế, gần một FLOP mỗi chu kỳ.',
-          'Hai thói quen bắt đầu từ đây: tìm điểm nghẽn trước đã, và mọi mức tăng tốc phải chứng minh bằng reference.',
+          'Tốt nghiệp Vi điện tử tại Bách khoa Hà Nội, sau đó hoàn thành chương trình Thạc sĩ Hệ thống nhúng tại TU Kaiserslautern, Đức.',
+          'Phát triển FPGA accelerator cho bài toán đánh giá rủi ro tài chính trong ngày (intraday): đạt tốc độ xử lý nhanh gấp 68 lần phần mềm hiện hữu, với hiệu năng gần 1 FLOP/chu kỳ.',
+          'Hình thành hai nguyên tắc làm việc cốt lõi từ dự án này: luôn tìm điểm nghẽn (bottleneck) trước, và mọi cải tiến tốc độ đều phải được đối chứng với reference model.',
         ],
         metrics: ['Tăng tốc 68× @ 100 MHz', '1.087 chu kỳ / FLOP'],
       },
@@ -142,10 +142,10 @@ export const journey: Record<Locale, JourneyContent> = {
         title: '5G PHY & Radio',
         org: 'Viettel High Tech → VinSmart, Hà Nội',
         story: [
-          'Trạm gốc 5G NR từ lớp vật lý trở lên, trên FPGA Xilinx.',
-          'Dẫn đội 5 kỹ sư làm PUSCH và PUCCH F3; digital front-end 2T2R đạt spectrum mask 3GPP.',
-          'PDSCH bit-processing đóng timing ở 300 MHz, độ trễ dưới 150 µs; macrocell 8T8R, hai thế hệ RRU.',
-          'Học được cách đọc spec như một bản hợp đồng thi hành được.',
+          'Xây dựng trạm gốc 5G NR từ lớp vật lý (PHY layer) trên nền tảng FPGA Xilinx.',
+          'Dẫn đội 5 kỹ sư làm PUSCH và PUCCH F3; khối digital front-end 2T2R đáp ứng hoàn hảo spectrum mask của 3GPP.',
+          'Khối PDSCH bit-processing đóng timing (timing closure) tại 300 MHz, độ trễ dưới 150 µs; hoàn thiện macrocell 8T8R qua hai thế hệ RRU.',
+          'Học được cách tiếp cận tài liệu spec như một bản hợp đồng kỹ thuật nghiêm ngặt.',
         ],
         metrics: [
           'PUSCH @ 250 MHz',
@@ -160,10 +160,10 @@ export const journey: Record<Locale, JourneyContent> = {
         title: 'Acceleration & Vision',
         org: 'Techvico (Taiwan - USA) → Avnet (Singapore)',
         story: [
-          'Bước leo thang trừu tượng có chủ đích: từ VHDL viết tay lên Vitis HLS.',
-          'Ba accelerator xử lý ảnh mới — disparity, defect-pixel, biến đổi hình học — cùng pipeline streaming ghép Xilinx DPU.',
-          'FAE cho AMD-Xilinx khắp Đông Nam Á: vài tuần một vendor stack khác, đứng trước khách hàng.',
-          'Học cách đánh giá nhanh công nghệ lạ — và giải thích silicon cho người không viết RTL.',
+          'Nâng mức trừu tượng (abstraction level) có chủ đích: chuyển dịch từ hand-written VHDL sang Vitis HLS.',
+          'Phát triển 3 accelerator xử lý ảnh mới — disparity, defect-pixel, biến đổi hình học — tích hợp trong pipeline streaming cùng Xilinx DPU.',
+          'Đảm nhận vai trò FAE cho AMD-Xilinx tại thị trường Đông Nam Á: liên tục làm chủ các vendor stack mới chỉ trong vài tuần để trực tiếp tư vấn cho khách hàng.',
+          'Rèn luyện khả năng đánh giá nhanh một công nghệ mới — và cách giải thích hệ thống silicon cho người không chuyên RTL.',
         ],
         metrics: [
           '3 ISP accelerator bằng HLS',
@@ -177,10 +177,10 @@ export const journey: Record<Locale, JourneyContent> = {
         title: 'Hệ thống O-RAN',
         org: 'SoC.one, USA - Hanoi Office',
         story: [
-          'Gia nhập SoC.one năm 2021 — quay lại 5G, nhưng ở tầm cả hệ thống thay vì từng khối.',
-          'Tăng tốc 5G L1 trên FPGA; bring-up nền tảng phần cứng O-DU và O-RU.',
-          'Fronthaul, timing domain, đồng bộ — những đường nối nơi trạm gốc disaggregated thật sự hỏng.',
-          'Những năm trên bàn thí nghiệm khiến một digital twin trung thực trở nên khả thi.',
+          'Gia nhập SoC.one năm 2021 — trở lại mảng 5G, nhưng tập trung ở mức hệ thống thay vì từng IP block.',
+          'Tăng tốc 5G L1 trên FPGA; bring-up các nền tảng phần cứng cho O-DU và O-RU.',
+          'Xử lý fronthaul, timing domain và đồng bộ — những điểm kết nối nhạy cảm nơi trạm gốc disaggregated thực sự bộc lộ vấn đề.',
+          'Chính những năm tháng thực chiến này đã tạo nền tảng để tôi xây dựng các mô hình Digital Twin phản ánh trung thực bản chất phần cứng.',
         ],
         metrics: [
           'Tăng tốc 5G L1 trên FPGA',
@@ -194,10 +194,10 @@ export const journey: Record<Locale, JourneyContent> = {
         title: 'Digital Twin & Verticals',
         org: 'SoC.one, USA - Hanoi Office',
         story: [
-          'Điều hành Verticals Group — robotics, automotive, drones, 5G/6G — với vai trò manager, và tech lead nơi những quyết định khó khăn nhất.',
-          'Dựng mô phỏng trước khi dựng sản phẩm: kênh vô tuyến ray-traced trên GPU trong digital twin của mạng và của xe.',
-          'Mô hình ISAC sensing và V2X sidelink stack truy vết từng clause về 3GPP, ETSI, SAE.',
-          'Robotics sim-to-real và hardware/software co-design.',
+          'Dẫn dắt Verticals Group — robotics, automotive, drones, 5G/6G — với vai trò quản lý kiêm Tech Lead.',
+          'Dựng mô phỏng trước khi dựng sản phẩm: xử lý kênh vô tuyến ray-traced trên nền tảng GPU trong Digital Twin của cả mạng và xe.',
+          'Xây dựng mô hình 5G Advanced ISAC sensing và V2X sidelink stack, tuân thủ nghiêm ngặt đến từng clause của 3GPP, ETSI, SAE.',
+          'Làm chủ quy trình robotics sim-to-real và giải pháp đồng thiết kế phần cứng/phần mềm (hardware/software co-design).',
         ],
         metrics: [
           'Verticals Group — 4 chương trình',
