@@ -181,7 +181,7 @@ Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host th
 
 ## 2. Một cách khác để gắn card PCIe
 
-Create a file named `pass-user.xml` and pasting the following content
+Tạo file `pass-user.xml` với nội dung sau:
 
 
 ```xml
@@ -194,7 +194,7 @@ Create a file named `pass-user.xml` and pasting the following content
 
 ```
 
-Create a file named `pass-mgmt.xml` and pasting the following content
+Tạo tiếp file `pass-mgmt.xml`:
 
 ```xml
 <hostdev mode="subsystem" type="pci" managed="yes">
@@ -205,12 +205,14 @@ Create a file named `pass-mgmt.xml` and pasting the following content
 </hostdev>
 ```
 
-`<address domain ..>`: address of PCIe device in the HOST
+`<address domain ..>` trong thẻ `<source>`: địa chỉ của card trên **host**.
 
-`<address type ..>`: address of PCIe device in the KVM (optional)
+`<address type ..>` ngoài thẻ `<source>`: địa chỉ card sẽ xuất hiện **trong máy
+ảo** — không bắt buộc, bỏ trống thì libvirt tự chọn.
 
 
-Attach or detach must be processed when VM is destroyed.
+Chỉ gắn hoặc gỡ card khi máy ảo đang tắt. Thao tác lúc máy ảo đang chạy sẽ bị
+libvirt từ chối, hoặc tệ hơn là làm treo guest.
 
 ```shell
  virsh attach-device ukvm2004 --file pass-user.xml --config
@@ -223,13 +225,13 @@ Attach or detach must be processed when VM is destroyed.
  virsh detach-device ukvm2004 --file pass-mgmt.xml --config
 ```
 
-Then, starting the VM
+Sau đó khởi động máy ảo:
 
 ```shell
 virsh start ukvm2004
 ```
 
-Now you can see the PCIe card is available in your VM with the following command
+Vào trong máy ảo, kiểm tra card đã xuất hiện chưa:
 
 ```bash
 lspci -nn
