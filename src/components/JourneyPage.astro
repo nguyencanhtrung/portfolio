@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import HeroScene from './HeroScene.astro';
+import ChapterArt from './ChapterArt.astro';
 import ChapterIcon from './ChapterIcon.astro';
 import ProjectArt from './ProjectArt.astro';
 import { journey } from '../data/journey';
@@ -44,7 +45,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
       {
         chapters.map(({ ch, iconIndex }) => (
           <li class="chapter">
-            <div class="marker" aria-hidden="true">
+            <div class="art" aria-hidden="true">
+              <ChapterArt index={iconIndex} />
+            </div>
+            <div class="spine" aria-hidden="true">
               <span class="dot" />
             </div>
             <div class="body">
@@ -56,9 +60,11 @@ const altPath = locale === 'en' ? '/vi/' : '/';
                 {ch.title}
               </h3>
               <p class="org">{ch.org}</p>
-              {ch.story.map((par) => (
-                <p class="story">{par}</p>
-              ))}
+              <ul class="story" role="list">
+                {ch.story.map((line) => (
+                  <li>{line}</li>
+                ))}
+              </ul>
               <ul class="metrics" role="list">
                 {ch.metrics.map((m) => (
                   <li class="mono">{m}</li>
@@ -192,31 +198,62 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     margin: 0;
     padding: 1rem 0 0;
   }
+  /* Zigzag spread: art one side, condensed text the other, alternating,
+     stitched by a dashed centre spine. */
   .chapter {
     display: grid;
-    grid-template-columns: 1.5rem 1fr;
-    gap: 1rem;
+    grid-template-columns: minmax(0, 1fr) 3rem minmax(0, 1fr);
+    column-gap: 2.5rem;
+    align-items: center;
+    padding: 1rem 0;
   }
-  .marker {
+  .art {
+    grid-column: 1;
+    grid-row: 1;
+    max-width: 30rem;
+    justify-self: end;
+    width: 100%;
+  }
+  .body {
+    grid-column: 3;
+    grid-row: 1;
+    padding: 1.6rem 0;
+    max-width: var(--w-content);
+  }
+  .chapter:nth-child(even) .art {
+    grid-column: 3;
+    justify-self: start;
+  }
+  .chapter:nth-child(even) .body {
+    grid-column: 1;
+    justify-self: end;
+  }
+  .spine {
+    grid-column: 2;
+    grid-row: 1;
     position: relative;
+    height: 100%;
   }
-  .marker::before {
+  .spine::before {
     content: '';
     position: absolute;
     left: 50%;
     top: 0;
     bottom: 0;
-    width: 1px;
-    background: var(--hairline);
+    border-left: 1px dashed var(--ink-3);
+    opacity: 0.5;
   }
-  .chapter:last-child .marker::before {
+  .chapter:first-child .spine::before {
+    top: 2.6rem;
+  }
+  .chapter:last-child .spine::before {
     bottom: auto;
-    height: 2.4rem;
+    height: 2.6rem;
   }
   .dot {
     position: absolute;
     left: 50%;
-    top: 2rem;
+    top: 2.2rem;
     transform: translateX(-50%);
     width: 9px;
     height: 9px;
@@ -224,9 +261,31 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     background: var(--bg);
     border: 2px solid var(--accent);
   }
-  .body {
-    padding: 1.6rem 0 2.4rem;
-    max-width: var(--w-content);
+  @media (max-width: 900px) {
+    .chapter,
+    .chapter:nth-child(even) {
+      display: block;
+      padding: 0 0 0 1.5rem;
+      position: relative;
+    }
+    .spine {
+      position: absolute;
+      left: 0;
+      top: 0;
+      bottom: 0;
+      height: auto;
+    }
+    .chapter:last-child .spine::before {
+      height: 2.6rem;
+    }
+    .art,
+    .chapter:nth-child(even) .art {
+      max-width: 24rem;
+      margin: 1.5rem 0 0;
+    }
+    .body {
+      padding: 0.8rem 0 2rem;
+    }
   }
   .era {
     color: var(--accent);
@@ -250,7 +309,22 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     margin-top: 0.25rem;
   }
   .story {
-    margin-top: 1rem;
+    list-style: none;
+    margin: 1rem 0 0;
+    padding: 0;
+  }
+  .story li {
+    position: relative;
+    padding-left: 1.2rem;
+    margin-top: 0.55rem;
+    font-size: 0.98rem;
+    line-height: 1.55;
+  }
+  .story li::before {
+    content: '—';
+    position: absolute;
+    left: 0;
+    color: var(--accent);
   }
   .metrics {
     list-style: none;

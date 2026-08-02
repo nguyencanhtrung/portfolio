@@ -1,0 +1,213 @@
+---
+/**
+ * Per-chapter line-art for the Journey timeline, one drawing per career stage,
+ * in the same datasheet language as HeroScene/ProjectArt.
+ * index: 0 = CH.01 Foundations … 4 = CH.05 Digital Twins & Verticals.
+ */
+interface Props {
+  index: number;
+}
+const { index } = Astro.props;
+---
+
+{index === 0 && (
+  <svg class="ch-art" viewBox="0 0 480 280" fill="none" aria-hidden="true">
+    <!-- two gates feeding an adder and accumulator: the fintech datapath -->
+    <g class="sk">
+      <path d="M 40 54 h 26 a 20 20 0 0 1 0 40 h -26 Z" />
+      <path d="M 24 62 h 16 M 24 86 h 16" />
+      <path d="M 40 178 h 26 a 20 20 0 0 1 0 40 h -26 Z" />
+      <path d="M 24 186 h 16 M 24 210 h 16" />
+      <circle cx="196" cy="130" r="16" />
+      <path d="M 189 130 h 14 M 196 123 v 14" />
+      <rect x="252" y="102" width="84" height="56" rx="6" />
+    </g>
+    <g class="sa">
+      <path d="M 86 74 h 46 v 48 h 48" />
+      <path d="M 86 198 h 46 v -48 h 48" />
+      <path d="M 212 130 h 40" />
+      <path d="M 336 130 h 72 m 0 0 l -10 -6 m 10 6 l -10 6" />
+    </g>
+    <circle class="via" cx="132" cy="74" r="2.5" />
+    <circle class="via" cx="132" cy="198" r="2.5" />
+    <text class="lbl" x="294" y="132">ACC</text>
+    <text class="lbl faint" x="240" y="252">1 FLOP / CYCLE · 68×</text>
+  </svg>
+)}
+
+{index === 1 && (
+  <svg class="ch-art" viewBox="0 0 480 280" fill="none" aria-hidden="true">
+    <!-- carrier through the DFE chain to the antenna, spectrum mask below -->
+    <g class="sk">
+      <rect x="130" y="110" width="62" height="60" rx="4" />
+      <rect x="222" y="110" width="62" height="60" rx="4" />
+      <rect x="314" y="110" width="62" height="60" rx="4" />
+      <path d="M 420 200 V 84" />
+      <path d="M 412 96 L 420 78 L 428 96" />
+    </g>
+    <g class="sa">
+      <path d="M 12 140 c 16 -28 32 -28 48 0 c 16 28 32 28 48 0 h 22" />
+      <path d="M 192 140 h 30 M 284 140 h 30 M 376 140 h 44" />
+    </g>
+    <g class="sf">
+      <path d="M 150 240 h 180" />
+      <path class="dash" d="M 170 232 h 30 v -16 h 60 v 16 h 30" />
+    </g>
+    <path class="sk" d="M 175 236 C 210 196 270 196 305 236" />
+    <text class="lbl" x="161" y="142">DPD</text>
+    <text class="lbl" x="253" y="142">CFR</text>
+    <text class="lbl" x="345" y="142">DUC</text>
+    <text class="lbl faint" x="240" y="264">3GPP SPECTRUM MASK</text>
+  </svg>
+)}
+
+{index === 2 && (
+  <svg class="ch-art" viewBox="0 0 480 280" fill="none" aria-hidden="true">
+    <!-- the abstraction staircase, and the vision pipeline it led to -->
+    <path class="sk" d="M 30 230 H 100 V 200 H 170 V 170 H 240 V 140 H 300" />
+    <text class="lbl faint" x="65" y="222">VHDL</text>
+    <text class="lbl faint" x="135" y="192">HLS</text>
+    <text class="lbl faint" x="205" y="162">SYSTEM</text>
+    <g class="sk">
+      <rect x="285" y="58" width="56" height="40" rx="6" />
+      <circle cx="313" cy="78" r="12" />
+      <rect x="297" y="48" width="16" height="8" rx="2" />
+    </g>
+    <g class="sf">
+      <rect x="380" y="120" width="48" height="48" />
+      <path d="M 396 120 v 48 M 412 120 v 48 M 380 136 h 48 M 380 152 h 48" />
+    </g>
+    <rect class="soft" x="396" y="136" width="16" height="16" />
+    <g class="sa dash">
+      <path d="M 300 140 L 300 104" />
+      <path d="M 341 88 L 380 128" />
+      <path d="M 404 168 V 200" />
+    </g>
+    <g class="sk">
+      <rect x="376" y="200" width="56" height="40" rx="4" />
+    </g>
+    <text class="lbl" x="404" y="222">DPU</text>
+  </svg>
+)}
+
+{index === 3 && (
+  <svg class="ch-art" viewBox="0 0 480 280" fill="none" aria-hidden="true">
+    <!-- the box: O-RU hardware, fronthaul to the DU, timing -->
+    <g class="sk">
+      <rect x="150" y="90" width="180" height="110" rx="10" />
+      <path d="M 190 90 V 54 M 186 62 l 4 -8 l 4 8" />
+      <path d="M 290 90 V 54 M 286 62 l 4 -8 l 4 8" />
+      <rect x="34" y="120" width="70" height="50" rx="6" />
+      <circle cx="404" cy="120" r="24" />
+      <path d="M 404 120 L 404 104 M 404 120 L 414 126" />
+    </g>
+    <g class="sf">
+      <rect x="170" y="120" width="60" height="36" />
+      <rect x="250" y="120" width="60" height="36" />
+      <path d="M 404 96 v 6 M 404 138 v 6 M 380 120 h 6 M 422 120 h 6" />
+      <path d="M 180 200 v 8 M 210 200 v 8 M 240 200 v 8 M 270 200 v 8 M 300 200 v 8" />
+    </g>
+    <path class="sa dash" d="M 104 145 H 150" />
+    <text class="lbl" x="69" y="147">O-DU</text>
+    <text class="lbl faint" x="127" y="134">7.2</text>
+    <text class="lbl faint" x="404" y="168">PTP</text>
+    <text class="lbl faint" x="240" y="252">O-RU BRING-UP</text>
+  </svg>
+)}
+
+{index === 4 && (
+  <svg class="ch-art" viewBox="0 0 480 280" fill="none" aria-hidden="true">
+    <!-- the world and its dashed twin below the ground line -->
+    <path class="sk thin" d="M 20 190 H 460" />
+    <g id={`ch-world-${index}`}>
+      <g class="sf">
+        <rect x="60" y="110" width="44" height="80" />
+        <rect x="114" y="84" width="38" height="106" />
+        <path d="M 114 106 h 38 M 114 128 h 38 M 114 150 h 38 M 114 172 h 38" />
+        <rect x="162" y="130" width="46" height="60" />
+      </g>
+      <g class="sk">
+        <rect x="250" y="158" width="76" height="20" rx="8" />
+        <rect x="266" y="146" width="36" height="14" rx="5" />
+        <circle cx="268" cy="182" r="7" />
+        <circle cx="304" cy="182" r="7" />
+        <rect x="352" y="66" width="22" height="10" rx="3" />
+        <path d="M 342 60 h 18 M 368 60 h 18 M 351 60 v 4 M 377 60 v 4" />
+      </g>
+    </g>
+    <g class="sa dash">
+      <path d="M 363 84 L 302 148" />
+      <path d="M 250 152 Q 200 116 166 138" />
+    </g>
+    <g class="mirror">
+      <use href={`#ch-world-${index}`} transform="translate(0, 380) scale(1, -1)" />
+    </g>
+    <text class="lbl acc" x="240" y="264">DIGITAL TWIN</text>
+  </svg>
+)}
+
+<style>
+  .ch-art {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .ch-art :global(*) {
+    vector-effect: non-scaling-stroke;
+  }
+  .sk {
+    stroke: var(--ink-2);
+    stroke-width: 1.6;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .thin {
+    stroke-width: 1.1;
+  }
+  .sf {
+    stroke: var(--ink-3);
+    stroke-width: 1.2;
+    stroke-linecap: round;
+    opacity: 0.55;
+  }
+  .sa {
+    stroke: var(--accent);
+    stroke-width: 1.7;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+  }
+  .dash {
+    stroke-dasharray: 5 7;
+  }
+  .soft {
+    fill: var(--accent-soft);
+    stroke: none;
+  }
+  .via {
+    fill: var(--ink-3);
+    stroke: none;
+  }
+  .mirror {
+    opacity: 0.25;
+  }
+  .mirror use {
+    stroke-dasharray: 3 5;
+  }
+  .lbl {
+    fill: var(--ink-2);
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    text-anchor: middle;
+    dominant-baseline: middle;
+    stroke: none;
+  }
+  .lbl.faint {
+    fill: var(--ink-3);
+  }
+  .lbl.acc {
+    fill: var(--accent);
+    opacity: 0.8;
+  }
+</style>
