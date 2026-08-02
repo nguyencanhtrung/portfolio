@@ -1,95 +1,196 @@
 ---
-title: 'Generic ROM design with SystemVerilog'
-description: 'Design a technology-independent SystemVerilog ROM memory with content initialisation from a file'
+title: 'Thiết kế ROM generic bằng SystemVerilog'
+description: 'Một module ROM tham số hoá, nạp nội dung từ file, không phụ thuộc vendor — kèm những điều kiện bắt buộc để tool suy diễn ra block RAM thay vì đốt hàng nghìn LUT.'
 date: 2023-09-13
 lang: vi
 key: a-generic-systemverilog-rom
-tags: ['core']
+tags: ['core', 'rtl']
 ---
-## 1. Introduction
 
-Pipeline handshaking protocol giúp tối ưu throughout của hệ thống. Tuy nhiên, việc thiết kế một kiến trúc pipeline vẫn đảm bảo được đặc tính của handshaking protocol đôi khi trở lên phức tạp quá mức (ít nhất là đối với cá nhân tôi trong thời gian đầu làm việc với RTL design, tôi đã thiết kế một Moore FSM gồm 8 states chỉ để xử lý backpressure từ TREADY và cắt được critical path từ tín hiệu này). Blog này sẽ mô tả một cách chi tiết vấn đề và cách giải quyết. 
+Gần như dự án RTL nào cũng cần một bảng tra cứu: hệ số filter, bảng sin/cos,
+ma trận cơ sở LDPC, bảng CRC. Cách nhanh nhất là gọi IP core của vendor — và
+cũng là cách nhanh nhất để khoá thiết kế vào một hãng. Bài này viết một ROM
+generic bằng SystemVerilog: tham số hoá độ rộng và độ sâu, nạp nội dung từ file
+text, và quan trọng nhất là viết sao cho synthesis tool **suy diễn ra block
+RAM** thay vì trải nội dung thành hàng nghìn LUT.
 
-## 2. AXIS protocol và pipelining
+## 1. Vì sao không dùng IP core của vendor
 
-### 2.1 Nguyên lý của AXIS
+Ba lý do thực dụng:
 
-Dạng đơn giản nhất của AXIS bao gồm 3 tín hiệu `DATA` `VALID` và `READY`. Với thiết kế `single cycle data transfer`, `DATA` được lấy mẫu và chuyển tiếp ra output thành công khi và chỉ khi:
+- **Tính khả chuyển.** Cùng một file `.sv` chạy được trên Xilinx, Intel và cả
+  simulator, không cần regenerate IP mỗi lần đổi đích.
+- **Kiểm soát phiên bản.** IP core sinh ra hàng chục file phái sinh; một module
+  RTL thì diff được, review được trong merge request.
+- **Tốc độ vòng lặp.** Đổi nội dung bảng chỉ là sửa file `.mem`, không phải mở
+  GUI và regenerate.
 
-* `S_AXIS_TVALID = 1` 
-* Và, `M_AXIS_TREADY = 1`
+Đánh đổi: bạn phải tự chịu trách nhiệm viết đúng khuôn mẫu (coding template) để
+tool nhận ra ý định của mình. Đó chính là phần còn lại của bài.
 
-Tại thời điểm lấy mẫu của hệ thống (sườn lên hoặc sườn xuống của clock) 
-
-Thiết kế này sẽ có hai dạng thiết kế như ở hình dưới:
-
-![](/images/blog/a-generic-systemverilog-rom/3.png)
-
-Với thiết kế bên tay trái, hệ thống sẽ chuyển tiếp dữ liệu từ `input` sang `output` khi và chỉ khi `consumer` tại output sẵn sàng nhận dữ liệu. Với thiết kế này `invalid` `input` cũng sẽ được chuyển tiếp, trong một pipeline, việc chuyển tiếp `invalid data` vào trong pipe là hiện tượng hình thành bubble.
-
-Thiết kế bên tay phải, giống với thiết kế tay trái, tuy nhiên nó ưu việt hơn do nó có khả năng loại bỏ bubble trong pipeline. Việc loại bỏ bubble xảy ra khi:
-* Bubble trong pipe được phát hiện `m_axis_tvalid = '0'` 
-* Và, `valid input` xuất hiện ở đầu vào `s_axis_tvalid = '1'`
-
-Khi đó hệ thống cho phép dữ liệu được chuyển tiếp dù `consumer` vẫn chưa sẵn sàng nhận dữ liệu. Bubble lúc này sẽ được loại bỏ bằng `valid` data.
-
-Tuy nhiên, hai thiết kế trên có một nhược điểm rất lớn đó là `critical path` sẽ được hình thành trên tín hiệu `m_axis_tready` làm giảm tần số hoạt động của hệ thống.
-
-![](/images/blog/a-generic-systemverilog-rom/5.png)
-
-### 2.2 Giải pháp registering `TREADY`
-
-Dưới đây là một phương pháp chèn `register` vào đường `TREADY`. `S_AXIS_TREADY` chậm hơn `M_AXIS_TREADY` 1 chu kỳ clock, do đó ngay tại chu kỳ `M_AXIS_TREADY = '0'`, dữ liệu đang có ở register sẽ không được lấy mấu ở output (vì `M_AXIS_TREADY = '0'`). Tuy nhiên, dữ liệu kế tiếp từ input vẫn được chuyển tiếp vào `register` và ghi đè vào giá trị chưa được lấy mẫu ở trên. Để giải quyết vấn đề trên, kiến trúc này sử dụng thêm một lớp `expansion registers` để lưu trữ giá trị chưa được lấy mẫu khi `M_AXIS_TREADY = '0'`, dữ liệu input kế tiếp sẽ vẫn tiếp tục lưu trữ vào lớp `primary registers` như cũ. 
+## 2. Module ROM
 
 ```systemverilog
-always_ff @(posedge clk) 
-begin
-    if (s_axis_tready == 1'b1) begin
-        primary_data_reg        <= s_axis_tdata;
-        primary_valid_reg       <= s_axis_tvalid;
-        if (m_axis_tready == 1'b0) begin
-            expansion_data_reg  <= primary_data_reg;
-            expansion_valid_reg <= primary_valid_reg;
+module rom_generic #(
+    parameter int          DATA_WIDTH = 16,
+    parameter int          DEPTH      = 1024,
+    parameter string       INIT_FILE  = "",     // "" = ROM khởi tạo toàn 0
+    parameter bit          INIT_HEX   = 1'b1    // 1: $readmemh, 0: $readmemb
+) (
+    input  logic                         clk,
+    input  logic                         en,
+    input  logic [$clog2(DEPTH)-1:0]     addr,
+    output logic [DATA_WIDTH-1:0]        dout
+);
+
+    // Mảng lưu nội dung. Không khai báo `const`: tool cần thấy đây là bộ nhớ.
+    logic [DATA_WIDTH-1:0] mem [0:DEPTH-1];
+
+    initial begin
+        if (INIT_FILE != "") begin
+            if (INIT_HEX) $readmemh(INIT_FILE, mem);
+            else          $readmemb(INIT_FILE, mem);
+        end else begin
+            for (int i = 0; i < DEPTH; i++) mem[i] = '0;
         end
     end
+
+    // Đọc đồng bộ, có output register — điều kiện để suy diễn block RAM.
+    always_ff @(posedge clk) begin
+        if (en) dout <= mem[addr];
+    end
+
+endmodule
+```
+
+`$clog2(DEPTH)` tự tính độ rộng địa chỉ, nên khi đổi `DEPTH` không phải sửa
+thêm chỗ nào. Với `DEPTH` không phải luỹ thừa của 2, các địa chỉ dư ra sẽ đọc
+ra giá trị không xác định — nếu điều đó quan trọng thì phải chặn ở tầng trên.
+
+## 3. Bốn điều kiện để tool suy diễn ra block RAM
+
+Đây là phần quyết định giữa một ROM tốn 1 block RAM và một ROM tốn 3000 LUT.
+Cùng một nội dung, chỉ khác cách viết.
+
+### 3.1 Đọc phải đồng bộ
+
+Block RAM trên FPGA **không có** cổng đọc bất đồng bộ. Viết như dưới đây là ép
+tool trải toàn bộ bảng thành logic tổ hợp:
+
+```systemverilog
+assign dout = mem[addr];   // đọc bất đồng bộ -> LUT, không phải block RAM
+```
+
+Phải luôn cho địa chỉ đi qua một thanh ghi, tức là đọc trong `always_ff` như
+module ở trên. Cái giá là độ trễ 1 chu kỳ — đây là độ trễ có thật của phần
+cứng, không phải thứ mình tự thêm vào.
+
+### 3.2 Không reset mảng nhớ
+
+Đây là lỗi phổ biến nhất:
+
+```systemverilog
+always_ff @(posedge clk or posedge rst) begin
+    if (rst) dout <= '0;          // reset thanh ghi output: chấp nhận được
+    else if (en) dout <= mem[addr];
 end
 ```
 
-Tại chu kỳ `M_AXIS_TREADY = '1'`, lúc này `S_AXIS_TREADY = '0'` do chậm 1 chu kỳ, dữ liệu sẽ được `consumer` lấy từ lớp `expansion registers` trước, sau đó là từ lớp `primary registers`.
+Reset thanh ghi output thì không sao. Nhưng nếu reset **cả mảng** (`for` loop
+gán `mem[i] <= '0` trong khối reset) thì tool buộc phải dùng flip-flop cho từng
+ô nhớ, vì block RAM không có chân reset nội dung. Kết quả: bùng nổ tài nguyên.
 
-![](/images/blog/a-generic-systemverilog-rom/4.png)
+### 3.3 Chỉ một tiến trình được truy cập mảng
 
+Nếu hai khối `always_ff` khác nhau cùng đọc `mem`, tool phải nhân đôi bộ nhớ
+hoặc bỏ luôn ý định suy diễn. Muốn hai cổng đọc thì khai báo rõ ROM hai cổng,
+đọc cả hai trong **cùng một** `always_ff`.
 
-### 2.3 Thiết kế RTL
+### 3.4 Ép kiểu khi tool vẫn không nghe
+
+Khi mọi thứ đã đúng mà báo cáo tổng hợp vẫn cho thấy LUT, dùng attribute để nói
+thẳng ý định. Chúng là pragma riêng của từng hãng nhưng vô hại với hãng còn lại:
 
 ```systemverilog
-logic [WIDTH-1:0]   expansion_data_reg;
-logic               expansion_valid_reg;
-logic [WIDTH-1:0]   primary_data_reg;
-logic               primary_valid_reg;
-
-always_ff @(posedge clk) 
-begin
-    if (s_axis_tready == 1'b1) begin
-        primary_data_reg        <= s_axis_tdata;
-        primary_valid_reg       <= s_axis_tvalid;
-        if (m_axis_tready == 1'b0) begin
-            expansion_data_reg  <= primary_data_reg;
-            expansion_valid_reg <= primary_valid_reg;
-        end
-    end
-    if (m_axis_tready == 1'b1) begin
-        expansion_valid_reg     <= 1'b0;
-    end
-end
-
-assign s_axis_tready = !(expansion_valid_reg); 
-assign m_axis_tvalid = (expansion_valid_reg) ? 
-                            expansion_valid_reg : 
-                            primary_valid_reg;
-assign m_axis_tdata  = (expansion_valid_reg) ? 
-                            expansion_data_reg : 
-                            primary_data_reg;
+(* rom_style = "block" *)     logic [DATA_WIDTH-1:0] mem [0:DEPTH-1];  // Xilinx
+(* ramstyle = "M20K"   *)     logic [DATA_WIDTH-1:0] mem [0:DEPTH-1];  // Intel
 ```
 
-Thiết kế được viết bằng `SystemVerilog` và được mô tả cụ thể ở [`axis_reg.sv`](https://github.com/nguyencanhtrung/systemverilog_axis/blob/master/rtl/axis_reg.sv)
+Giá trị `"distributed"` (Xilinx) hoặc `"logic"` (Intel) thì ngược lại — hữu ích
+cho bảng rất nhỏ, khoảng dưới 64 phần tử, khi dùng nguyên một block RAM là
+lãng phí.
+
+## 4. File nội dung
+
+`$readmemh` đọc file text, mỗi dòng một giá trị hex, cho phép comment kiểu `//`
+và dòng trắng:
+
+```text
+// sin_lut.mem — 1/4 chu kỳ sin, Q1.15
+0000
+0324
+0648
+096a
+// ...
+```
+
+Vài điểm dễ vấp:
+
+- Số giá trị trong file **ít hơn** `DEPTH` thì phần còn lại là `'x` trong mô
+  phỏng, còn khi tổng hợp thường thành `0`. Sự khác biệt này khiến bug chỉ lộ
+  ra trên board chứ không lộ trong simulation.
+- Đường dẫn `INIT_FILE` được hiểu tương đối so với thư mục chạy tool, không phải
+  so với file `.sv`. Nên truyền đường dẫn tuyệt đối từ script build.
+- Sinh file bằng script (Python/MATLAB) và commit cả script lẫn file `.mem`.
+  Sáu tháng sau, câu hỏi "bảng này ở đâu ra" sẽ có câu trả lời.
+
+## 5. Sử dụng
+
+```systemverilog
+rom_generic #(
+    .DATA_WIDTH (16),
+    .DEPTH      (256),
+    .INIT_FILE  ("sin_lut.mem")
+) u_sin_lut (
+    .clk  (clk),
+    .en   (lut_en),
+    .addr (lut_addr),
+    .dout (lut_data)
+);
+```
+
+## 6. Kiểm chứng
+
+Một ROM sai thì mọi thứ phía sau nó đều sai, nên đáng bỏ ra vài phút viết
+testbench đối chiếu với mô hình tham chiếu:
+
+```systemverilog
+// Đọc lại đúng file mà RTL nạp, rồi so từng phần tử.
+logic [15:0] golden [0:255];
+initial $readmemh("sin_lut.mem", golden);
+
+initial begin
+    for (int i = 0; i < 256; i++) begin
+        @(posedge clk);
+        addr <= i[7:0]; en <= 1'b1;
+        @(posedge clk);                 // bù 1 chu kỳ độ trễ đọc
+        assert (dout === golden[i])
+            else $error("ROM sai ở địa chỉ %0d: %h thay vì %h", i, dout, golden[i]);
+    end
+    $display("ROM khớp toàn bộ %0d phần tử", 256);
+end
+```
+
+Phép kiểm này bắt được cả hai lỗi hay gặp nhất: lệch địa chỉ một nhịp (do quên
+trừ độ trễ đọc) và file `.mem` không được nạp (khi đó `dout` toàn `x`).
+
+## 7. Tóm lại
+
+- Đọc đồng bộ, không reset mảng, chỉ một tiến trình truy cập — ba điều kiện này
+  quyết định ROM của bạn nằm trong block RAM hay trải ra LUT.
+- `$readmemh` cộng với file `.mem` sinh bằng script giữ cho nội dung bảng có
+  thể diff được và tái tạo được.
+- Attribute `rom_style` / `ramstyle` là cách nói thẳng với tool khi khuôn mẫu
+  đã đúng mà kết quả vẫn sai.
+- Luôn đối chiếu ROM với chính file nội dung trong testbench: lệch một nhịp địa
+  chỉ là lỗi im lặng, và nó sẽ theo bạn xuống tận board.

@@ -56,8 +56,7 @@ Trạng thái của một container có thể được quan sát với câu lệ
 * `docker commit`
 
 
-### 3.1 -----------
-### 3.2 $docker run
+### 3.1 $docker run
 
 `docker run` tạo một container mới dựa trên `image` được cung cấp. Container mới này được định danh bởi `container name` và `containter id`.
 
@@ -101,8 +100,7 @@ Giải nghĩa: `docker run` khởi chạy một `container` với các cờ sau
 
 Khi chạy câu lệnh trên: Docker sẽ tạo một container mới có tên là `bi` từ image `ubuntu:20.04` và cho phép chạy GUI từ container, cũng như cho phép tương tác với bash shell bên trong container.
 
-### 3.3 -----------
-### 3.4 $docker start
+### 3.2 $docker start
 
 Docker start được sử dụng để khởi chạy một container đang trong trạng thái `exited`.
 
@@ -122,8 +120,7 @@ Chạy container `bo` bằng cách:
 
 `$ docker start bo`
 
-### 3.5 -----------
-### 3.6 $docker attach
+### 3.3 $docker attach
 
 Sau khi khởi chạy một container, truy cập vào môi trường của container bằng câu lệnh sau:
 
@@ -137,8 +134,7 @@ Truy cập môi trường container `bo` bằng cách:
 
 `$docker attach bo`
 
-### 3.7 -----------
-### 3.8 $docker ps
+### 3.4 $docker ps
 
 `docker ps` được sử dụng với các cờ khác nhau và có chức năng khác nhau như bảng mô tả sau đây
 
@@ -187,8 +183,7 @@ Truy cập môi trường container `bo` bằng cách:
     71e7c47685f2   bi        "/bin/bash"   49 minutes ago   Up 49 minutes             bo
 ```
 
-### 3.9 -----------
-### 3.10 $docker rm
+### 3.5 $docker rm
 
 Như đã thấy ở danh sách `docker ps -a`, có rất nhiều containers không được dùng mà vẫn tồn tại trên hệ thống. Ta có thể loại bỏ chúng bằng câu lệnh `docker rm`
 
@@ -202,8 +197,7 @@ Tương đương với
 docker rm c5e156ba746f
 ```
 
-### 3.11 -----------
-### 3.12 $docker images
+### 3.6 $docker images
 
 Liệt kê tất cả các images có trên hệ thống
 
@@ -216,8 +210,7 @@ ubuntu       20.04     1c5c8d0b973a   3 weeks ago   72.8MB
 
 ```
 
-### 3.13 -----------
-### 3.14 $docker rmi
+### 3.7 $docker rmi
 
 Để gỡ docker images, trước tiên phải gỡ bỏ toàn bộ các container được tạo bởi image cần xóa bằng câu lệnh `docker rm <container-name>`. Sau đó, dùng câu lệnh `docker rmi`
 

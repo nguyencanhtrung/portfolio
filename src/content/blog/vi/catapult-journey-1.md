@@ -69,9 +69,7 @@ $(CC) -o $(TDIR)/tb tb.cpp tb.cpp test_chan_assert.cpp -I$(IDIR) $(CFLAGS)
 $(MGC_HOME)/bin/gdb $(TDIR)/tb
 ```
 
-## 3. Section 1
-
-#### Understand makefile and simple errors
+## 3. Understand makefile and simple errors
 
 ```cpp
 //test_chan_assert.cpp
@@ -155,8 +153,7 @@ make: *** [tb0] Error 1
  printf("sat_behavior = %3d, ",sat_behavior.to_uint());
  ```
 
-## 4. Section 2
-#### Working with debugger (dbg) to trace back the error cause in source code
+## 4. Working with debugger (dbg) to trace back the error cause in source code
 
 ```cpp
 // tb.cpp
@@ -284,8 +281,7 @@ Giải pháp: Thực hiện kiểm tra channel có dữ liệu hay không trư�
  }
 ```
 
-## 5. Section 3
-#### Understand behaviour of shifting in AC data types
+## 5. Understand behaviour of shifting in AC data types
 
 Khi thực hiện dịch trái một vector ac_* phải cast vector đó với một kích thước đủ lớn để đảm bảo giá trị của kết quả thu được phản ánh đúng toán tử dịch trái.
 

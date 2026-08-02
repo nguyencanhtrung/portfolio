@@ -7,6 +7,12 @@ key: kvm-cmd-cheatsheet
 tags: ['kvm']
 ---
 
+A working set of `virsh` and `virt-install` commands for running KVM guests on
+Ubuntu, in the order you actually need them: confirm the host can accelerate,
+point the client at the system daemon, get networking and storage in place, then
+create and drive a VM. Every block below is copy-paste ready.
+
+## 1. Check the host can run KVM
 ```shell
 sudo kvm-ok
 ```
@@ -20,11 +26,21 @@ KVM acceleration can be used
 ```
 
 
+## 2. Point virsh at the system daemon
+
+Without this, `virsh` talks to a per-user session daemon and cannot see the
+VMs that were created with `sudo`.
+
 ```shell
 # use same connection and objects as sudo
 export LIBVIRT_DEFAULT_URI=qemu:///system
 ```
 
+
+## 3. Networking
+
+The default NAT network lives on `virbr0`. A bridged network gives guests an
+address on the physical LAN instead.
 
 ```shell
 ip addr show virbr0
@@ -44,6 +60,8 @@ $ virsh net-dumpxml host-bridge
 ```
 
 
+### 3.1 IP forwarding
+
 ```shell
 # this needs to be "1"
 cat /proc/sys/net/ipv4/ip_forward
@@ -54,6 +72,10 @@ echo net.ipv4.ip_forward=1 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 ```
 
+
+## 4. Storage pools
+
+A pool is just a directory libvirt is allowed to write disk images into.
 
 ```shell
 $ virsh pool-list --all
@@ -75,6 +97,8 @@ $ virsh pool-list --all
 ```
 
 
+## 5. Fix ownership after running virsh as root
+
 ```shell
 # chown is only necessary if virsh was run previously as sudo
 ls -l ~/.virtinst
@@ -84,7 +108,7 @@ sudo chown -R $USER:$USER ~/.virtinst
 virsh list --all
 ```
 
-### Installing `ukvm2004` VM
+## 6. Installing `ukvm2004` VM
 
 ```shell
 virt-install \
@@ -101,25 +125,25 @@ virt-install \
 --machine q35 \
 ```
 
-### Start the VM
+## 7. Start the VM
 
 ```shell
 virsh start ukvm2004
 ```
 
-### View the running VM
+## 8. View the running VM
 
 ```shell
 virt-viewer ukvm2004
 ```
 
-### Close the VM
+## 9. Close the VM
 
 ```shell
 virsh destroy ukvm2004
 ```
 
-### Delete the VM
+## 10. Delete the VM
 
 ```shell
 virsh undefine ukvm2004
