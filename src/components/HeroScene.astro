@@ -164,10 +164,10 @@
     .hero-scene {
       display: block;
       width: 100%;
-      /* 28vw = the drawing's own aspect (1600:448), so the panorama is
-         never cropped: it fills the width, and on short windows the whole
-         drawing scales down (meet) instead of losing its top or sides. */
-      height: min(28vw, 38vh, 420px);
+      /* Height follows the drawing's own aspect, so the drawn extent always
+         fills the frame exactly — no letterboxing, no cropping. */
+      height: auto;
+      aspect-ratio: 1600 / 448;
     }
     .hero-scene * {
       vector-effect: non-scaling-stroke;
@@ -225,6 +225,13 @@
     .lbl.acc {
       fill: var(--accent);
       opacity: 0.8;
+    }
+    /* At phone widths the panorama is ~100px tall; the zone captions shrink
+       below legibility and read as smudges — drop them. */
+    @media (max-width: 700px) {
+      .lbl {
+        display: none;
+      }
     }
 
     /* Motion: draw the signal, then reveal rays and the reflection. */

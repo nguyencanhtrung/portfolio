@@ -109,7 +109,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     flex-direction: column;
     justify-content: center;
     padding-top: 1.5rem;
-    max-width: none;
+    /* A flex item with auto inline margins shrinks to fit and centres itself,
+       drifting off the page frame — force it to fill the 62rem container so
+       the copy shares its left edge with the journey below. */
+    width: 100%;
   }
   .hero-copy > * {
     max-width: var(--w-content);
@@ -140,9 +143,13 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     transform: translateY(3px);
   }
   .scene {
+    /* The panorama lives in the same 62rem frame as the copy and the journey:
+       its ground line ends where the section hairlines end. */
     width: 100%;
+    max-width: var(--w-wide);
+    margin-inline: auto;
+    padding-inline: 1.25rem;
     flex-shrink: 0;
-    overflow: hidden;
   }
   /* The drawing's top third is empty sky — let it rise behind the CTA
      so the copy stands on the scene. Skip on small screens where the
