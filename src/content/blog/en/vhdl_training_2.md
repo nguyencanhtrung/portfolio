@@ -5,6 +5,8 @@ date: 2023-02-25
 lang: en
 key: vhdl_training_2
 tags: ['vhdl']
+series: 'VHDL training'
+seriesOrder: 2
 ---
 
 ## Scalar data types

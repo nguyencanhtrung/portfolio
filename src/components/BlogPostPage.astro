@@ -1,5 +1,5 @@
 ---
-import { render, type CollectionEntry } from 'astro:content';
+import { render, getCollection, type CollectionEntry } from 'astro:content';
 import 'katex/dist/katex.min.css';
 import Base from '../layouts/Base.astro';
 import { t, localePath, type Locale } from '../i18n/ui';
@@ -26,6 +26,29 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
   month: 'long',
   day: 'numeric',
 });
+
+// Series mode: posts sharing data.series (same language) get part label + prev/next.
+const series = post.data.series;
+let seriesPosts: CollectionEntry<'blog'>[] = [];
+if (series) {
+  seriesPosts = (
+    await getCollection(
+      'blog',
+      (p) => p.data.series === series && p.data.lang === locale && !p.data.draft
+    )
+  ).sort((a, b) => (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0));
+}
+const pos = seriesPosts.findIndex((p) => p.id === post.id);
+const prevPost = pos > 0 ? seriesPosts[pos - 1] : undefined;
+const nextPost = pos >= 0 && pos < seriesPosts.length - 1 ? seriesPosts[pos + 1] : undefined;
+const postPath = (p: CollectionEntry<'blog'>) =>
+  localePath(locale, `/blog/${p.id.replace(/^(en|vi)\//, '')}/`);
+const partLabel =
+  series && pos >= 0
+    ? locale === 'vi'
+      ? `phần ${pos + 1}/${seriesPosts.length}`
+      : `part ${pos + 1} of ${seriesPosts.length}`
+    : '';
 ---
 
 <Base locale={locale} title={`${post.data.title} — Canh-Trung Nguyen`} description={post.data.description} altPath={altPath}>
@@ -54,6 +77,13 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
         {post.data.tags.length > 0 && <span> · {post.data.tags.map((tag) => `#${tag}`).join(' ')}</span>}
       </p>
       {
+        series && (
+          <p class="series mono">
+            {series} · {partLabel}
+          </p>
+        )
+      }
+      {
         altPath && (
           <p class="switch">
             <a href={altPath} rel="alternate" hreflang={other}>
@@ -80,6 +110,26 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
     <div class="prose">
       <Content />
     </div>
+    {
+      (prevPost || nextPost) && (
+        <nav class="series-nav" aria-label={series} data-pagefind-ignore>
+          {prevPost ? (
+            <a class="s-card" href={postPath(prevPost)} rel="prev">
+              <span class="s-label mono">{t(locale, 'blog.seriesPrev')}</span>
+              <span class="s-title">{prevPost.data.title}</span>
+            </a>
+          ) : (
+            <span />
+          )}
+          {nextPost && (
+            <a class="s-card s-next" href={postPath(nextPost)} rel="next">
+              <span class="s-label mono">{t(locale, 'blog.seriesNext')}</span>
+              <span class="s-title">{nextPost.data.title}</span>
+            </a>
+          )}
+        </nav>
+      )
+    }
   </article>
 
   <script>
@@ -208,6 +258,63 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
     .prose {
       margin-top: 2.5rem;
     }
+    .series {
+      margin-top: 0.6rem;
+      font-size: 0.75rem;
+      color: var(--accent);
+    }
+
+    /* --- Series prev/next --- */
+    .series-nav {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      max-width: var(--w-content);
+      margin-top: 3.5rem;
+      padding-top: 2rem;
+      border-top: 1px dashed var(--ink-3);
+    }
+    .s-card {
+      display: flex;
+      flex-direction: column;
+      gap: 0.45rem;
+      padding: 1rem 1.2rem;
+      border: 1px solid var(--hairline);
+      border-radius: 10px;
+      background: var(--surface);
+      color: inherit;
+      transition: border-color 0.15s ease, transform 0.15s ease;
+    }
+    .s-card:hover {
+      text-decoration: none;
+      border-color: var(--accent);
+      transform: translateY(-2px);
+    }
+    .s-next {
+      text-align: right;
+    }
+    .s-label {
+      font-size: 0.7rem;
+      letter-spacing: 0.12em;
+      text-transform: uppercase;
+      color: var(--ink-3);
+    }
+    .s-card:hover .s-label {
+      color: var(--accent);
+    }
+    .s-title {
+      font-size: 0.92rem;
+      line-height: 1.4;
+      color: var(--ink-2);
+    }
+    @media (max-width: 640px) {
+      .series-nav {
+        grid-template-columns: 1fr;
+      }
+      .s-next {
+        text-align: left;
+      }
+    }
 
     /* --- Table of contents --- */
     /* Mobile / narrow: collapsed block above the prose. */
@@ -253,7 +360,8 @@ const fmt = new Intl.DateTimeFormat(locale === 'vi' ? 'vi-VN' : 'en-US', {
         column-gap: 3rem;
       }
       article.has-toc > .head,
-      article.has-toc > .prose {
+      article.has-toc > .prose,
+      article.has-toc > .series-nav {
         grid-column: 2;
       }
       .toc {

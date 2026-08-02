@@ -5,6 +5,8 @@ date: 2023-02-25
 lang: en
 key: vhdl_training_3
 tags: ['vhdl']
+series: 'VHDL training'
+seriesOrder: 3
 ---
 ## Composite data types
  

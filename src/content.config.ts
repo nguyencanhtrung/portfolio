@@ -12,6 +12,10 @@ const blog = defineCollection({
     key: z.string(),
     tags: z.array(z.string()).default([]),
     draft: z.boolean().default(false),
+    /** Posts sharing the same series name (within one language) get prev/next navigation. */
+    series: z.string().optional(),
+    /** Position within the series, 1-based. */
+    seriesOrder: z.number().optional(),
   }),
 });
 

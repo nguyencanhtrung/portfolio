@@ -51,6 +51,9 @@ draft: false        # true = không publish
 ```
 
 - Math: KaTeX (`$...$`, `$$...$$`). Diagram: code fence ` ```mermaid `. Code: Shiki, theme sáng/tối tự đổi.
+- Series: thêm `series: 'Tên series'` + `seriesOrder: 1` vào frontmatter các bài cùng series
+  (cùng ngôn ngữ, tên series phải giống hệt nhau). Bài viết sẽ hiện nhãn "phần n/m" dưới tiêu đề
+  và nút Phần trước / Phần tiếp theo ở cuối bài. Bài không có `series` thì giữ nguyên như cũ.
 - Ảnh đặt ở `public/images/blog/<slug>/`, nhúng bằng đường dẫn tuyệt đối `/images/blog/<slug>/ten-anh.png`.
 - Bài có ≥ 2 heading `##` sẽ tự có table of contents (sidebar trái trên desktop, khối gập được trên mobile).
 - Blog list phân trang 10 bài/trang (`/blog/page/2/`…).

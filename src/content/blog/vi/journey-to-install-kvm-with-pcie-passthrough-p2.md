@@ -5,6 +5,8 @@ date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p2
 tags: ['kvm']
+series: 'Setup KVM with PCIe passthrough'
+seriesOrder: 2
 ---
 ## 1. Giới thiệu
 

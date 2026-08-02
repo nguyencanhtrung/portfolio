@@ -5,6 +5,8 @@ date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p5
 tags: ['kvm']
+series: 'Setup KVM with PCIe passthrough'
+seriesOrder: 5
 ---
 
 There are 2 ways to attach or detach PCIe devices to/from KVM which are

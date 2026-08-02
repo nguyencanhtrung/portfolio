@@ -5,6 +5,8 @@ date: 2023-02-25
 lang: en
 key: vhdl_training_1
 tags: ['vhdl']
+series: 'VHDL training'
+seriesOrder: 1
 ---
 
 

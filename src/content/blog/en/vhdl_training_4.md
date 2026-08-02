@@ -5,6 +5,8 @@ date: 2023-02-25
 lang: en
 key: vhdl_training_4
 tags: ['vhdl']
+series: 'VHDL training'
+seriesOrder: 4
 ---
 ## VHDL operators
  
