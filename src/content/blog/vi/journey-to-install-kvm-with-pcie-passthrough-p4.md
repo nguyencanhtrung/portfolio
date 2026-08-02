@@ -8,7 +8,7 @@ tags: ['kvm']
 series: 'Setup KVM with PCIe passthrough'
 seriesOrder: 4
 ---
-## 1. A. Splitting IOMMU group
+## 1. Splitting IOMMU group
 
 ### 1.1 PCIe ACS override
 
@@ -89,7 +89,7 @@ Unfortunately, it DID NOT work since my machine which includes a MOBO (Z390 Giga
 
 The last solution would be rebuild the host's kernel that patched ACS feature and use that kernel instead. Luckily, I found a way to do so.
 
-## 2. B. Build patched ACS kernel
+## 2. Build patched ACS kernel
 
 ### 2.1 Download ACS patch and original kernel to build
 
@@ -258,7 +258,7 @@ Advanced Ubuntu     (index = 1)
 ...
 ```
 
-## 3. C. References
+## 3. References
 
 Visit [video](https://www.youtube.com/watch?v=JBEzshbGPhQ)
 

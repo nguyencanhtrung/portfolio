@@ -17,7 +17,7 @@ There are 2 ways to attach or detach PCIe devices to/from KVM which are
 
 GUI and commandline method are described [here](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html).
 
-## 1. A. Command line method to assign PCIe device to VM Guest
+## 1. Command line method to assign PCIe device to VM Guest
 
 ### 1.1 Identify the host PCI device to assign to the VM Guest
 
@@ -167,7 +167,7 @@ virsh nodedev-reattach pci_0000_01_00_0
 Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host thì ngon quá.
 
 
-## 2. B. Another way to attach PCIe devices
+## 2. Another way to attach PCIe devices
 
 Create a file named `pass-user.xml` and pasting the following content
 
@@ -224,6 +224,6 @@ lspci -nn
 ```
 
 
-## 3. C. References
+## 3. References
 
 Visit [the instruction](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html) and [Xilinx instruction](https://www.xilinx.com/developer/articles/using-alveo-data-center-accelerator-cards-in-a-kvm-environment.html)

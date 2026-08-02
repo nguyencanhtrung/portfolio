@@ -256,54 +256,7 @@ ex2 <= to_integer(ex1);
 * `ex1 <= to_signed (ex2, ex1'length)` The first example here converts an integer (ex2) to signed type using `to_signed` conversion function, available in `numeric_std` package and stores the result in `ex1` which is of `singed` type.
 * `ex2 <= to_integer(ex1)` Similarly, the `to_integer` conversion function converts a `signed` type to `integer` type in the second example.
 
-
-## 4. Data Type Conversion
-
-Since VHDL is a strongly typed language by its nature, assigning one type to another is illegal. Performing this change requires a conversion mechanism.
-
-The conversion processes in VHDL are:
-
-* Casting
-* Conversion function
-
-### 4.1 Type casting
-
-* Used to move between the `std_logic_vector` =>  `signed` and `unsigned` types. 
-* Type cast between `std_logic_vector` and `signed` or `unsigned` can be used as long as the original and destination signals have the same bit width.
-
-For example:
-
-```vhdl
-signal ex1 : std_logic_vector(3 downto 0);
-signal ex2 : signed(3 downto 0);
-signal ex3 : unsigned(3 downto 0);
-
-ex2 <= signed(ex1);
-ex3 <= unsigned(ex1);
-ex1 <= std_logic_vector(ex2);
-```
-
-* `ex2 <= signed(ex1)` The first example type casts a signal of `std_logic_vector` type (ex1) to `signed` type and stores it in ex2 which is of `signed` type as well.
-* `ex3 <= unsigned(ex1)` Similarly, the second example type casts a signal of `std_logic_vector` type (ex1) to `unsigned` type
-* `ex1 <= std_logic_vector(ex2)` Third example type casts a signal of singed type (ex2) to `std_logic_vector` type.
-
-### 4.2 Conversion function
-
-* Used to move between `signed` and `unsigned` => `integer`. 
-* Integers do not have a set bit width, which is why the conversion function from `integer` to `signed/unsigned` includes a specification of the intended bit width.
-
-```vhdl
-signal ex1: signed(3 downto 0);
-signal ex2: integer;
-
-ex1 <= to_signed (ex2, ex1'length);
-ex2 <= to_integer(ex1);
-```
-
-* `ex1 <= to_signed (ex2, ex1'length)` The first example here converts an integer (ex2) to signed type using `to_signed` conversion function, available in `numeric_std` package and stores the result in `ex1` which is of `singed` type.
-* `ex2 <= to_integer(ex1)` Similarly, the `to_integer` conversion function converts a `signed` type to `integer` type in the second example.
-
-### 4.3 std_logic_vector to/from integer
+### 3.3 std_logic_vector to/from integer
 
 Common conversions required in VHDL are
 
@@ -322,7 +275,7 @@ To convert from integer to std_logic_vector:
 slv_value <= std_logic_vector(to_unsigned( integer_value, n ));
 ```
 
-### 4.4 Types & subtypes
+## 4. Types and subtypes
 
 #### Types
 
@@ -352,7 +305,7 @@ The syntax always has a pre-defined type as subtype only refines the use of a pr
 The example shown here creats a subtype `ROM_MEMORY_RANGE` that limits the integer range (by default, a minimum of 32 bits) to 8 bits.
 
 
-### 4.5 Characters & Strings
+## 5. Characters and strings
 
 #### Characters
 
@@ -384,7 +337,7 @@ constant msg: string (1 to 10) := "setup time";
 A constant `msg` of string type with the range equal to ten characters. It has been assigned a value of “setup time".
 
 
-### 4.6 Physical
+## 6. Physical types
 
 * Used to quantify real-world physical concepts and amounts, such as `mass`, `length`, `time` etc.
 * `time` is the only pre-defined physical type
@@ -415,7 +368,7 @@ Z <= A after TPD;
 In the example here, a constant `TPD` is of the type time and has been initialized with a 3ns value.
 
 
-### 4.7 Enumerated types
+## 7. Enumerated types
 
 * Lists a set of names or values defining a new type.
 * Use values immediately recognizable and intuitively relevant to the operation of the model. 
