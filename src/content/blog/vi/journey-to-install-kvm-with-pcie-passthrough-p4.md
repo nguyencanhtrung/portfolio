@@ -238,7 +238,7 @@ GRUB_DEFAULT="1>4"
 
 Then,
 
-```
+```bash
 sudo update-grub
 reboot
 ```

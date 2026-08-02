@@ -47,7 +47,7 @@ Scalar data types in VHDL represent single values. These includes:
 * This data type is concise for modeling logic, but it does not adequately model hardware. 
 * Hardly used for synthesis and has been essentially replaced by `std_logic`
 
-```
+```vhdl
 architecture Behavioral of mux is
 signal A, B, SEL, Z : bit;
 begin
@@ -118,7 +118,7 @@ resolved. `std_ulogic` does provide a built-in means of error checking for inadv
 
 * in the case of the `std_logic` type, it provides some form of a resolution function for the multiple drivers issue.
 
-```
+```vhdl
 architecture rtl of example is
 signal OUT_1: std_ulogic;
 signal A, B, C, RES_OUT: std_logic;
@@ -147,7 +147,7 @@ It can be resolved by using the tristate buffer modeling technique.
 
 Atthe board level, these signals are combined via open-drain or open-collector outputs-in which case, `std_logic` weak high (H) and weak low (1) could be used to model
 
-```
+```vhdl
 signal A, B, C, RES_OUT: std_logic;
 RES_OUT <= A when EN0 = '1' else 'Z';
 RES_OUT <= B when EN1 = '1' else 'Z';
@@ -167,12 +167,12 @@ RES_OUT <= C when EN2 = '1' else 'Z';
 The syntax and an example of the type integer is shown here
 
 <strong>Syntax</strong>
-```
+```vhdl
 type integer is range ...
 ```
 
 <strong>Example</strong>
-```
+```vhdl
 signal A: integer range 0 to 7;
 signal B: integer range 15 downto 0;
 ```
@@ -186,12 +186,12 @@ signal B: integer range 15 downto 0;
 * Real type can also be used in synthesizable code if the results they produce are resolvable during synthesis.
 
 <strong>Syntax</strong>
-```
+```vhdl
 type real is range ...
 ```
 
 <strong>Example</strong>
-```
+```vhdl
 type CAPACITY is range -25.0 to 25.0;
 signal SIG_1: CAPACITY := 3.0;
 ```
@@ -224,7 +224,7 @@ The conversion processes in VHDL are:
 
 For example:
 
-```
+```vhdl
 signal ex1 : std_logic_vector(3 downto 0);
 signal ex2 : signed(3 downto 0);
 signal ex3 : unsigned(3 downto 0);
@@ -243,7 +243,7 @@ ex1 <= std_logic_vector(ex2);
 * Used to move between `signed` and `unsigned` => `integer`. 
 * Integers do not have a set bit width, which is why the conversion function from `integer` to `signed/unsigned` includes a specification of the intended bit width.
 
-```
+```vhdl
 signal ex1: signed(3 downto 0);
 signal ex2: integer;
 
@@ -271,7 +271,7 @@ The conversion processes in VHDL are:
 
 For example:
 
-```
+```vhdl
 signal ex1 : std_logic_vector(3 downto 0);
 signal ex2 : signed(3 downto 0);
 signal ex3 : unsigned(3 downto 0);
@@ -290,7 +290,7 @@ ex1 <= std_logic_vector(ex2);
 * Used to move between `signed` and `unsigned` => `integer`. 
 * Integers do not have a set bit width, which is why the conversion function from `integer` to `signed/unsigned` includes a specification of the intended bit width.
 
-```
+```vhdl
 signal ex1: signed(3 downto 0);
 signal ex2: integer;
 
@@ -310,13 +310,13 @@ Common conversions required in VHDL are
 
 To convert from std logic_vector to integer:
 
-```
+```vhdl
 integer_value <= to_integer( unsigned(slv_value));
 ```
 
 To convert from integer to std_logic_vector:
 
-```
+```vhdl
 slv_value <= std_logic_vector(to_unsigned( integer_value, n ));
 ```
 
@@ -328,7 +328,7 @@ slv_value <= std_logic_vector(to_unsigned( integer_value, n ));
 * STD package defines a specific collection of types such as `integer`, `real`, `bit`, etc. 
 * A new type can be created using enumeration arrays, records, etc.
 
-```
+```vhdl
 type mem_array is array (integer range 0 to 1023) of std_logic_vector(15 downto 0);
 ```
 The example shown here creates a new type called `mem_array`. Once created, this mem array becomes a full-blown type that a new signal or variable may be defined as. In this example, the created type is an array of `std_logic_vector` with length of 16 bits. The array has 1024 elements.
@@ -339,7 +339,7 @@ The example shown here creates a new type called `mem_array`. Once created, this
 * Used in simulation to do boundary checking.
 * Boundary checking in hardware does not exist and hence subtypes only reduce the number of bits required to describe a signal or variable, which consequently reduces the number of unescessary warnings.
 
-```
+```vhdl
 subtype <new subtype name> is <type or subtype name>;
 
 subtype ROM_MEMORY_RANGE is integer range 0 to 255;
@@ -358,7 +358,7 @@ The example shown here creats a subtype `ROM_MEMORY_RANGE` that limits the integ
 * Characters are written in single quotes. 
 * Character types are synthesizable.
 
-```
+```vhdl
 type character is (nul, sol, stx, ...);
 
 constant MY_CHAR : character := 'Q';
@@ -374,7 +374,7 @@ The constant `MY_CHAR` is of the character type and has been assigned a value eq
     * Once the string size is fixed or defined, it cannot be changed, even if a new string value is smaller than the defined size. The remaining space will contain remnants of the previous value.
     * String size always starts from 1. Since it is `postive range<>`
 
-```
+```vhdl
 type string is array (positive range <>) of character;
 constant msg: string (1 to 10) := "setup time";
 ```
@@ -390,7 +390,7 @@ A constant `msg` of string type with the range equal to ten characters. It has b
 * Generally not synthesizable.
 * A physical type must be defined in terms of its primary unit. Any secondary unit must be in multiples of the primary unit. * It is to noted that the units must be of the integer type and not real
 
-```
+```vhdl
 type time is range -2147483647 to 2147483647
 units
 fs;
@@ -404,7 +404,7 @@ end units;
 * A syntax for `time`, defined in IEEE, is shown onscreen with its range. 
 * Here, fs is the primary unit, and all secondary units are defined using fs.
 
-```
+```vhdl
 constant TPD : time := 3 ns;
 ...
 Z <= A after TPD;
@@ -421,7 +421,7 @@ In the example here, a constant `TPD` is of the type time and has been initializ
 
 The syntax for this enumerated type is for this enumerated type is given onscreen:
 
-```
+```vhdl
 type <new type name> is (<list of items>);
 ```
 
@@ -429,7 +429,7 @@ type <new type name> is (<list of items>);
 * <list of items> is a list of items, separated by commas that have the form of any legal identifier.
 * By default, enumerated values are sequentially encoded from left to right within the parentheses.
 
-```
+```vhdl
 type MY STATE is (RST, LOAD, FETCH, STORE, SHIFT);
 ...
 signal STATE, NEXT STATE: MY STATE;
@@ -459,7 +459,7 @@ In this example,
     * Although VHDL is a case-insensitive language, enumerated types are case sensitive
     * Enumerated types enclosed in single quotes
 
-```
+```vhdl
 type rx_states is (IDLE, START, DATA, PARITY, STOP);
 type tx_states is (IDLE, START, DATA, PARITY, STOP);
 

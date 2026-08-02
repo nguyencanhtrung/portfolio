@@ -20,7 +20,7 @@ Before getting started, ensure that you meet the following prerequisites:
 
 3. **CPU Support**: Check if your CPU supports virtualization and IOMMU (Input-Output Memory Management Unit) by running:
 
-```
+```bash
 egrep -c '(vmx|svm)' /proc/cpuinfo
 ```
 If the command returns a value of 0, your processor is not capable of running KVM. On the other hand, any other number means you can proceed with the installation.

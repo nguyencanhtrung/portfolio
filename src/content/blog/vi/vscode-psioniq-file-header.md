@@ -46,7 +46,7 @@ Thiết lập `psioniq` bằng cách truy cập:  `File` > `Preferences` > `Sett
 
 ### a. Trường `psi-header.config`
 
-```
+```jsonc
 "psi-header.config": {
         "forceToTop": true,
         "blankLinesAfter": 6,
@@ -70,7 +70,7 @@ Trường này chứa thông tin chung về `LICENSE`, `author`, `initials` (vi�
 Trường này thiết lập cơ chế tracking của extension và cách extension update header như ở ví dụ dưới đây:
 
 
-```
+```jsonc
   "psi-header.changes-tracking": {
         "isActive": true,
         "modAuthor": "Modified By",
@@ -114,7 +114,7 @@ Trường này thiết lập định dạng của header ứng với mỗi một
 Trên đây là một vài thiết lập phổ biến, nếu bạn muốn tìm hiểu thêm các thiết lập khác hãy truy cập vào psioniq [language config](https://marketplace.visualstudio.com/items?itemName=psioniq.psi-header#language-configuration)
 
 
-```
+```jsonc
 "psi-header.lang-config": [
     {
         "language": "*",
@@ -155,7 +155,7 @@ Mô tả template của header. Chú ý: nếu bạn sử dụng cụm từ khá
 
 Dưới đây là ví dụ về header teamplate của `SystemVerilog` và các định dạng còn lại.
 
-```
+```jsonc
 "psi-header.templates": [
     {
         "language": "*",
@@ -221,7 +221,7 @@ Dưới đây là ví dụ về header teamplate của `SystemVerilog` và các 
 Cấu hình hoàn thiện bao gồm tất cả các trường mô tả bên trên và được lưu tại `settings.json`
 
 
-```
+```jsonc
 {
     "workbench.colorTheme": "Default High Contrast",
     "code-runner.runInTerminal": true,

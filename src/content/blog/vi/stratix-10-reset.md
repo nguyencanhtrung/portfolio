@@ -113,7 +113,7 @@ signal s1 	: std_logic_vector(3 downto 0) := b"0001";
 
 Or in verilog
 
-```C++
+```cpp
 
 reg q = 1'b1;
 

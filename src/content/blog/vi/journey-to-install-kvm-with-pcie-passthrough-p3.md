@@ -124,7 +124,7 @@ sudo update-initramfs -u
 
 After the reboot of the host, check Xilinx is configure for Pass-through using the below command.
 
-```
+```bash
 lspci -k
 ```
 

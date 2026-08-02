@@ -19,14 +19,14 @@ GUI and commandline method are described [here](https://documentation.suse.com/s
 
 ### 1. Identify the host PCI device to assign to the VM Guest
 
-```
+```bash
 lspci -nn | grep "Xilinx"
 
 ```
 
 The output is
 
-```
+```console
 tesla@tesla:~/kvm$ sudo lspci -nn | grep "Xilinx"
 01:00.0 Processing accelerators [1200]: Xilinx Corporation Device [10ee:5000]
 01:00.1 Processing accelerators [1200]: Xilinx Corporation Device [10ee:5001]
@@ -37,7 +37,7 @@ Xilinx has 2 IDs: (`01:00.0`  and `01:00.1`)
 ### 2. Gather detailed information about the device
 
 
-```
+```console
 $ virsh nodedev-dumpxml pci_0000_01_00_0
 
 <device>
@@ -70,7 +70,7 @@ $ virsh nodedev-dumpxml pci_0000_01_00_0
 
 and, do the same with the other
 
-```
+```console
 $ virsh nodedev-dumpxml pci_0000_01_00_1
 ```
 
@@ -78,7 +78,7 @@ Write down the values for domain, bus, slot and function.
 
 ### 3. Detach the device from the host system
 
-```
+```bash
 virsh nodedev-detach pci_0000_01_00_0
 ```
 
@@ -92,14 +92,14 @@ Trong trường hợp của ta, `detach` or `reattach` không có ý nghĩa, vì
 
 ### 4. Convert the domain, bus, slot and function from dec to hex
 
-```
+```bash
 printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 0
 printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 1
 ```
 
 Output:
 
-```
+```console
 tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 0
 <address domain='0x0' bus='0x1' slot='0x0' function='0x0'/>
 tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 1
@@ -109,13 +109,13 @@ tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' functio
 
 ### 5. Run `virsh edit`
 
-```
+```bash
 virsh edit ukvm2004
 ```
 
 Add the following device entry in the <devices> section using the result from the previous step:
 
-```
+```xml
 <hostdev mode='subsystem' type='pci' managed='yes'>
   <source>
     <address domain='0x0' bus='0x1' slot='0x0' function='0x0'/>
@@ -125,7 +125,7 @@ Add the following device entry in the <devices> section using the result from th
 
 and,
 
-```
+```xml
 <hostdev mode='subsystem' type='pci' managed='yes'>
   <source>
     <address domain='0x0' bus='0x1' slot='0x0' function='0x1'/>
@@ -135,7 +135,7 @@ and,
 
 Then, start the VM
 
-```
+```bash
 virsh start ukvm2004
 ```
 
@@ -152,13 +152,13 @@ If the device is unmanaged, you must manually manage these tasks before assignin
 
 In the example above, the managed='yes' option means that the device is managed. To switch the device mode to unmanaged, set managed='no'. If you do so, you need to take care of the related driver with the virsh nodedev-detach and virsh nodedev-reattach commands. Prior to starting the VM Guest you need to detach the device from the host by running
 
-```
+```bash
 virsh nodedev-detach pci_0000_01_00_0
 ```
 
 When the VM Guest is not running, you can make the device available for the host by running
 
-```
+```bash
 virsh nodedev-reattach pci_0000_01_00_0
 ```
 
@@ -170,7 +170,7 @@ Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host th
 Create a file named `pass-user.xml` and pasting the following content
 
 
-```
+```xml
 <hostdev mode="subsystem" type="pci" managed="yes">
   <source>
     <address domain="0x0000" bus="0x01" slot="0x00" function="0x1"/>
@@ -182,7 +182,7 @@ Create a file named `pass-user.xml` and pasting the following content
 
 Create a file named `pass-mgmt.xml` and pasting the following content
 
-```
+```xml
 <hostdev mode="subsystem" type="pci" managed="yes">
   <source>
     <address domain="0x0000" bus="0x01" slot="0x00" function="0x0"/>
@@ -217,7 +217,7 @@ virsh start ukvm2004
 
 Now you can see the PCIe card is available in your VM with the following command
 
-```
+```bash
 lspci -nn
 ```
 

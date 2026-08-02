@@ -13,6 +13,7 @@ export default defineConfig({
     rehypePlugins: [rehypeKatex],
     shikiConfig: {
       themes: { light: 'github-light', dark: 'github-dark' },
+      langAlias: { systemverilog: 'system-verilog', sv: 'system-verilog' },
     },
   },
 });

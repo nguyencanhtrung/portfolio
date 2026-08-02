@@ -37,7 +37,7 @@ Their usages
 * string is array of scalar type 'character`
 
 Example:
-```
+```vhdl
 signal A_WORD: std_logic_vector (3 downto 0) := "0011";
 ```
 The A_WORD signal shown here has a composite data type. 
@@ -66,7 +66,7 @@ The A_WORD signal shown here has a composite data type.
 * Use `unsigned` type when the vector needs math, like adding two BCD digits.
 * Use `std_logic_vector` when only a pattern is needed, such as driving the LED segments where the value means nothing.
 
-```
+```vhdl
 entity bcd_add_and_display is
     port(
         clk         : in std_logic;
@@ -96,7 +96,7 @@ The `NUMERIC_STD` library contains appropriate overloading functions to support 
 
 Arrays are groups of elements, all of the <strong>same type</strong>. The syntax of an array declaration is shown here.
 
-```
+```vhdl
 type <new type name> is array ( <range> ) of <data_type>
 ```
 In this:
@@ -104,7 +104,7 @@ In this:
 * `<range>` specifies the minimum and maximum values of indices via the “to” or “downto” notation. Typically, you specify arrays in an upward (to) direction, whereas you usually specify ranges for std logic vectors in a downward direction.
 * `<data type>` may be an “intrinsic” data type, such as integer or bit. It can also be an extension provided by a library such as `std_logic`, or a user-defined type.
 
-```
+```vhdl
 type WORD is array (0 to 3) of std_logic;
 signal B_BUS : WORD;
 ```
@@ -113,7 +113,7 @@ In this example, `WORD` is an array of four elements of the type `std_logic`.
 
 If a signal B_BUS is of type WORD, then it becomes an array of std_logic. Thus, the possible values for each element are 'U', 'X', '0', '1', 'Z', 'W, 'U, 'H', or '-'. Therefore, there are 9^4 (6561) possibilities versus 16 if the type were "bit".
 
-```
+```vhdl
 type DATA is array (0 to 3) of integer range 0 to 9;
 signal B_BUS : DATA;
 ```
@@ -130,7 +130,7 @@ Make sure that the arrays are of
 * The same length 
 * The assignment is positional, from left to right.
 
-```
+```vhdl
 signal BUS_A, BUS_B :   std_logic_vector (3 downto 0);
 signal BUS_C:           std_logic_vector (0 to 3);
 ```
@@ -150,7 +150,7 @@ To simplify array assignments and enhance readability:
 * you can designate a hexadecimal or octal base. 
 * Also, you can use underscores to further enhance readability as shown in example here.
 
-```
+```vhdl
 signal DATA_WORD : std_logic_vector(11 downto 0);
 
 DATA_WORD <= X"A6F";
@@ -161,7 +161,7 @@ DATA_WORD <= B"1010_0110_1111";
 
 Vivado synthesis <strong>only allows underscores</strong> when the base is explicitly defined via <strong>hex, octal, or binary</strong> notation.
 
-```
+```vhdl
 signal DATA_WORD : std_logic_vector(10 downto 0);
 DATA_WORD <= B"100_0110_1111";
 DATA_WORD <= X"46F";
@@ -178,7 +178,7 @@ A slice is a sub-array of a one-dimensional array, from a single element up to a
 
 The example has A, B, and Z as arrays, where A and B have eight elements and Z has 16 elements.
 
-```
+```vhdl
 signal A_VEC,B_VEC  : std logic vector (7 downto 0);
 signal Z_VEC        : std _logic_vector (15 downto 0);
 signal A_BIT, C_BIT, D_BIT: std_logic;
@@ -199,7 +199,7 @@ Out of the four array assignments:
 
 #### Array slices example
 
-```
+```vhdl
 entity REG_4 is
 port (
         reset   : in std logic.
@@ -247,7 +247,7 @@ integer.
 * Helpful during simulation and debugging to display user-defined text, messages, warnings, or errors and are often used with the assert statement.
 * Concatenate strings and characters by using the '&' operator.
 
-```
+```vhdl
 constant WARNING1: string (1 to 27) := "Unexpected Outputs Detected";
 write(output, WARNING1 & '!');
 ```
@@ -258,7 +258,7 @@ write(output, WARNING1 & '!');
 
 A convenient way of modeling memory structures is to create a pseudo two-dimensional array structure; that is, create an array of arrays.
 
-```
+```vhdl
 type MEM_ARRAY is array (0 to 3) of std_logic_vector (7 downto 0);
 signal MY_MEM : MEM_ARRAY;
 ```
@@ -275,7 +275,7 @@ Synthesis tools understand this construct as a way to represent memory.
 
 ### g. Assigning values to arrays
 
-```
+```vhdl
 type MEM_ARRAY is array (0 to 3) of std_logic_vector (7 downto 0);
 signal MY_MEM : MEM_ARRAY;
 signal R_ADDR, W_ADDR : std_logic_vector (1 downto 0);
@@ -288,7 +288,7 @@ In order to assign a value to an array, first the read and write address vector 
 
 Thus, the reading of data happens through the first line of the code shown here, and the writing of data happens through the second.
 
-```
+```vhdl
 D_OUT <= MY_MEM (to_integer(unsigned(R_ADDR)));
 ...
 MY_MEM (to_integer(unsigned(W_ADDR))) <= DATA_IN;
@@ -300,7 +300,7 @@ You can construct true multi-dimensional arrays by creating a user-defined type 
 
 The example here creates a two-dimensional array MATRIX A of the std_logic type and a three-dimensional array MATRIX_B of integers.
 
-```
+```vhdl
 type MATRIX_A is array (1 to 3, 1 to 16) of std_logic;
 type MATRIX_B is array (1 to 3, 1 to 3, 1 to 3) of integer range -1024 to 1023;
 
@@ -312,14 +312,14 @@ type MATRIX_3x3x3       : MATRIX_B  := (others => (others => (others => '0')));
 
 * The notation show here is used to access any given point.
 
-```
+```vhdl
 MATRIX_3x16 (3,15) <= '1';
 value <= MATRIX_3x3x3 (2,1,3);
 ```
 
 The example here shows how to multiply a higher order array by an integer scalar. 
 
-```
+```vhdl
 mmult: process
     type tMATRIX_3x3x3 is array(1 to 3, 1 to 3, 1 to 3) of integer range -1024 to 1023;
     variable matrix3D   : tMATRIX_3x3x3 := (others=>(others=>(others=>0)));
@@ -356,7 +356,7 @@ Each element of this variable matrix3D is then multiplied by a scalar constant t
 
 A record is a group of elements that may be of <strong>different types</strong>. An example of record is given here.
 
-```
+```vhdl
 type PACKET is record
 PARITY      : bit
 ADDRESS     : std_logic_vector (0 to 3);
@@ -385,7 +385,7 @@ These elements are stored one after the other as shown here.
 
 For packet-handling applications, an array of records can be useful. The ability to combine different data types affords great flexibility.
 
-```
+```vhdl
 type PACKET is record
 PARITY      : bit
 ADDRESS     : std_logic_vector (0 to 3);
@@ -398,7 +398,7 @@ signal TX PACKET, RX PACKET : PACKET;
 ```
 The PACKET here is a record having five elements, out of which `PARITY` is of the `bit` type and the rest are arrays of the `std_logic_vector` type, each having a different array length. 
 
-```
+```vhdl
 type DATA_ARRAY is array (0 to 2) of PACKET;
 signal MY_DATA : DATA_ARRAY;
 ```
@@ -420,7 +420,7 @@ They are enclosed in parentheses and separated by commas.
 
 Only scalar data variables are allowed on the left-side aggregates.
 
-```
+```vhdl
 signal H_BYTE, L_BYTE   : std_logic_vector (0 to 7);
 signal Q_OUT            : std_logic_vector (31 downto 0);
 signal A, B, C, D       : std_logic;
@@ -431,23 +431,23 @@ signal WORD             : std_logic_vector (3 downto 0);
 
 An aggregate of A, B,C, and D has been assigned a WORD, which is an array of `std_logic`. This is valid since both sides have the same length and the same std logic type.
 
-```
+```vhdl
 WORD <= (2 => '1', 3 => D, others => '0');
 ```
 In this example, index 2 and 3 of the WORD array have been assigned specific values of '1' and D, respectively, whereas the other indexes are assigned a value of '0' using the `others` keyword.
 
-```
+```vhdl
 Q_OUT <= (others => '0');
 ```
 You can use the “others” keyword as a default assignment, regardless of the array size as shown in the third example.
 
-```
+```vhdl
 WORD <= (A,B,C,D);
 ```
 The fourth example is an exact opposite of the first one and it is valid.
 
 
-```
+```vhdl
 H_BYTE <= (7|6|0|1 => '1', 2 to 5 => '0');
 ```
 The fifth example assigns index 7,6,0, and 1 of H_BYTE to avalue of '1' and index 2, 3, 4, and 5 of H_BYTE to '0'.
@@ -457,7 +457,7 @@ The fifth example assigns index 7,6,0, and 1 of H_BYTE to avalue of '1' and inde
 
 Similar to array aggregates, record aggregates can also be used as shown here.
 
-```
+```vhdl
 type D_WORD is record
     UPPER : std_logic_vector (7 downto 0);
     LOWER : std_logic_vector (7 downto 0);
@@ -467,7 +467,7 @@ signal DATA_WORD        : D_WORD;
 signal H_BYTE, L_BYTE   : std_logic_vector (0 to 7);
 ```
  
- ```
+ ```vhdl
  DATA_WORD <= (H_BYTE, L_BYTE);
  DATA_WORD <= (LOWER => L_BYTE, UPPER => H_BYTE);
  DATA_WORD <= (LOWER | UPPER => H_BYTE);

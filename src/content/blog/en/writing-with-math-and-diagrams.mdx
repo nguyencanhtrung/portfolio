@@ -65,6 +65,74 @@ begin
 end process;
 ```
 
+The rest of the toolbox renders too. SystemVerilog, for the verification side —
+an assertion that data holds until it's accepted:
+
+```systemverilog
+property p_no_drop;
+  @(posedge clk) disable iff (!rst_n)
+  valid && !ready |=> valid;   // hold until accepted
+endproperty
+assert property (p_no_drop);
+```
+
+C++ on the software side of the boundary — a saturating fixed-point
+accumulator, the arithmetic RTL and reference model must agree on:
+
+```cpp
+int16_t acc_sat(int32_t acc, int16_t x) {
+  acc += x;
+  if (acc > INT16_MAX) return INT16_MAX;
+  if (acc < INT16_MIN) return INT16_MIN;
+  return static_cast<int16_t>(acc);
+}
+```
+
+Python for the quick numerical sanity check:
+
+```python
+import numpy as np
+
+def fspl_db(d_km: float, f_ghz: float) -> float:
+    return 20 * np.log10(d_km) + 20 * np.log10(f_ghz) + 92.45
+
+assert abs(fspl_db(1.0, 3.5) - 103.3) < 0.1
+```
+
+MATLAB, where the golden reference usually lives:
+
+```matlab
+% golden reference vs. RTL capture
+err = max(abs(y_ref - y_rtl));
+assert(err < 2^-14, 'RTL diverges from reference: %g', err);
+```
+
+Tcl, because no FPGA flow escapes it:
+
+```tcl
+create_clock -period 3.333 -name sys_clk [get_ports clk_p]
+set_false_path -from [get_clocks sys_clk] -to [get_clocks axi_clk]
+report_timing_summary -file timing.rpt
+```
+
+Bash for the glue:
+
+```bash
+vivado -mode batch -source build.tcl |& tee build.log
+grep -E 'WNS|TNS' build.log   # did we close timing?
+```
+
+And JSON for the configs that hold a simulation scenario together:
+
+```json
+{
+  "scenario": "urban-intersection",
+  "vehicles": 12,
+  "channel": { "model": "TR38.901-UMa", "fc_ghz": 5.9 },
+  "seed": 42
+}
+```
+
 ## Tables
 
 | Interface | Path | Latency profile | Coverage needed |

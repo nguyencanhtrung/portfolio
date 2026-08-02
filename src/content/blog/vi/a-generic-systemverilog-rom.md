@@ -41,7 +41,7 @@ Tuy nhiên, hai thiết kế trên có một nhược điểm rất lớn đó l
 
 Dưới đây là một phương pháp chèn `register` vào đường `TREADY`. `S_AXIS_TREADY` chậm hơn `M_AXIS_TREADY` 1 chu kỳ clock, do đó ngay tại chu kỳ `M_AXIS_TREADY = '0'`, dữ liệu đang có ở register sẽ không được lấy mấu ở output (vì `M_AXIS_TREADY = '0'`). Tuy nhiên, dữ liệu kế tiếp từ input vẫn được chuyển tiếp vào `register` và ghi đè vào giá trị chưa được lấy mẫu ở trên. Để giải quyết vấn đề trên, kiến trúc này sử dụng thêm một lớp `expansion registers` để lưu trữ giá trị chưa được lấy mẫu khi `M_AXIS_TREADY = '0'`, dữ liệu input kế tiếp sẽ vẫn tiếp tục lưu trữ vào lớp `primary registers` như cũ. 
 
-```
+```systemverilog
 always_ff @(posedge clk) 
 begin
     if (s_axis_tready == 1'b1) begin
@@ -62,7 +62,7 @@ Tại chu kỳ `M_AXIS_TREADY = '1'`, lúc này `S_AXIS_TREADY = '0'` do chậm 
 
 ### c. Thiết kế RTL
 
-```
+```systemverilog
 logic [WIDTH-1:0]   expansion_data_reg;
 logic               expansion_valid_reg;
 logic [WIDTH-1:0]   primary_data_reg;

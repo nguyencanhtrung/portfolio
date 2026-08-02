@@ -29,7 +29,7 @@ Trạng thái của một container có thể được quan sát với câu lệ
 * `paused` trạng thái tạm ngưng, đóng băng
 * `Exited` trạng thái off
 
-```
+```console
     $docker ps -a
 
     CONTAINER ID   IMAGE          COMMAND       CREATED          STATUS                    PORTS     NAMES
@@ -76,7 +76,7 @@ Trạng thái của một container có thể được quan sát với câu lệ
 
 #### Example 1
 
-```
+```bash
 docker run --name=bi -it ubuntu:20.04 /bin/bash
 ```
 Giải nghĩa: `docker run` khởi chạy một `container` với các cờ sau
@@ -90,7 +90,7 @@ Khi ta chạy câu lệnh trên: Docker sẽ tạo một container mới có tê
 
 #### Example 2
 
-```
+```bash
 docker run --name=bi -it --env="DISPLAY" --net="host" ubuntu:20.04 /bin/bash
 ```
 
@@ -106,7 +106,7 @@ Khi chạy câu lệnh trên: Docker sẽ tạo một container mới có tên l
 
 Docker start được sử dụng để khởi chạy một container đang trong trạng thái `exited`.
 
-```
+```bash
 docker start <ten_container>
 ```
 
@@ -127,7 +127,7 @@ Chạy container `bo` bằng cách:
 
 Sau khi khởi chạy một container, truy cập vào môi trường của container bằng câu lệnh sau:
 
-```
+```bash
 docker attach <ten container>
 ```
 
@@ -144,7 +144,7 @@ Truy cập môi trường container `bo` bằng cách:
 
 `docker ps` liệt kê active containers.
 
-```
+```console
     $docker ps
 
     CONTAINER ID   IMAGE          COMMAND       CREATED          STATUS          PORTS     NAMES
@@ -155,7 +155,7 @@ Truy cập môi trường container `bo` bằng cách:
 
 `docker ps -a`: Liệt kê tất cả các container đã tồn tại trên hệ thống và trạng thái của nó
 
-```
+```console
     $docker ps -a
 
     CONTAINER ID   IMAGE          COMMAND       CREATED          STATUS                    PORTS     NAMES
@@ -180,7 +180,7 @@ Truy cập môi trường container `bo` bằng cách:
 
 `docker ps -l`: Liệt kê container chạy ở lần cuối cùng
 
-```
+```console
     $docker ps -l
 
     CONTAINER ID   IMAGE     COMMAND       CREATED          STATUS          PORTS     NAMES
@@ -192,13 +192,13 @@ Truy cập môi trường container `bo` bằng cách:
 
 Như đã thấy ở danh sách `docker ps -a`, có rất nhiều containers không được dùng mà vẫn tồn tại trên hệ thống. Ta có thể loại bỏ chúng bằng câu lệnh `docker rm`
 
-```
+```bash
 docker rm eloquent_merkle
 ```
 
 Tương đương với
 
-```
+```bash
 docker rm c5e156ba746f
 ```
 
@@ -207,7 +207,7 @@ docker rm c5e156ba746f
 
 Liệt kê tất cả các images có trên hệ thống
 
-```
+```console
 $docker images
 REPOSITORY   TAG       IMAGE ID       CREATED       SIZE
 bi           latest    9b486bf052eb   6 hours ago   1.14GB
@@ -221,6 +221,6 @@ ubuntu       20.04     1c5c8d0b973a   3 weeks ago   72.8MB
 
 Để gỡ docker images, trước tiên phải gỡ bỏ toàn bộ các container được tạo bởi image cần xóa bằng câu lệnh `docker rm <container-name>`. Sau đó, dùng câu lệnh `docker rmi`
 
-```
+```bash
 docker rmi 08d22c0ceb15
 ```
