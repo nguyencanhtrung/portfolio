@@ -104,10 +104,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
      and the panorama tucks up behind it, so the two read as one scene
      instead of two blocks with a void between them. */
   .hero {
-    /* Fills the screen on a laptop, but stops stretching on tall monitors —
-       otherwise the copy and the panorama drift apart to fill height that
-       nothing occupies, and the timeline never peeks above the fold. */
-    min-height: min(calc(100svh - 4.2rem), 50rem);
+    /* Exactly one screen: on landing the visitor sees the hero and nothing
+       of the timeline — the journey is reached by the CTA or by scrolling.
+       Never cap this height; a cap lets the next section peek above the fold. */
+    min-height: calc(100svh - 4.2rem);
     display: flex;
     flex-direction: column;
   }
