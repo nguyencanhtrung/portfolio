@@ -1,6 +1,6 @@
 ---
 title: 'VHDL - Keywords and identifiers'
-description: 'Learn VHDL syntax'
+description: 'Part 1 of a VHDL series: keywords and identifier rules, expressions and literals, and the three data objects — constant, variable and signal — with the assignment semantics that separate them.'
 date: 2023-02-25
 lang: en
 key: vhdl_training_1

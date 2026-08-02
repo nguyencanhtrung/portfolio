@@ -1,6 +1,6 @@
 ---
 title: 'Catapult Journey - Untimed C++ - lab 2'
-description: 'Catapult GUI and simulation setting notices'
+description: 'Lab 2 của loạt bài Catapult HLS: chạy một project bằng GUI rồi bằng script, đọc Gantt Chart và Design Analyzer để tìm điểm nghẽn, và cách chèn STALL trong RTL co-simulation để kiểm tra thiết kế dưới áp lực backpressure.'
 date: 2022-11-04
 lang: vi
 key: catapult-journey-2

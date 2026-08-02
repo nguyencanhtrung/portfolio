@@ -1,6 +1,6 @@
 ---
 title: 'Catapult Journey - Untimed C++ - lab 4'
-description: 'Khi nào một mảng C++ trở thành memory interface thay vì thanh ghi, và vì sao vòng lặp truy cập mảng đó không unroll được — qua ví dụ FIR 4-tap với bảng hệ số 32x4.'
+description: 'Lab 4 của loạt bài Catapult HLS: khi nào một mảng C++ trở thành memory interface thay vì thanh ghi, và vì sao vòng lặp đọc mảng đó không unroll được — qua ví dụ FIR 4-tap với bảng hệ số 32x4.'
 date: 2022-11-06
 lang: vi
 key: catapult-journey-4

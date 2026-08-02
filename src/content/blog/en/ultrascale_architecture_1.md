@@ -1,6 +1,6 @@
 ---
 title: 'UltraScale architecture - part 1: CLB resources'
-description: 'What changed in the UltraScale CLB compared to the 7 series: the slice boundary is gone, the carry chain doubled to 8 bits, and every flip-flop output is now visible to the router — plus what "8 flip-flop granularity" actually refers to.'
+description: 'What changed in the UltraScale CLB compared to the 7 series: the slice boundary is gone, the carry chain doubled to 8 bits, and every flip-flop output reaches the router — plus what 8-flip-flop granularity really means for control sets and packing.'
 date: 2023-03-31
 lang: en
 key: ultrascale_architecture_1

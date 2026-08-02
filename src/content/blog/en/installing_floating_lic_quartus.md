@@ -1,6 +1,6 @@
 ---
 title: 'Floating license server for Quartus'
-description: 'How to setup floating license server'
+description: 'Standing up a FLEXlm floating licence server for Quartus: matching the licence file to the server hostname, opening the three daemon ports, and the start, stop and status commands you will actually reuse.'
 date: 2022-12-14
 lang: en
 key: installing_floating_lic_quartus

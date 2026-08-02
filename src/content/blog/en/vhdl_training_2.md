@@ -1,6 +1,6 @@
 ---
 title: 'VHDL - Scalar data types'
-description: 'Learn VHDL syntax'
+description: 'Part 2 of a VHDL series: scalar types from bit and boolean to std_ulogic and std_logic, integer and real, casting versus conversion functions, and the subtypes, characters, physical and enumerated types that build on them.'
 date: 2023-02-25
 lang: en
 key: vhdl_training_2

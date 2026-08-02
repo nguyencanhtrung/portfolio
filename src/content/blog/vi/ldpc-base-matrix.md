@@ -1,6 +1,6 @@
 ---
 title: '5G LDPC - Base Matrices'
-description: 'Describing 5G LDPC base matrix and how to construct it'
+description: 'Ma trận cơ sở của LDPC trong 5G: quan hệ giữa B và ma trận kiểm tra H, cấu trúc base graph, cách dựng ma trận từ bảng trong 3GPP TS 38.212, và vì sao trên FPGA chúng được tính trước rồi lưu thành ROM.'
 date: 2022-10-06
 lang: vi
 key: ldpc-base-matrix

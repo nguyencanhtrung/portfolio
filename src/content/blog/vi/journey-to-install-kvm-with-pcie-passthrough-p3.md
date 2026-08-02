@@ -1,6 +1,6 @@
 ---
 title: 'Series - Setup KVM with PCIe passthrough - p3'
-description: 'Setup VFIO và IOMMU for the host'
+description: 'Phần 3: IOMMU làm gì và vì sao passthrough không thể thiếu nó. Bật IOMMU trên host, bind card Xilinx AU200 vào vfio-pci, và kiểm tra card nằm trong IOMMU group nào.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p3

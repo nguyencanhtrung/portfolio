@@ -1,6 +1,6 @@
 ---
 title: 'VHDL - Composite data types'
-description: 'Learn VHDL syntax'
+description: 'Part 3 of a VHDL series: composite types. std_logic_vector against signed and unsigned, arrays and array slices, records, and the aggregate notation for assigning them.'
 date: 2023-02-25
 lang: en
 key: vhdl_training_3

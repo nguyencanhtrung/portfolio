@@ -1,6 +1,6 @@
 ---
 title: 'Psioniq file header for VScode'
-description: 'Append file header in VScode with Psioniq extension'
+description: 'Tự động chèn file header trong VSCode bằng extension psioniq: cấu hình từng trường, template riêng cho từng ngôn ngữ, và tự động cập nhật thông tin sửa đổi mỗi lần lưu file.'
 date: 2023-09-15
 lang: vi
 key: vscode-psioniq-file-header

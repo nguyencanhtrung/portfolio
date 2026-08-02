@@ -1,6 +1,6 @@
 ---
 title: '5G LDPC - Lifting factor Zc'
-description: 'Describing 5G LDPC lifting factor and how to calculate it'
+description: 'Lifting factor Zc trong LDPC 5G: công thức tính, cách chọn Zc từ bảng set index của 3GPP, và đoạn Matlab để tự kiểm chứng kết quả.'
 date: 2022-10-06
 lang: vi
 key: ldpc-lifting-factor

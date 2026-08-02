@@ -1,6 +1,6 @@
 ---
 title: 'RTL simulation with Questasim'
-description: 'Introduction - how to simulate RTL design with Questa Sim'
+description: 'Simulating RTL with QuestaSim in an Intel flow: the commands that matter, a reusable script, and the difference between simulating a design with no third-party IP and one that pulls in Intel IP cores and their simulation libraries.'
 date: 2022-11-23
 lang: en
 key: questasim-intel

@@ -1,6 +1,6 @@
 ---
 title: 'VHDL - Procedures'
-description: 'Working with procedures'
+description: 'Procedures in VHDL: parameter modes and classes, where to declare one so the right code can see it, and two worked examples — a bus-access routine for a testbench and a synthesisable register-field procedure.'
 date: 2022-11-28
 lang: en
 key: vhdl-procedures
@@ -447,3 +447,61 @@ end process p_control;
 ```
 
 ### 5.2 Synthesized procedure
+
+A procedure is synthesisable as long as it describes only combinational or
+clocked behaviour — no `wait`, no `after`, no absolute time. What makes it
+useful in RTL is that the *caller* stays readable while the repeated logic
+lives in one place.
+
+Here a procedure updates a register bank field, called from inside a clocked
+process:
+
+```vhdl
+architecture rtl of csr_block is
+
+  -- Declared in the architecture: visible to every process below.
+  procedure set_field (
+    signal   reg    : inout std_logic_vector(31 downto 0);
+    constant hi     : in    natural;
+    constant lo     : in    natural;
+    constant value  : in    std_logic_vector) is
+  begin
+    reg(hi downto lo) <= value;
+  end procedure set_field;
+
+begin
+
+  p_csr : process (clk)
+  begin
+    if rising_edge(clk) then
+      if rst = '1' then
+        ctrl_reg <= (others => '0');
+      elsif wr_en = '1' then
+        case wr_addr is
+          when x"00"  => set_field(ctrl_reg, 3,  0, wr_data(3 downto 0));   -- mode
+          when x"04"  => set_field(ctrl_reg, 15, 8, wr_data(7 downto 0));   -- gain
+          when others => null;
+        end case;
+      end if;
+    end if;
+  end process p_csr;
+
+end architecture rtl;
+```
+
+Three rules keep a procedure synthesisable:
+
+- **No timing control.** `wait`, `wait for`, and signal assignments with
+  `after` are simulation-only. A synthesisable procedure is pure logic that the
+  caller places inside its own clocked process.
+- **Signal parameters need a class.** A parameter the procedure assigns to must
+  be declared `signal ... inout` (or `out`). Leaving the class implicit makes it
+  a variable, and the assignment then never reaches the outside world.
+- **The procedure inherits the caller's clock.** It has no clock of its own; it
+  simply expands inline where it is called. Calling the same procedure from two
+  different clocked processes creates two independent copies of the logic.
+
+Where to declare it decides the reach: inside an architecture for one entity,
+inside a package for the whole project. A package is the right home once two
+entities need the same routine — it also means the procedure gets reviewed once
+instead of drifting into two slightly different copies.

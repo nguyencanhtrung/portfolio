@@ -1,6 +1,6 @@
 ---
 title: 'License server for Catapult (Mentor HLS)'
-description: 'Setting up license server for Catapult HLS'
+description: 'Standing up a FLEXlm licence server for Catapult HLS: what to download, how to make the host match the MAC address and hostname the licence was issued against, and the commands for running it day to day.'
 date: 2022-12-16
 lang: en
 key: installing_lic_server_for_catapult

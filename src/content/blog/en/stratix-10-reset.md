@@ -1,6 +1,6 @@
 ---
 title: 'Stratix 10 - Reset release IP'
-description: 'Describe how to do proper reset for user logic in Stratix 10'
+description: 'Stratix 10 and Agilex configure sector by sector, so parts of your design leave reset before their neighbours do. Why that puts a state machine into an illegal state, and how the Reset Release IP with INIT_DONE fixes it.'
 date: 2022-10-01
 lang: en
 key: stratix-10-reset

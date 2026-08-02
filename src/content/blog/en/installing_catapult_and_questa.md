@@ -1,6 +1,6 @@
 ---
 title: 'Catapult and Questasim installation'
-description: 'Setting up Catapult HLS'
+description: 'Installing Catapult HLS and QuestaSim on Linux, the Quartus and Vivado back ends they call out to for synthesis, and the .bashrc entries that make the whole toolchain start from one command.'
 date: 2022-12-17
 lang: en
 key: installing_catapult_and_questa

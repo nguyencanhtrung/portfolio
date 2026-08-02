@@ -1,6 +1,6 @@
 ---
 title: 'Series - Setup KVM with PCIe passthrough - p1'
-description: 'Setup KVM with PCIe passthrough that allows guests working in a virtual machine and still interact with PCIe card. This model can be used in firmware development.'
+description: 'Phần 1: vì sao cần PCIe passthrough cho một card FPGA, cấu hình host dùng trong loạt bài, và bốn khái niệm nền tảng — máy ảo KVM, VFIO, IOMMU và IOMMU group.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p1

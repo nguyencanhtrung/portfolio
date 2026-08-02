@@ -1,6 +1,6 @@
 ---
 title: 'Pipeline AXIS bus with registered ready signals'
-description: 'Kỹ thuật chèn register trên đường tín hiệu READY của AXI4 Stream'
+description: 'Chèn register lên đường TREADY của AXI4-Stream mà không làm mất dữ liệu: vì sao cách làm ngây thơ phá vỡ handshake, và thiết kế RTL vừa cắt được đường tổ hợp dài vừa giữ nguyên throughput.'
 date: 2023-09-13
 lang: vi
 key: register-ready-signals-in-low-latency-design

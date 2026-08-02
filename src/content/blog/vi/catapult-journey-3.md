@@ -1,6 +1,6 @@
 ---
 title: 'Catapult Journey - Untimed C++ - lab 3'
-description: 'Loop handling (unrolling and pipelining)'
+description: 'Lab 3 của loạt bài Catapult HLS: Catapult coi main là vòng lặp vô hạn nên pipeline được, nhưng không tự unroll vòng lặp con — và vì sao chỉ số động làm hỏng kế hoạch đó.'
 date: 2022-11-06
 lang: vi
 key: catapult-journey-3

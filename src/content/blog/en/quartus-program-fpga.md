@@ -1,6 +1,6 @@
 ---
 title: 'Quartus - Program FPGA'
-description: 'Describe how to program FPGA with Quartus'
+description: 'Programming an FPGA from the command line with quartus_pgm and jtagconfig, including the JTAG daemon, and two failures that cost real time: multiple programming cables in the chain, and a Cyclone 10 GX kit that changes USB ID mid-programming.'
 date: 2022-10-01
 lang: en
 key: quartus-program-fpga
@@ -30,12 +30,12 @@ Note that listing the devices as shown above is not necessary for loading the bi
 
 In case, the server has more than one programming cable, the program could not enumerate position of FPGA in the JTAG chain.
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm --auto
 Error (213043): More than one programming cable found in available hardware list 
     -- use --list option to display available hardware list and specify correct 
     programming cable
-</d-code>
+```
 
 Lets use following command
 
@@ -43,7 +43,7 @@ Lets use following command
 quartus_pgm --list
 ```
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm --list
 Info: *******************************************************************
 Info: Running Quartus Prime Programmer
@@ -75,7 +75,7 @@ Info: Quartus Prime Programmer was successful. 0 errors, 0 warnings
     Info: Processing ended: Fri Apr  6 15:03:44 2018
     Info: Elapsed time: 00:00:01
     Info: System process ID: 3834
-</d-code>
+```
 
 There are 2 JTAG cables USB-Blaster and USB-BlasterII. Now we can check which devices connect with each JTAG cable
 
@@ -89,7 +89,7 @@ OR
 jtagconfig -d
 ```
 
-<d-code block language="bash">
+```bash
 $ jtagconfig -n
 1) USB-Blaster [3-5.3]
   Unable to read device chain - JTAG chain broken
@@ -112,7 +112,7 @@ $ jtagconfig -n
     + Node 0C006E00  JTAG UART #0
 
 5) Remote server dash.soc.one:1310: Unable to connect
-</d-code>
+```
 
 Cable 2 (USB-BlasterII) is connected to Stratix 10 GX board (1SG280HH)
 
@@ -136,7 +136,7 @@ quartus_pgm -m jtag -o "p;path/to/file.sof"
 
 Alternatively, add the position of the JTAG in the JTAG chain explicitly (in particular if it’s not the first device). In this case it’s @1, meaning it’s the first device in the JTAG chain. If it’s the second device, pick @2 etc.
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm -m jtag -o "p;path/to/file.sof@1"
 Info: *******************************************************************
 Info: Running Quartus Prime Programmer
@@ -171,7 +171,7 @@ Info: Quartus Prime Programmer was successful. 0 errors, 0 warnings
     Info: Processing ended: Sun May 27 15:35:09 2018
     Info: Elapsed time: 00:00:07
     Info: Total CPU time (on all processors): 00:00:03
-</d-code>
+```
 
 If anything goes wrong — device mismatch, a failure to scan the JTAG chain or anything else, it will be hard to miss that, because of the errors written in red. The good thing with the command line interface is that every attempt starts everything from the beginning, so just turn the board on and try again.
 
@@ -190,7 +190,7 @@ quartus_pgm -c $1 -m JTAG -o p\;$BITSTREAM@$2
 
 Example:
 
-<d-code block language="bash">
+```bash
 $ jtagconfig -n
 1) USB-Blaster [3-5.3]
   Unable to read device chain - JTAG chain broken
@@ -213,7 +213,7 @@ $ jtagconfig -n
     + Node 0C006E00  JTAG UART #0
 
 5) Remote server dash.soc.one:1310: Unable to connect
-</d-code>
+```
 
 Lets program the 2nd cable (USB-BlasterII) - the FPGA device (stratix 10 GX is at the first position of JTAG chain)
 
@@ -228,40 +228,40 @@ quartus_pgm -c 2 -m JTAG -o p\;$BITSTREAM@1
 
 This board caused me some extra trouble, so a few words about it. When this board is connected to a computer, it appears as 09fb:6810, however after attempting to load the FPGA (note the "@2" in the end) with:
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm -m jtag -o "p;thecode.sof@2"
 Error (213019): Can't scan JTAG chain. Error code 86.
-</d-code>
+```
 
 The device's ID changes to 09fb:6010. So there's clearly some reprogramming of the firmware (the system log shows a disconnection and reconnection with the new ID). The board is detected as GX0000406 by Quartus' GUI Programming Tool, but clicking "Auto Detect" results in "Unable to scan device chain. Hardware is not connected".
 
 OK, so how about trying a scan?
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm --auto
 [ ... ]
 Info (213045): Using programming cable "10CGX0000406 [1-5.1.2]"
 1) 10CGX0000406 [1-5.1.2]
   Unable to read device chain - Hardware not attached
-</d-code>
+```
 
 The problem in my case was apparently that the jtagd that was running was started by an older version of Quartus, which didn’t recognize Cyclone 10 devices. So follow the advice above, and kill it. After that, programming with the command above worked with Quartus Pro 17.1:
 
-<d-code block language="bash">
+```bash
 $ quartus_pgm --auto
 [...]
 Info (213045): Using programming cable "USB-BlasterII [1-5.1.2]"
 1) USB-BlasterII [1-5.1.2]
   031820DD   10M08SA(.|ES)/10M08SC
   02E120DD   10CX220Y
-</d-code>
+```
 
 
 ### 2.2 Mismatch JTAG ID
 
 The design is deployed on Stratix 10 GX development kit which contains FPGA chip "1SG280HU2F50E2VG". However, setting the same device and generating bitstream, programing it on the device prompts following error.
 
-<d-code block language="bash">
+```bash
 $ ./pgm.sh 2 1 ./workspace/trungnc/00.gitlab/bitstream/gx_board/qts_pcie.sof 
 Info (19848): Regular SEU info => 105 sector(s), 8 thread(s), 31500 interval time in microsecond(s)
 Info (19848): Keyed hash is 211E9227EA2B2E8AC9DACF53399D089EC8DD58B9ACDAF5778CDB73A7649CCC7E
@@ -301,7 +301,7 @@ Error: Quartus Prime Programmer was unsuccessful. 2 errors, 0 warnings
     Error: Processing ended: Fri Apr  6 20:28:57 2018
     Error: Elapsed time: 00:00:10
     Error: System process ID: 18686
-</d-code>
+```
 
 #### Debugging flow
 

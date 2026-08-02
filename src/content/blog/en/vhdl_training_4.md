@@ -1,6 +1,6 @@
 ---
 title: 'VHDL - Operators'
-description: 'The full VHDL operator set and the four places it bites: logical operators sit at the bottom of the precedence table, array comparison is lexicographic rather than numeric, srl throws away the sign, and mod differs from rem.'
+description: 'Part 4 of a VHDL series: the operator set and the four places it bites — logical operators sit at the bottom of the precedence table, array comparison is lexicographic rather than numeric, srl throws away the sign, and mod differs from rem.'
 date: 2023-02-25
 lang: en
 key: vhdl_training_4

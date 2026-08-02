@@ -1,6 +1,6 @@
 ---
 title: 'Series - Setup KVM with PCIe passthrough - p4'
-description: 'Guide to split IOMMU group. In case your MOBO does not support ACS feature, patching the kernel is required.'
+description: 'Phần 4: khi mainboard không hỗ trợ ACS, cả nhóm thiết bị dính chung một IOMMU group và không tách ra được. Cách vá kernel bằng ACS override, build và cài kernel đã vá.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p4

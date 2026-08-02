@@ -1,6 +1,6 @@
 ---
 title: 'Thiết kế ROM generic bằng SystemVerilog'
-description: 'Một module ROM tham số hoá, nạp nội dung từ file, không phụ thuộc vendor — kèm những điều kiện bắt buộc để tool suy diễn ra block RAM thay vì đốt hàng nghìn LUT.'
+description: 'Một module ROM tham số hoá, nạp nội dung từ file, không phụ thuộc vendor — kèm những điều kiện bắt buộc để synthesis tool suy diễn ra block RAM thay vì đốt hàng nghìn LUT.'
 date: 2023-09-13
 lang: vi
 key: a-generic-systemverilog-rom

@@ -1,6 +1,6 @@
 ---
 title: 'Series - Setup KVM with PCIe passthrough - p5'
-description: 'Attach PCIe cards to KVM'
+description: 'Phần 5: gắn card PCIe vào máy ảo. Xác định thiết bị, tách khỏi host, chuyển địa chỉ domain/bus/slot/function sang hex và khai báo hostdev trong file XML của máy ảo.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p5

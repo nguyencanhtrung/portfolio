@@ -1,6 +1,6 @@
 ---
 title: 'PCIe - Re-programing FPGA without reboot'
-description: 'Possibility to reprogram FPGA with embedded PCIe without reboot'
+description: 'Reprogramming an FPGA over JTAG without rebooting the host. When a PCIe remove-and-rescan is enough, when a dropped link forces a hot reset from the upstream bridge, and why function-level reset rarely helps.'
 date: 2022-09-29
 lang: en
 key: pcie-reprogram-without-reboot
@@ -8,6 +8,30 @@ tags: ['pcie']
 ---
 
 ## 1. Rescan
+
+The cheapest thing to try first. Linux lets you remove a device from its bus
+and then re-enumerate it, which is enough **only** when the FPGA still holds a
+working PCIe endpoint across the reprogramming:
+
+```bash
+# remove the endpoint, reprogram the FPGA, then bring it back
+echo 1 | sudo tee /sys/bus/pci/devices/0000:01:00.0/remove
+# ... program the device over JTAG here ...
+echo 1 | sudo tee /sys/bus/pci/rescan
+```
+
+Two conditions decide whether this works:
+
+- **The link must stay up.** If reconfiguration drops the PCIe link, the root
+  port logs the surprise-down and a rescan finds nothing. Devices that keep the
+  hard PCIe block in a separate reconfiguration region — Xilinx partial
+  reconfiguration, Intel's PR regions — survive this; a full-chip reprogram
+  usually does not.
+- **The driver must be unloaded first.** A driver still bound to the device
+  holds references to BARs that are about to disappear, and the removal either
+  hangs or takes the kernel down with it.
+
+When the link does drop, a rescan cannot help and the next step is a hot reset.
 
 
 ## 2. Hot reset
@@ -78,4 +102,23 @@ References  ( <a href="https://unix.stackexchange.com/questions/73908/how-to-res
 ***
 
 ## 3. Conclusion
+
+Reprogramming an FPGA without rebooting the host comes down to how far the
+disturbance travels:
+
+- If the hard PCIe block survives the reprogram, **remove plus rescan** is
+  enough, and it is the only method that needs no special privileges beyond
+  root.
+- If the link goes down, the endpoint has to be re-trained, and that means a
+  **hot reset issued by the upstream bridge** — the `setpci` script above.
+  Unload the drivers first, and expect to redo it for each function on a
+  multi-function device.
+- A **function-level reset** via `/sys/.../reset` looks convenient but only
+  resets one function, is optional in the specification, and does nothing about
+  a link that has already dropped.
+
+There is no portable way to trigger a cold or warm reset from software, so the
+power switch remains the last resort. In practice the reliable setup is to put
+the PCIe block in a region that reconfiguration does not touch — then the whole
+problem reduces to a rescan.
 

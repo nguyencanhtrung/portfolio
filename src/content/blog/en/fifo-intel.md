@@ -1,6 +1,6 @@
 ---
 title: 'Using FIFO in Intel platform'
-description: 'Working with FIFOs'
+description: 'Instantiating Intel FPGA FIFOs: the two ways to declare one, what the parameter editor really controls, and the two settings that change behaviour rather than area — clear semantics across clock domains, and normal versus show-ahead read mode.'
 date: 2022-11-23
 lang: en
 key: fifo-intel
@@ -113,7 +113,41 @@ There, you can configure your FIFOs. Then, generating IP > Open the HDL file to 
 
 ### 3.1 Clear
 
+Both `sclr` (synchronous) and `aclr` (asynchronous) reset the read and write
+pointers back to empty. Two things are easy to get wrong:
+
+- On a **DCFIFO** the clear crosses two clock domains. `aclr` has to be held
+  long enough to be seen in both, and Intel's guidance is to keep it asserted
+  for at least three cycles of the *slower* clock. A one-cycle pulse from the
+  fast side can reset one pointer and not the other, which leaves the FIFO
+  reporting a phantom occupancy that never drains.
+- Clearing does **not** flush the memory contents, only the pointers. Data
+  written before the clear is still physically there; it is simply unreachable.
+  Do not rely on reading zeros after a reset.
+
+If you can, prefer `sclr` on an SCFIFO and reset the whole datapath from one
+synchronous reset — it removes the whole class of half-reset bugs.
+
 ### 3.2 Normal vs Show-Ahead mode
+
+This setting decides what `q` means, and it changes the read-side handshake:
+
+| | Normal mode | Show-ahead mode |
+| --- | --- | --- |
+| When is `q` valid? | one clock **after** `rdreq` | as soon as data is in the FIFO |
+| What does `rdreq` mean? | "fetch the next word" | "I took this word, advance" |
+| Read latency | 1 cycle | 0 cycles |
+
+Show-ahead is what you want when the FIFO feeds a handshake such as AXI-Stream,
+because `q` and `empty` together give you `TDATA` and `TVALID` directly, and
+`rdreq` becomes `TREADY and TVALID`. In normal mode you have to add a register
+stage yourself to build the same interface.
+
+The cost: show-ahead adds latency on the *write to empty-deassert* path — the
+FIFO has to pre-fetch the first word before it can present it — and on several
+device families it forces a different memory implementation, so the resource
+report can change when you flip this switch. Check the fitter output rather
+than assuming it is free.
 
 
 ## 4. Example design

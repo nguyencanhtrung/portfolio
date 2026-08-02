@@ -1,6 +1,6 @@
 ---
 title: 'Docker - Quick start'
-description: 'Learn Docker'
+description: 'Bắt đầu với Docker: vòng đời pull, run, start, attach, các trạng thái của một container, và bộ lệnh tối thiểu để quản lý container cùng image mà không phải tra tài liệu.'
 date: 2023-03-30
 lang: vi
 key: docker_journey_part_1

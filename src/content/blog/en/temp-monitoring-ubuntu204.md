@@ -1,6 +1,6 @@
 ---
 title: 'Temperature monitoring'
-description: 'Temperature monitoring in ubuntu 20.4'
+description: 'Two ways to watch CPU and GPU temperature on Ubuntu: lm-sensors for a quick command-line reading, and Glances when you want a browser view of a remote machine.'
 date: 2022-10-23
 lang: en
 key: temp-monitoring-ubuntu204

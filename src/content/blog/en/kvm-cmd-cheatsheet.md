@@ -1,6 +1,6 @@
 ---
 title: 'KVM commands cheatsheet'
-description: 'All commands for KVM'
+description: 'A copy-paste set of virsh and virt-install commands, in the order you need them: confirm KVM acceleration, point virsh at the system daemon, set up NAT and bridged networking, define a storage pool, then create, start and delete a guest.'
 date: 2023-09-29
 lang: en
 key: kvm-cmd-cheatsheet

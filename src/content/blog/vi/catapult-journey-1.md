@@ -1,6 +1,6 @@
 ---
 title: 'Catapult Journey - Untimed C++ - lab 1'
-description: 'Compiling, debugging and executing design using AC data-types'
+description: 'Lab 1 của loạt bài Catapult HLS: Makefile để compile và debug C++ model, cách đọc những lỗi thường gặp, và hành vi của phép dịch trên kiểu ac_int/ac_fixed — nơi mất bit xảy ra âm thầm.'
 date: 2022-11-02
 lang: vi
 key: catapult-journey-1
