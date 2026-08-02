@@ -104,7 +104,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
      and the panorama tucks up behind it, so the two read as one scene
      instead of two blocks with a void between them. */
   .hero {
-    min-height: calc(100svh - 4.2rem);
+    /* Fills the screen on a laptop, but stops stretching on tall monitors —
+       otherwise the copy and the panorama drift apart to fill height that
+       nothing occupies, and the timeline never peeks above the fold. */
+    min-height: min(calc(100svh - 4.2rem), 50rem);
     display: flex;
     flex-direction: column;
   }
@@ -114,6 +117,8 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     flex-direction: column;
     justify-content: center;
     padding-top: 1.5rem;
+    /* Sit above the optical centre: dead-centre copy reads as floating. */
+    padding-bottom: clamp(1rem, 6vh, 5rem);
     /* A flex item with auto inline margins shrinks to fit and centres itself,
        drifting off the page frame — force it to fill the 62rem container so
        the copy shares its left edge with the journey below. */

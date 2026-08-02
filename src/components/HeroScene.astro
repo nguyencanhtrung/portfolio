@@ -243,10 +243,24 @@
       .sig {
         stroke-dasharray: 1;
         stroke-dashoffset: 1;
-        animation: hs-sweep 7s cubic-bezier(0.4, 0, 0.2, 1) infinite;
+        /* Linear, not eased: an eased sweep races through its middle and
+           reads as a blink rather than a trace. */
+        animation: hs-sweep 9.5s linear infinite;
       }
       .sig2 {
-        animation-delay: 0.75s;
+        /* Starts as the square wave finishes entering the FPGA, so the two
+           traces read as one signal propagating. */
+        animation-delay: 1.8s;
+      }
+      /* On a phone the drawing is a third of the size, so the same sweep
+         covers too little distance to read as motion — stretch it out. */
+      @media (max-width: 700px) {
+        .sig {
+          animation-duration: 14s;
+        }
+        .sig2 {
+          animation-delay: 2.6s;
+        }
       }
       .appear {
         opacity: 0;
@@ -265,9 +279,9 @@
     }
     @keyframes hs-sweep {
       0% { stroke-dashoffset: 1; }    /* off-screen ahead of the path */
-      13% { stroke-dashoffset: 0; }   /* drawn (0.9s) */
-      87% { stroke-dashoffset: 0; }   /* held (~5.2s) */
-      100% { stroke-dashoffset: -1; } /* swept off the end */
+      23% { stroke-dashoffset: 0; }   /* drawn (2.2s) */
+      76% { stroke-dashoffset: 0; }   /* held (~5s) */
+      100% { stroke-dashoffset: -1; } /* swept off the end (2.3s) */
     }
     @keyframes hs-fade {
       to { opacity: 1; }
