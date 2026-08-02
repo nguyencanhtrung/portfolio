@@ -7,12 +7,12 @@ key: catapult-journey-3
 tags: ['catapult']
 ---
 
-## Main
+## 1. Main
 
 Khác với cách tiếp cận ở một số tool HLS khác, Catapult coi hàm `main` là một unbounded loop (infinite loop). Do đó ta hoàn toàn có thể cấu hình để tool tổng hợp `main` ra kiến trúc pipeline. Tuy nhiên, Catapult sẽ không tự động UNROLL các LOOP trong hàm `main` như Vitis HLS, việc này được thực hiện hoàn toàn dựa vào người thiết kế.
 
 
-## LOOP
+## 2. LOOP
 
 Chỉ có 2 kỹ thuật được thực hiện trên LOOP bao gồm
 
@@ -28,7 +28,7 @@ Pragmas UNROLL
 
 ```
 
-## Dynamic index
+## 3. Dynamic index
 
 
 ```cpp

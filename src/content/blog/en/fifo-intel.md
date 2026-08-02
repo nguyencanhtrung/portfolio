@@ -28,7 +28,7 @@ When comparing with Xilinx,
 Xilinx has 2 approaches for declaring and configuring FIFO IP core. Intel also provides the same.
 
 
-### a. Megafuntions
+### 2.1 Megafuntions
 
   Instantiate the library:
 
@@ -92,7 +92,7 @@ Note: if using Stratix 10, `use_eab = ON` is a must.
 
 Looking at signals description <strong>[here](https://www.intel.com/content/www/us/en/docs/programmable/683522/18-0/fifo-signals.html)</strong> and parameters description <strong>[here](https://www.intel.com/content/www/us/en/docs/programmable/683522/18-0/fifo-parameter-settings.html)</strong>
 
-### b. FIFO parameter editor
+### 2.2 FIFO parameter editor
 
 Openning IP Catalog,
 
@@ -102,7 +102,7 @@ There, you can configure your FIFOs. Then, generating IP > Open the HDL file to 
 
 ![](/images/blog/fifo-intel/1.png)
 
-### c. What are differences?
+### 2.3 What are differences?
 
 | Megafunctions     | IP Catalog    |
 | :-                | :-            |
@@ -111,16 +111,16 @@ There, you can configure your FIFOs. Then, generating IP > Open the HDL file to 
 
 ## 3. Important configurations
 
-### Clear
+### 3.1 Clear
 
-### Normal vs Show-Ahead mode
+### 3.2 Normal vs Show-Ahead mode
 
 
 ## 4. Example design
 
 http://blogs.plymouth.ac.uk/embedded-systems/fpga-and-vhdl/testing-understanding-the-scfifo-megafunction/
 
-## References
+## 5. References
 
 * [1] https://www.intel.com/content/www/us/en/docs/programmable/683522/18-0/vhdl-library-use-declaration.html
 * [2] https://www.intel.com/content/www/us/en/docs/programmable/683522/18-0/vhdl-component-declaration.html

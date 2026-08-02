@@ -32,7 +32,7 @@ What IOMMU does and why it's important:
 
 ## 2. IOMMU and VFIO setup
 
-### a. Enable IOMMU on host
+### 2.1 Enable IOMMU on host
 
 Open the grub configuration file:
 
@@ -66,7 +66,7 @@ cat /proc/cmdline
 BOOT_IMAGE=/boot/vmlinuz-5.15.0-acso root=UUID=2006ace4-1a9a-4d7f-aa7c-685cae3abe4c ro quiet intel_iommu=on
 ```
 
-### b. Assign Xilinx AU200 card to VFIO
+### 2.2 Assign Xilinx AU200 card to VFIO
 
 Again, open the grub configuration file:
 
@@ -144,7 +144,7 @@ lspci -k
 
 ```
 
-### c. Check IOMMU group
+### 2.3 Check IOMMU group
 
 ```shell
 git clone https://github.com/nguyencanhtrung/kvm-pcie.git

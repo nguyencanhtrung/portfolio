@@ -14,7 +14,7 @@ RTL. So before writing anything real, this first post checks that all of those
 render the way they should. It doubles as the template I copy for every new
 post.
 
-## Equations
+## 1. Equations
 
 Inline math sits in the sentence, like the free-space path loss at distance
 $d$ and frequency $f$: $\mathrm{FSPL} = \left(\tfrac{4\pi d f}{c}\right)^2$.
@@ -28,7 +28,7 @@ Shannon capacity is a useful sanity bound in any link-budget argument: given a
 received power $P_r$ over bandwidth $B$, no waveform trick gets you above
 $C$ — it only decides how gracefully you approach it.
 
-## Diagrams
+## 2. Diagrams
 
 Diagrams are written as fenced Mermaid blocks and rendered in the browser,
 matching the site theme. A V2V safety exchange over the PC5 sidelink:
@@ -44,7 +44,7 @@ sequenceDiagram
     B-->>A: Warning-relevant event
 ```
 
-## Code
+## 3. Code
 
 Code blocks are highlighted at build time, in both themes. Since this site is
 partly a story about FPGAs, the demo is VHDL — a two-stage pipeline register,
@@ -133,14 +133,14 @@ And JSON for the configs that hold a simulation scenario together:
 }
 ```
 
-## Tables
+## 4. Tables
 
 | Interface | Path | Latency profile | Coverage needed |
 | --------- | ---- | --------------- | --------------- |
 | Uu | vehicle → network → vehicle | tens of ms, variable | yes |
 | PC5 | vehicle → vehicle | few ms, direct | no |
 
-## Figures
+## 5. Figures
 
 Figures can be plain markdown images, or inline SVG when they should follow
 the site theme:
@@ -158,7 +158,7 @@ the site theme:
   <figcaption>An inline SVG figure — it inherits the theme's colors.</figcaption>
 </figure>
 
-## Quotes
+## 6. Quotes
 
 > Hardware is never the ideal on paper: a real clock drifts, a real sensor
 > reads off. The interesting engineering starts where the model stops.

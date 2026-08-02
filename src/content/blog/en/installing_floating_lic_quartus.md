@@ -28,7 +28,7 @@ VENDOR mgcld /home/administrator/license/quartusld/mgcld port=1236
 
 The license is delivered along with MAC Address of server which is `00ABCXYZ`
 
-### Setup `hostname`
+### 2.1 Setup `hostname`
 
 ```bash
 vi /etc/hosts
@@ -41,7 +41,7 @@ Adding the following lines in to the file
 1.1.1.1 ubuntu18
 ```
 
-### Open 3 ports for license server `1234`, `1235` and `1236`
+### 2.2 Open 3 ports for license server `1234`, `1235` and `1236`
 
 [Ubuntu](https://www.cyberciti.biz/faq/how-to-open-firewall-port-on-ubuntu-linux-12-04-14-04-lts/)
 
@@ -86,13 +86,13 @@ Another way, to start license server deamon directly without scripting
 
 ## 5. Important commands
 
-### Stop license server
+### 5.1 Stop license server
 
 ```bash
 lmutil lmdown -q -force
 ```
 
-### Restart license server
+### 5.2 Restart license server
 
 ```bash
 lmgrd -c lic.dat -l debug.log
@@ -100,13 +100,13 @@ lmgrd -c lic.dat -l debug.log
 
 ## 6. Checking status of license server after setting up
 
-### Having only one licence server running
+### 6.1 Having only one licence server running
 
 ```bash
 lmutil lmstat -a -c
 ```
 
-### Having multiple license server running
+### 6.2 Having multiple license server running
 
 ```bash
 lmutil lmstat -a -c <port>@<hostname or host IPvi ~>

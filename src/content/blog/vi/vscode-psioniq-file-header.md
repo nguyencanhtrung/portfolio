@@ -44,7 +44,7 @@ Phần này sẽ mô tả cách thiết lập psioniq, để nó có thể tự 
 
 Thiết lập `psioniq` bằng cách truy cập:  `File` > `Preferences` > `Settings` > `Extensions` > `psioniq File Header` > `Editing settings.json`
 
-### a. Trường `psi-header.config`
+### 2.1 Trường `psi-header.config`
 
 ```jsonc
 "psi-header.config": {
@@ -65,7 +65,7 @@ Thiết lập `psioniq` bằng cách truy cập:  `File` > `Preferences` > `Sett
 Trường này chứa thông tin chung về `LICENSE`, `author`, `initials` (viết tắt tên tác giả để chèn vào phần `HISTORY` hay `Revision`)
 
 
-### b. Trường `psi-header.changes-tracking`
+### 2.2 Trường `psi-header.changes-tracking`
 
 Trường này thiết lập cơ chế tracking của extension và cách extension update header như ở ví dụ dưới đây:
 
@@ -97,7 +97,7 @@ Tracking được `activate`, extension sẽ tìm đến trường text `Modifie
 
 Chú ý rằng: trường text `Modified By` và `Last Modified` phụ thuộc vào nội dung header mà bạn quy định. Việc thiết lập nội dung của header được thực hiện ở `bước d`.
 
-### c. Trường `psi-header.lang-config`
+### 2.3 Trường `psi-header.lang-config`
 
 Trường này thiết lập định dạng của header ứng với mỗi một `language` khác nhau. 
 
@@ -149,7 +149,7 @@ Trên đây là một vài thiết lập phổ biến, nếu bạn muốn tìm h
 Đây là một ví dụ về việc thiết lập header file cho file `SystemVerilog`, `verilog` và các ngôn ngữ còn lại.
 
 
-### d. Trường `psi-header.templates`
+### 2.4 Trường `psi-header.templates`
 
 Mô tả template của header. Chú ý: nếu bạn sử dụng cụm từ khác để mô tả `Last Modified` và `Modified by` thì phải thay đổi `si-header.changes-tracking` bằng cụm từ tương ứng để extension có thể lọc và thay đổi nội dụng.
 

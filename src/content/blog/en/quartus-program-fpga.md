@@ -7,7 +7,7 @@ key: quartus-program-fpga
 tags: ['intel']
 ---
 
-## Command-line
+## 1. Command-line
 
 All programs such as `quartus_pgm`, `jtagconfig`, etc. locate in the Quartus installation folder or in the standard alone FPGA programmer folder.
 
@@ -18,7 +18,7 @@ export PATH=/home/administrator/data/intelFPGA_pro/21.3/qprogrammer/quartus/bin:
 Exporting the library and programs to use in the latter sections.
 
 
-### JTAG scanning
+### 1.1 JTAG scanning
 
 To list all devices that are found (the cable is auto-detected)
 
@@ -117,7 +117,7 @@ $ jtagconfig -n
 Cable 2 (USB-BlasterII) is connected to Stratix 10 GX board (1SG280HH)
 
 
-### JTAGD deamon
+### 1.2 JTAGD deamon
 
 This deamon listens to TCP/IP port 1309. It is responsible for talking with the JTAG adapter through the USB bus, so both the GUI programmer and command line tool rely on it. If there’s no daemon running, both of these start it.
 
@@ -126,7 +126,7 @@ But if you use multiple versions of Quartus, this may be a source of confusion, 
 ```bash
 killall jtagd
 ```
-### Programming FPGA
+### 1.3 Programming FPGA
 
 `quartus_pgm` displays most of its output in green text. Generally speaking, if there’s no text in red, all went fine.
 
@@ -222,9 +222,9 @@ quartus_pgm -c 2 -m JTAG -o p\;$BITSTREAM@1
 ```
 
 
-## Issues
+## 2. Issues
 
-### Cyclone 10 GX FPGA development kit
+### 2.1 Cyclone 10 GX FPGA development kit
 
 This board caused me some extra trouble, so a few words about it. When this board is connected to a computer, it appears as 09fb:6810, however after attempting to load the FPGA (note the "@2" in the end) with:
 
@@ -257,7 +257,7 @@ Info (213045): Using programming cable "USB-BlasterII [1-5.1.2]"
 </d-code>
 
 
-### Mismatch JTAG ID
+### 2.2 Mismatch JTAG ID
 
 The design is deployed on Stratix 10 GX development kit which contains FPGA chip "1SG280HU2F50E2VG". However, setting the same device and generating bitstream, programing it on the device prompts following error.
 

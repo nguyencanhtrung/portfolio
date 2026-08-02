@@ -15,7 +15,7 @@ You need 3 things to setup a license server:
 * License file
 * Software to change your MAC address if you running license server which has different MAC address
 
-### License server
+### 1.1 License server
 
 Catapult uses FLEXlm daemon to run license server. Firstly, you need to download `License Server` from Mentor [website](https://account.mentor.com/licenses/download).
 
@@ -23,7 +23,7 @@ The FlexNet software includes `lmgrd` deamon, `lmutil` and etc.
 
 If already installed Catapult software, just need to go to `<path_to_installation>/Mgc_home/pkgs/` to get the above software. 
 
-### MAC changer 
+### 1.2 MAC changer
 
 You can install `macchanger` to change your MAC address.
 
@@ -59,7 +59,7 @@ $ ip a
 
 Looking for MAC address of your ethernet interface. In my case, it is `eno2` and the MAC is `00:20:00:04:10:AC`. Just remember the interface name `eno2`.
 
-### Name your host
+### 1.3 Name your host
 
 Open `etc/hosts` and adding the following line, then saving it. `<hostname>` is the name you want to name your host.
 
@@ -72,7 +72,7 @@ In my case, it is
 127.0.1.1    tesla
 ```
 
-### Openning tcp port
+### 1.4 Openning tcp port
 
 If your firewall is not active like mine, no need to open anything.
 
@@ -155,13 +155,13 @@ Another way, to start license server deamon directly without scripting
 
 ## 4. Important commands
 
-### Stop license server
+### 4.1 Stop license server
 
 ```bash
 lmutil lmdown -q -force
 ```
 
-### Restart license server
+### 4.2 Restart license server
 
 ```bash
 lmgrd -c lic.dat -l debug.log
@@ -169,13 +169,13 @@ lmgrd -c lic.dat -l debug.log
 
 ## 5. Checking status of license
 
-### Having only one licence server running
+### 5.1 Having only one licence server running
 
 ```bash
 lmutil lmstat -a -c
 ```
 
-### Having multiple license server running
+### 5.2 Having multiple license server running
 
 ```bash
 lmutil lmstat -a -c <port>@<hostname or host IP ~>
@@ -222,7 +222,7 @@ Users of CatapultUltra_c:  (Total of 1 license issued;  Total of 1 license in us
 ```
 
 
-### Errors may happen
+### 5.3 Errors may happen
 
 ```bash
 lmgrd: No such file or directory

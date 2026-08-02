@@ -7,10 +7,10 @@ key: pcie-reprogram-without-reboot
 tags: ['pcie']
 ---
 
-## Rescan
+## 1. Rescan
 
 
-## Hot reset
+## 2. Hot reset
 
 Resets in PCI express are a bit complex. There are two main types of resets - conventional reset, and function-level reset. There are also two types of conventional resets, fundamental resets and non-fundamental resets. See the PCI express specification for all of the details.
 
@@ -77,5 +77,5 @@ References  ( <a href="https://unix.stackexchange.com/questions/73908/how-to-res
 
 ***
 
-## Conclusion
+## 3. Conclusion
 

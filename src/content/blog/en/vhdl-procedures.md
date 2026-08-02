@@ -3,7 +3,7 @@ title: 'VHDL - Procedures'
 description: 'Working with procedures'
 date: 2022-11-28
 lang: en
-key: vhdl_training
+key: vhdl-procedures
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 5
@@ -55,7 +55,7 @@ A procedure’s parameter list defines its inputs and outputs, kind of like a mi
 
 Unlike functions, procedures may contain wait-statements. Therefore, they are often used in testbenches like simple BFM’s for simulating interfaces, or for checking output from the device under test (DUT).
 
-### a. Procedure parameters
+### 3.1 Procedure parameters
 
 Procedure parameters are similar to port declartions.
 
@@ -100,7 +100,7 @@ SLV_REVERSE   ( SLV_IN      => D_IN,
 To make the mapping valid, the `formal` and `actual` must be of same `data type`, `class` and `mode`
 
 
-### b. Parameters classes
+### 3.2 Parameters classes
 
 VHDL supports four classes of objects
 
@@ -118,7 +118,7 @@ If classes are not specified in the argument list. The default class will be sel
 | INOUT | variable |
 
 
-### c. Explicitly specify class of procedure parameters
+### 3.3 Explicitly specify class of procedure parameters
 
 Explicitly specify class of input and output parameters declared in a procedure is oftern helpful. It simplifies usage and expands capabilities of a procedure.
 
@@ -323,7 +323,7 @@ library work;
 
 ## 5. Practical examples
 
-### BUS access (testbench)
+### 5.1 BUS access (testbench)
 
 ```vhdl
 p_control : process
@@ -446,4 +446,4 @@ wait;
 end process p_control;
 ```
 
-### Synthesized procedure
+### 5.2 Synthesized procedure

@@ -7,7 +7,7 @@ key: catapult-journey-4
 tags: ['catapult']
 ---
 
-## Map C++ arrays to memories
+## 1. Map C++ arrays to memories
 
 ```cpp
 

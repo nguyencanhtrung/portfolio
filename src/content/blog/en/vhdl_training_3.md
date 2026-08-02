@@ -3,20 +3,20 @@ title: 'VHDL - Composite data types'
 description: 'Learn VHDL syntax'
 date: 2023-02-25
 lang: en
-key: vhdl_training
+key: vhdl_training_3
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 3
 ---
-## Composite data types
+## 1. Composite data types
  
-### Objectives of this section
+### 1.1 Objectives of this section
 
 * Describe what composite data types are
 * Create composite data types (array and record)
 * Declare one-dimensional and two-dimensional arrays
 
-### What is composite data types?
+### 1.2 What is composite data types?
 
 The composite type object has a group of elements. 
 
@@ -50,15 +50,15 @@ The A_WORD signal shown here has a composite data type.
 * In this case, VHDL does not infer that the higher index is MSB (3 in this example) but simply indexes the vector from left to right.
 * Choosing and using one indexing method consistently is good design practice. The most popular is the `(3 downto 0)` method
 
-## 1. std logic vector and signed, unsigned
+## 2. std logic vector and signed, unsigned
 
-### a. std logic vector
+### 2.1 std logic vector
 * An array of type `std_logic`.
 * Defined in the `std_logic_1164` package, which is part of the IEEE library.
 * Have no positional meaning (signed bit)
 * "0110" in `std_logic_vector` is always interpreted as 6.
 
-### b. signed and unsigned 
+### 2.2 signed and unsigned
 * Arrays of type `std_logic`
 * Have positional meanings
 * The left-most bit is the sign bit.
@@ -80,7 +80,7 @@ entity bcd_add_and_display is
 end entity;
 ```
 
-### c. What can and cannot be done with std_logic?
+### 2.3 What can and cannot be done with std_logic?
 
 You can use `std_logic` with:
 
@@ -92,9 +92,9 @@ You can use `std_logic` with:
 
 The `NUMERIC_STD` library contains appropriate overloading functions to support various comparisons and shifting functions. It also contains special cases of the `std_logic` type like `signed` and `unsigned` types.
 
-## 2. Arrays
+## 3. Arrays
 
-### a. Arrays
+### 3.1 Arrays
 
 Arrays are groups of elements, all of the <strong>same type</strong>. The syntax of an array declaration is shown here.
 
@@ -122,7 +122,7 @@ signal B_BUS : DATA;
 
 In this example, `DATA` is an array of four elements of type integer. Here, the integer range is reduced to 0 to 9. This is important to avoid the default (minimum) 32-bit implementation. If the signal `B_BUS` is of type `DATA`, then it becomes an array of integers
 
-### b. Array assignments
+### 3.2 Array assignments
 
 When you want to assign one array to another?
 
@@ -146,7 +146,7 @@ In the first example, BUS_A and BUS B are arrays of `std_logic_vector` with four
 In the second example, the array BUS_A is arranged in a downward direction and the array BUS_C is arranged in an upward direction. Hence, bit swapping happens as shown
 
 
-### c. Array assignment notation
+### 3.3 Array assignment notation
 
 To simplify array assignments and enhance readability:
 * you can designate a hexadecimal or octal base. 
@@ -170,7 +170,7 @@ DATA_WORD <= X"46F";
 ```
 Example 2 illustrates that the size of the vector must be an integer multiple of the base. That is, to use the binary base, the length of the vector must be divisible by two. This is not the case here as the length of the DATA WORD is eleven. Similarly, for hexadecimal base, the length of the vector must be divisible by sixteen, but it is twelve in this case. Hence, both the assignments show an error. [Note: I think the first assignment of binary base is correct]
 
-### d. Array slices
+### 3.4 Array slices
 
 You can reference any group of contiguous elements within an array as a slice. 
 
@@ -240,7 +240,7 @@ not equal, this is an invalid assignment.
 * In `B <= D`, a conversion function is required to make this assignment, because an integer is being assigned to a bit.
 * In `Q <= cntrl`, even though Q and CNTRL are both of type std_logic_vector, Q is 4-bits wide and CNTRL is only 2-bits wide; therefore, the error is in size, and not type.
 
-### e. String
+### 3.5 String
 
 String is a user-defined <strong>array</strong> of characters. 
 * Its range is always positive and non-zero and it is less than the largest
@@ -256,7 +256,7 @@ write(output, WARNING1 & '!');
 * WARNING1 is a constant of the string type with a range equal to 27. It has been assigned a value equal to “Unexpected Outputs Detected".
 * You can use this string to display a warning message in VHDL code as shown here.
 
-### f. Memory as Pseudo 2D arrays
+### 3.6 Memory as Pseudo 2D arrays
 
 A convenient way of modeling memory structures is to create a pseudo two-dimensional array structure; that is, create an array of arrays.
 
@@ -275,7 +275,7 @@ Synthesis tools understand this construct as a way to represent memory.
     Memory modeling
 
 
-### g. Assigning values to arrays
+### 3.7 Assigning values to arrays
 
 ```vhdl
 type MEM_ARRAY is array (0 to 3) of std_logic_vector (7 downto 0);
@@ -296,7 +296,7 @@ D_OUT <= MY_MEM (to_integer(unsigned(R_ADDR)));
 MY_MEM (to_integer(unsigned(W_ADDR))) <= DATA_IN;
 ```
 
-### h. Higher order arrays
+### 3.8 Higher order arrays
 
 You can construct true multi-dimensional arrays by creating a user-defined type of the desired size.
 
@@ -352,9 +352,9 @@ A variable matrix3D of this type is then created and initialized to zero.
 
 Each element of this variable matrix3D is then multiplied by a scalar constant to get the result.
 
-## 3. Records
+## 4. Records
 
-### a. What is record?
+### 4.1 What is record?
 
 A record is a group of elements that may be of <strong>different types</strong>. An example of record is given here.
 
@@ -383,7 +383,7 @@ These elements are stored one after the other as shown here.
 ![](/images/blog/vhdl_training_3/3.png)
     PACKET record
 
-### b. Arrays of records
+### 4.2 Arrays of records
 
 For packet-handling applications, an array of records can be useful. The ability to combine different data types affords great flexibility.
 
@@ -412,9 +412,9 @@ A new signal MY_DATA is then declared which is of the DATA ARRAY type. The diagr
 ![](/images/blog/vhdl_training_3/5.png)
 
 
-## 4. Array aggreates and record aggregates
+## 5. Array aggreates and record aggregates
 
-### a. Array aggregates
+### 5.1 Array aggregates
 
 Aggregates are a convenient means for grouping both scalar and composite data types for assignment. 
 
@@ -455,7 +455,7 @@ H_BYTE <= (7|6|0|1 => '1', 2 to 5 => '0');
 The fifth example assigns index 7,6,0, and 1 of H_BYTE to avalue of '1' and index 2, 3, 4, and 5 of H_BYTE to '0'.
 
 
-### b. Record aggregates
+### 5.2 Record aggregates
 
 Similar to array aggregates, record aggregates can also be used as shown here.
 

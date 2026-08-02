@@ -8,9 +8,9 @@ tags: ['kvm']
 series: 'Setup KVM with PCIe passthrough'
 seriesOrder: 4
 ---
-## A. Splitting IOMMU group
+## 1. A. Splitting IOMMU group
 
-### 1. PCIe ACS override
+### 1.1 PCIe ACS override
 
 PCIe ACS (Access Control Services) Override is a feature in Linux-based systems and server systems that use PCIe (Peripheral Component Interconnect Express) ports. This feature allows you to override or modify the configuration of the ACS protocol within the PCIe system. ACS is part of the PCIe standard and plays a role in controlling access to PCIe devices, especially when using PCIe passthrough in virtualization.
 
@@ -24,7 +24,7 @@ Specifically, the PCIe ACS Override feature allows you to:
 
 Please note that using PCIe ACS Override should be done carefully and following the specific guidelines of your system and virtualization management software, such as KVM/QEMU or VMware. Adjusting the ACS configuration can affect the stability and security of the PCIe system, so it should be performed knowledgeably, taking into account its impact on the system.
 
-### 2. Enable PCIe ACS override
+### 1.2 Enable PCIe ACS override
 
 Open the grub configuration file:
 
@@ -89,9 +89,9 @@ Unfortunately, it DID NOT work since my machine which includes a MOBO (Z390 Giga
 
 The last solution would be rebuild the host's kernel that patched ACS feature and use that kernel instead. Luckily, I found a way to do so.
 
-## B. Build patched ACS kernel
+## 2. B. Build patched ACS kernel
 
-### 1. Download ACS patch and original kernel to build
+### 2.1 Download ACS patch and original kernel to build
 
 On the host machine, 
 
@@ -106,7 +106,7 @@ wget https://github.com/torvalds/linux/archive/refs/tags/v5.15.zip
 unzip v5.15.zip
 ```
 
-### 2. Editing config file to avoid building error
+### 2.2 Editing config file to avoid building error
 
 
 ```shell
@@ -122,7 +122,7 @@ Use `Ctrl+w` to search for `CONFIG_SYSTEM_TRUSTED_KEYS` on nano and comment out 
 `Ctrl+x` to Save & Exit
 
 
-### 3. Apply patches ACS
+### 2.3 Apply patches ACS
 
 ```shell
 patch -p1 < ../acso.patch
@@ -142,7 +142,7 @@ Hunk #2 succeeded at 5049 with fuzz 1 (offset 153 lines).
 This shows a successful patch that required a fuzz (slight offset change) because the patch was made for an earlier kernel version. As long as there isn't an error this should be okay.
 Run the following command to build the kernel:
 
-### 4. Build patched kernel
+### 2.4 Build patched kernel
 
 ```shell
 sudo make -j `getconf _NPROCESSORS_ONLN` bindeb-pkg LOCALVERSION=-acso KDEB_PKGVERSION=$(make kernelversion)-1
@@ -153,7 +153,7 @@ Press Enter for all prompts.
 **Note:** If you get a build failure remove the "-j `getconf _NPROCESSORS_ONLN`"" part from the make line and run it again to see the error with more detail and fix it.
 
 
-### 5. Install the patched kernel
+### 2.5 Install the patched kernel
 
 When you get a successful build run the following to install the kernel:
 
@@ -178,7 +178,7 @@ reboot
 
 When the system rebooting, hold `SHIFT` to entering the patched kernel  `Advanced Ubuntu` > `5.15.0-acso`
 
-### 6. In case booting hang (optional)
+### 2.6 In case booting hang (optional)
 
 Reboot the system hold `SHIFT` to entering the patched kernel  `Advanced Ubuntu` > `5.15.0-acso`
 
@@ -225,7 +225,7 @@ Group:  17  0000:05:00.0 Non-Volatile memory controller [0108]: Samsung Electron
 
 Now, Xilinx card and Nvidia card are in different IOMMU groups
 
-### 7. Change Grub to auto boot to patched kernel
+### 2.7 Change Grub to auto boot to patched kernel
 
 ```shell
 sudo nano /etc/default/grub
@@ -258,7 +258,7 @@ Advanced Ubuntu     (index = 1)
 ...
 ```
 
-## C. References
+## 3. C. References
 
 Visit [video](https://www.youtube.com/watch?v=JBEzshbGPhQ)
 

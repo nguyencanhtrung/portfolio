@@ -7,14 +7,14 @@ key: ldpc-lifting-factor
 tags: ['5g']
 ---
 
-## Overview
+## 1. Overview
 
 Lifting factor hay expansion factor $$ Z_c $$ (có nhiều tài liệu ký hiệu là $$Z$$) là tham số được sử dụng để quyết định kích thước của ma trận cơ sở ($$B$$) sẽ được mở rộng bao nhiêu lần. Việc sử dụng <a href="https://bobibo.one/blog/2022/ldpc-base-matrix/">ma trận cơ sở $$B$$</a> để mô tả parity check matrices là một phương pháp hiệu quả giúp giảm tài nguyên nhớ. Về mặt lý thuyết, phương pháp này giảm được $$Z^2_c$$ phần tử nhớ (trong thực tế, tài nguyên nhớ sử dụng còn tiếp tục được tối ưu hơn nữa, do việc tính toán chỉ cần sử dụng một phần của ma trận cơ bản bao gồm ma trận $$A, E, C_1, C_2$$).
 
 Phần sau sẽ mô tả cách tính $$Z_c$$ được mô tả trong tài liệu 3GPP.
 
 ***
-## Compute $$Z_c$$
+## 2. Compute $$Z_c$$
 
 ![](/images/blog/ldpc-lifting-factor/2.png)
 <br/>
@@ -45,7 +45,7 @@ $$
 Như vậy table 5.3.2-1 đang mô tả các giá trị của $$Z_c$$ ứng với mỗi index, nhưng bản chất nó là tập các giá trị của $$Z_c$$ ứng với một giá trị của $$a$$. Sau cùng, chúng ta sẽ chỉ quan tâm đến các giá trị của $$Z_c$$ mà thôi.
 
 ***
-## $$Z_c$$ selection
+## 3. $$Z_c$$ selection
 
 Việc lựa chọn $$Z_c$$ phụ thuộc vào <b>độ dài của thông tin cần mã hóa</b> (theo đơn vị bit). Nó được mô tả ở phần `Matlab code` dưới đây.
 
@@ -58,7 +58,7 @@ Với mỗi $$Z_c$$, ma trận cơ sở B sẽ có những ràng buộc sau đâ
 * Các giá trị a lớn hơn 0: tương ứng với ma trận Identity được shift phải a lần
 
 ***
-## Matlab code
+## 4. Matlab code
 
 ```matlab
 

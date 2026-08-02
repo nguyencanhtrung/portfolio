@@ -7,7 +7,7 @@ key: temp-monitoring-ubuntu204
 tags: ['ubuntu']
 ---
 
-## Sensors
+## 1. Sensors
 
 Sensors is a command-line utility to monitor CPU and GPU temperature in Linux. It is a free and open-source tool. It helps you to see the readings of all sensor chips including the CPU. You can also monitor fans of your system with this tool..Run the following command in Ubuntu to install Sensors.
 
@@ -25,7 +25,7 @@ After detecting the available sensors on your system, run the following command 
 sensors
 ```
 
-## Glances
+## 2. Glances
 
 Glances is a cross-platform real-time system monitoring tool. You access it via a web browser to remotely monitor your Linux server. It is a curses-based system monitoring tool written in Python
 

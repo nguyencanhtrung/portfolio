@@ -31,14 +31,14 @@ You are now ready to start installing KVM.
 
 ## 3. KVM Installation
 
-### a. Install KVM and assorted tools
+### 3.1 Install KVM and assorted tools
 
 ```shell
 sudo apt update
 sudo apt install qemu-kvm libvirt-clients libvirt-daemon-system virtinst bridge-utils cpu-checker virt-viewer virt-manager qemu-system
 ```
 
-### b. Check whether your system can use KVM acceleration
+### 3.2 Check whether your system can use KVM acceleration
 
 ```shell
 sudo kvm-ok
@@ -96,7 +96,7 @@ QEMU: Checking for device assignment IOMMU support                         : PAS
  LXC: Checking if device /sys/fs/fuse/connections exists                   : PASS
 ```
 
-### c. Add user to libvirt groups
+### 3.3 Add user to libvirt groups
 
 To allow the current user to manage the guest VM without sudo, we can add ourselves to all of the libvirt groups (e.g. libvirt, libvirt-qemu) and the kvm group
 
@@ -113,7 +113,7 @@ id | grep libvirt
 
 Group membership requires a user to log back in, so if the `id` command does not show your libvirt* group membership, logout and log back in, or try `exec su -l $USER`.
 
-### d. QEMU connection to system
+### 3.4 QEMU connection to system
 
 If not explicitly set, the userspace QEMU connection will be to `qemu:///session`, and not to `qemu:///system`.  This will cause you to see different domains, networks, and disk pool when executing virsh as your regular user versus sudo.
 
@@ -124,7 +124,7 @@ Modify your profile so that the environment variable below is exported to your l
 export LIBVIRT_DEFAULT_URI=qemu:///system
 ```
 
-### e. Default network
+### 3.5 Default network
 
 By default, KVM creates a virtual switch that shows up as a host interface named `virbr0` using 192.168.122.0/24.
 
@@ -140,7 +140,7 @@ $ ip addr show virbr0
 
 `virbr0` operates in NAT mode, which allows the guest OS to communicate out, but only allowing the Host(and those VMs in its subnet) to make incoming connections.
 
-### f. Bridge network
+### 3.6 Bridge network
 
 To enable guest VMs on the same network as the Host, you should create a bridged network to your physical interface (e.g. eth0, ens4, epn1s0).
 
@@ -162,7 +162,7 @@ This `host-bridge` will be required in later articles.
 
 Instruction to setup host's OS to create `br0` [here](https://fabianlee.org/2019/04/01/kvm-creating-a-bridged-network-with-netplan-on-ubuntu-bionic/)
 
-### g. Enable IPv4 forwarding on KVM host
+### 3.7 Enable IPv4 forwarding on KVM host
 
 In order to handle NAT and routed networks for KVM, enable IPv4 forwarding on this host.
 
@@ -176,7 +176,7 @@ echo net.ipv4.ip_forward=1 | sudo tee -a /etc/sysctl.conf
 sudo sysctl -p /etc/sysctl.conf
 ```
 
-### h. Default storage pool
+### 3.8 Default storage pool
 
 The “default” storage pool for guest disks is `/var/lib/libvirt/images`.   This is fine for test purposes, but if you have another mount that you want to use for guest OS disks, then you should create a custom storage pool.
 
@@ -204,7 +204,7 @@ $ virsh pool-list --all
 
 ## 4. VM creation using `virt-install`
 
-### a. Download ubuntu 20.04 focal iso
+### 4.1 Download ubuntu 20.04 focal iso
 
 In order to test you need an OS boot image.  Since we are on an Ubuntu host, let’s download the ISO for the network installer of Ubuntu 20.04 Focal. When complete, you should have a local file named `~/kvm/mini.iso`
 
@@ -226,7 +226,7 @@ virsh list --all
 
 This should return an empty list of VMs, because no guest OS have been deployed. 
 
-### b. Installing `ukvm2004` VM
+### 4.2 Installing `ukvm2004` VM
 
 ```shell
 virt-install --virt-type=kvm --name=ukvm2004 --ram 8192 --vcpus=4 --virt-type=kvm --hvm --cdrom ~/kvm/mini.iso --network network=default --disk pool=default,size=20,bus=virtio,format=qcow2 --noautoconsole --machine q35
@@ -241,7 +241,7 @@ Note: When creating VM's using virt-manager, make sure to also select `q35` as t
 * Pool storage:  `default` and size = 20GB
 * Graphic: `default` - spice
 
-### c. Open the VM
+### 4.3 Open the VM
 
 ```shell
 # open console to VM
@@ -253,7 +253,7 @@ virt-viewer ukvm2004
 `virt-manager` provides a convenient interface for creating or managing a guest OS, and any guest OS you create from the CLI using virt-install will show up in this list also.
 
 
-### d. Stop and delete VM
+### 4.4 Stop and delete VM
 
 If you want to delete this guest OS completely, close the GUI window opened with virt-viewer, then use the following commands:
 

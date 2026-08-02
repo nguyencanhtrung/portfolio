@@ -5,13 +5,14 @@ date: 2022-11-22
 lang: en
 key: signal-tap
 tags: ['intel']
+draft: true
 ---
 
-## Basic Configuration & Trigger Conditions
+## 1. Basic Configuration & Trigger Conditions
 
 
-## State-based Triggering, Compilation and device programming
+## 2. State-based Triggering, Compilation and device programming
 
 
-## Signal Tap logic Analyzer: Data Acquisition & Additional Features
+## 3. Signal Tap logic Analyzer: Data Acquisition & Additional Features
 

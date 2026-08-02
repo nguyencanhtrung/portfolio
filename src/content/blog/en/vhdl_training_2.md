@@ -3,20 +3,20 @@ title: 'VHDL - Scalar data types'
 description: 'Learn VHDL syntax'
 date: 2023-02-25
 lang: en
-key: vhdl_training
+key: vhdl_training_2
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 2
 ---
 
-## Scalar data types
+## 1. Scalar data types
 
 Objectives:
 * Use approriate data types when declaring ports and signals
 * List legal values of std_logic data types
 * Create scalar data types
 
-### Data types 
+### 1.1 Data types
 
 * A data type in VHDL is a name that has been associated with a set of values and a set of operations.
 * A wide range of available data types provides flexibility in hardware modeling and built-in error checking to ensure signal compatibility in large, complex models.
@@ -27,7 +27,7 @@ Objectives:
 Though VHDL has a limited number of "buld-in" data types, libraries in VHDL extend this number.
 
 
-### Scalar data types
+### 1.2 Scalar data types
 
 Scalar data types in VHDL represent single values. These includes:
 * bit
@@ -39,7 +39,7 @@ Scalar data types in VHDL represent single values. These includes:
 * Physical concepts and amounts
 * Enumerated types for immediate recognition
 
-### 1. Bit & boolean
+### 1.3 Bit & boolean
  
 <strong>BIT</strong>
 
@@ -70,7 +70,7 @@ end Behavioral;
 Both the data type declarations are taken from library `STD` and the package `Standard`. These are predefined and implicit for every VHDL model and, therefore, no explicit library declaration is ever required.
 
 
-### 2. std_ulogic & std_logic
+### 1.4 std_ulogic & std_logic
  
 <strong> std_ulogic </strong>
 
@@ -156,9 +156,9 @@ RES_OUT <= B when EN1 = '1' else 'Z';
 RES_OUT <= C when EN2 = '1' else 'Z';
 ```
 
-## Integer and Real
+## 2. Integer and Real
 
-### Integer
+### 2.1 Integer
 
 * Allows for flexible, intuitive quantities values.
 * Specifying the range of any integer has significant impact during synthesis. 
@@ -179,7 +179,7 @@ signal A: integer range 0 to 7;
 signal B: integer range 15 downto 0;
 ```
 
-### Real 
+### 2.2 Real
 
 * Allows users to use floating-point values in the range of +1e38 to -1e38
 * Used to scale and offset physical data types
@@ -198,7 +198,7 @@ type CAPACITY is range -25.0 to 25.0;
 signal SIG_1: CAPACITY := 3.0;
 ```
 
-### What can & cannot be done with Integers & Reals
+### 2.3 What can & cannot be done with Integers & Reals
 
 * In general, all forms of comparisons (>, <, >=, <=, =, /=) are legal in integer and real. 
 * Caution needs to be taken if real numbers are tested for equality as the test is not reliable.
@@ -210,7 +210,7 @@ signal SIG_1: CAPACITY := 3.0;
 * Care needs to be taken as some of these operations can cause problems during synthesis but not during simulation.
 
 
-## Data Type Conversion
+## 3. Data Type Conversion
 
 Since VHDL is a strongly typed language by its nature, assigning one type to another is illegal. Performing this change requires a conversion mechanism.
 
@@ -219,7 +219,7 @@ The conversion processes in VHDL are:
 * Casting
 * Conversion function
 
-### Type casting
+### 3.1 Type casting
 
 * Used to move between the `std_logic_vector` =>  `signed` and `unsigned` types. 
 * Type cast between `std_logic_vector` and `signed` or `unsigned` can be used as long as the original and destination signals have the same bit width.
@@ -240,7 +240,7 @@ ex1 <= std_logic_vector(ex2);
 * `ex3 <= unsigned(ex1)` Similarly, the second example type casts a signal of `std_logic_vector` type (ex1) to `unsigned` type
 * `ex1 <= std_logic_vector(ex2)` Third example type casts a signal of singed type (ex2) to `std_logic_vector` type.
 
-### Conversion function
+### 3.2 Conversion function
 
 * Used to move between `signed` and `unsigned` => `integer`. 
 * Integers do not have a set bit width, which is why the conversion function from `integer` to `signed/unsigned` includes a specification of the intended bit width.
@@ -257,7 +257,7 @@ ex2 <= to_integer(ex1);
 * `ex2 <= to_integer(ex1)` Similarly, the `to_integer` conversion function converts a `signed` type to `integer` type in the second example.
 
 
-## Data Type Conversion
+## 4. Data Type Conversion
 
 Since VHDL is a strongly typed language by its nature, assigning one type to another is illegal. Performing this change requires a conversion mechanism.
 
@@ -266,7 +266,7 @@ The conversion processes in VHDL are:
 * Casting
 * Conversion function
 
-### Type casting
+### 4.1 Type casting
 
 * Used to move between the `std_logic_vector` =>  `signed` and `unsigned` types. 
 * Type cast between `std_logic_vector` and `signed` or `unsigned` can be used as long as the original and destination signals have the same bit width.
@@ -287,7 +287,7 @@ ex1 <= std_logic_vector(ex2);
 * `ex3 <= unsigned(ex1)` Similarly, the second example type casts a signal of `std_logic_vector` type (ex1) to `unsigned` type
 * `ex1 <= std_logic_vector(ex2)` Third example type casts a signal of singed type (ex2) to `std_logic_vector` type.
 
-### Conversion function
+### 4.2 Conversion function
 
 * Used to move between `signed` and `unsigned` => `integer`. 
 * Integers do not have a set bit width, which is why the conversion function from `integer` to `signed/unsigned` includes a specification of the intended bit width.
@@ -303,7 +303,7 @@ ex2 <= to_integer(ex1);
 * `ex1 <= to_signed (ex2, ex1'length)` The first example here converts an integer (ex2) to signed type using `to_signed` conversion function, available in `numeric_std` package and stores the result in `ex1` which is of `singed` type.
 * `ex2 <= to_integer(ex1)` Similarly, the `to_integer` conversion function converts a `signed` type to `integer` type in the second example.
 
-### std_logic_vector to/from integer
+### 4.3 std_logic_vector to/from integer
 
 Common conversions required in VHDL are
 
@@ -322,7 +322,7 @@ To convert from integer to std_logic_vector:
 slv_value <= std_logic_vector(to_unsigned( integer_value, n ));
 ```
 
-### Types & subtypes
+### 4.4 Types & subtypes
 
 #### Types
 
@@ -352,7 +352,7 @@ The syntax always has a pre-defined type as subtype only refines the use of a pr
 The example shown here creats a subtype `ROM_MEMORY_RANGE` that limits the integer range (by default, a minimum of 32 bits) to 8 bits.
 
 
-### Characters & Strings
+### 4.5 Characters & Strings
 
 #### Characters
 
@@ -384,7 +384,7 @@ constant msg: string (1 to 10) := "setup time";
 A constant `msg` of string type with the range equal to ten characters. It has been assigned a value of “setup time".
 
 
-### Physical
+### 4.6 Physical
 
 * Used to quantify real-world physical concepts and amounts, such as `mass`, `length`, `time` etc.
 * `time` is the only pre-defined physical type
@@ -415,7 +415,7 @@ Z <= A after TPD;
 In the example here, a constant `TPD` is of the type time and has been initialized with a 3ns value.
 
 
-### Enumerated types
+### 4.7 Enumerated types
 
 * Lists a set of names or values defining a new type.
 * Use values immediately recognizable and intuitively relevant to the operation of the model. 

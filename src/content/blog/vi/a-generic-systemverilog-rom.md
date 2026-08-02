@@ -12,7 +12,7 @@ Pipeline handshaking protocol giúp tối ưu throughout của hệ thống. Tuy
 
 ## 2. AXIS protocol và pipelining
 
-### a. Nguyên lý của AXIS
+### 2.1 Nguyên lý của AXIS
 
 Dạng đơn giản nhất của AXIS bao gồm 3 tín hiệu `DATA` `VALID` và `READY`. Với thiết kế `single cycle data transfer`, `DATA` được lấy mẫu và chuyển tiếp ra output thành công khi và chỉ khi:
 
@@ -37,7 +37,7 @@ Tuy nhiên, hai thiết kế trên có một nhược điểm rất lớn đó l
 
 ![](/images/blog/a-generic-systemverilog-rom/5.png)
 
-### b. Giải pháp registering `TREADY`
+### 2.2 Giải pháp registering `TREADY`
 
 Dưới đây là một phương pháp chèn `register` vào đường `TREADY`. `S_AXIS_TREADY` chậm hơn `M_AXIS_TREADY` 1 chu kỳ clock, do đó ngay tại chu kỳ `M_AXIS_TREADY = '0'`, dữ liệu đang có ở register sẽ không được lấy mấu ở output (vì `M_AXIS_TREADY = '0'`). Tuy nhiên, dữ liệu kế tiếp từ input vẫn được chuyển tiếp vào `register` và ghi đè vào giá trị chưa được lấy mẫu ở trên. Để giải quyết vấn đề trên, kiến trúc này sử dụng thêm một lớp `expansion registers` để lưu trữ giá trị chưa được lấy mẫu khi `M_AXIS_TREADY = '0'`, dữ liệu input kế tiếp sẽ vẫn tiếp tục lưu trữ vào lớp `primary registers` như cũ. 
 
@@ -60,7 +60,7 @@ Tại chu kỳ `M_AXIS_TREADY = '1'`, lúc này `S_AXIS_TREADY = '0'` do chậm 
 ![](/images/blog/a-generic-systemverilog-rom/4.png)
 
 
-### c. Thiết kế RTL
+### 2.3 Thiết kế RTL
 
 ```systemverilog
 logic [WIDTH-1:0]   expansion_data_reg;

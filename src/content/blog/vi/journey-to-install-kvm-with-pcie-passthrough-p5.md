@@ -17,9 +17,9 @@ There are 2 ways to attach or detach PCIe devices to/from KVM which are
 
 GUI and commandline method are described [here](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html).
 
-## A. Command line method to assign PCIe device to VM Guest
+## 1. A. Command line method to assign PCIe device to VM Guest
 
-### 1. Identify the host PCI device to assign to the VM Guest
+### 1.1 Identify the host PCI device to assign to the VM Guest
 
 ```bash
 lspci -nn | grep "Xilinx"
@@ -36,7 +36,7 @@ tesla@tesla:~/kvm$ sudo lspci -nn | grep "Xilinx"
 
 Xilinx has 2 IDs: (`01:00.0`  and `01:00.1`)
 
-### 2. Gather detailed information about the device
+### 1.2 Gather detailed information about the device
 
 
 ```console
@@ -78,7 +78,7 @@ $ virsh nodedev-dumpxml pci_0000_01_00_1
 
 Write down the values for domain, bus, slot and function.
 
-### 3. Detach the device from the host system
+### 1.3 Detach the device from the host system
 
 ```bash
 virsh nodedev-detach pci_0000_01_00_0
@@ -92,7 +92,7 @@ When using a multi-function PCI device that does not support FLR (function level
 
 Trong trường hợp của ta, `detach` or `reattach` không có ý nghĩa, vì ta đã cố định card FPGA với `VFIO` ở GRUB. Tôi sẽ thử bỏ command đó đi và chạy theo flow này xem ntn. Vì với flow này có thể sử dụng card FPGA ở cả host lẫn VM.
 
-### 4. Convert the domain, bus, slot and function from dec to hex
+### 1.4 Convert the domain, bus, slot and function from dec to hex
 
 ```bash
 printf "<address domain='0x%x' bus='0x%x' slot='0x%x' function='0x%x'/>\n" 0 1 0 0
@@ -109,7 +109,7 @@ tesla@tesla:~/kvm$ printf "<address domain='0x%x' bus='0x%x' slot='0x%x' functio
 
 ```
 
-### 5. Run `virsh edit`
+### 1.5 Run `virsh edit`
 
 ```bash
 virsh edit ukvm2004
@@ -167,7 +167,7 @@ virsh nodedev-reattach pci_0000_01_00_0
 Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host thì ngon quá.
 
 
-## B. Another way to attach PCIe devices
+## 2. B. Another way to attach PCIe devices
 
 Create a file named `pass-user.xml` and pasting the following content
 
@@ -224,6 +224,6 @@ lspci -nn
 ```
 
 
-## C. References
+## 3. C. References
 
 Visit [the instruction](https://documentation.suse.com/smart/virtualization-cloud/html/task-assign-pci-device-libvirt/index.html) and [Xilinx instruction](https://www.xilinx.com/developer/articles/using-alveo-data-center-accelerator-cards-in-a-kvm-environment.html)

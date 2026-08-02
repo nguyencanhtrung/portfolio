@@ -7,13 +7,13 @@ key: catapult-journey-2
 tags: ['catapult']
 ---
 
-## Mục đích
+## 1. Mục đích
 
 * Tổng hợp một thiết kế script-based và GUI-based
 * Sử dựng Catapult Gantt Chart và Catapult Design Analyzer
 * Setup và sử dụng simulation
 
-## Thiết kế với GUI
+## 2. Thiết kế với GUI
   
 Một project sẽ được thực hiện theo thứ tự sau
 
@@ -41,7 +41,7 @@ Một project sẽ được thực hiện theo thứ tự sau
 
 Quá trình phát triển sẽ sử dụng các thông tin từ `Gantt Chart` (chạy tab `Schedule`) và `Design Analyzer` để quan sát quá trình chuyển đổi từ high level model xuống RTL model. Từ đó, có thể lựa chọn được thiết kế tối ưu nhất với yêu cầu đề ra.
 
-## Thiết kế với script
+## 3. Thiết kế với script
 
 Script-based thực hiện đúng theo quy trình của GUI-based ở trên. Dưới đây là một ví dụ
 
@@ -116,13 +116,13 @@ Mở Catapult,
 Trỏ đến script.
 
 
-## Catapult Gantt Chart
+## 4. Catapult Gantt Chart
 
 Cung cấp thông tin lập lịch của các operator. Người thiết kế có thể dựa vào thông tin này để tinh chỉnh việc lập lịch từ đó đạt được các yêu cầu đã đặt ra. 
 
 Đây là một chủ đề nâng cao, chúng ta sẽ cùng tìm hiểu và làm rõ ở các dự án sắp tới.
 
-## Catapult Desing Analyzer 
+## 5. Catapult Desing Analyzer
 
 Cung cấp thông tin và cho phép cross-probed giữa 3 model: C/C++ model, HDL model (Verilog/VHDL), RTL model (Schematic, Schedule).
 
@@ -131,7 +131,7 @@ Design Analyzer cung cấp thông tin chính xác về tài nguyên của từng
 Người thiết kế có thể sử dụng thông tin này để kiểm tra các critical path trong thiết kế từ đó có những giải pháp tối ưu phù hợp.
 
 
-## RTL co-simulation
+## 6. RTL co-simulation
 
 Để có thể mô phỏng được nhiều trường hợp có thể xảy ra trong thực tế, SCVerify cho phép người test chèn `STALL` vào input và output để kiểm tra trạng thái của hệ thống trong các trường hợp đó.
 
@@ -213,7 +213,7 @@ CCS_MAIN(int argv, char **argc)
 
 Đây là một testbench, nó được sử dụng để kiểm tra trạng thái của mạch `mult_add_pipeline`. Cách mạch này hoạt động không quan trọng trong vấn đề đang thảo luận ở đây. Hãy chú ý vào đoạn code:
 
-### Chèn STALL trong testbench
+### 6.1 Chèn STALL trong testbench
 
 ```cpp
 
@@ -265,7 +265,7 @@ Chèn `STALL` có độ dài `Y` chu kỳ clock cho một tín hiệu bất kỳ
 
 ```
 
-### Cấu hình Compiler để enable STALL
+### 6.2 Cấu hình Compiler để enable STALL
 
 Giai đoạn thứ 2 là cấu hình compiler flag để tổng hợp được đoạn code testbench trên.
 
@@ -282,7 +282,7 @@ solution file add [file join $sfd tb.cpp] -type C++ -exclude true -args -DSTALL
 ```
 Sau đó, recompile lại thiết kế (tạo branch hoặc solution mới để chạy)
 
-### Tự động chèn `STALL` bởi SCVerify
+### 6.3 Tự động chèn `STALL` bởi SCVerify
 
 Phần trên là hướng dẫn chèn `STALL` vào input và output bởi người thiết kế, SCVerify cho phép chèn STALL vào
 interface một cách tự động. Bằng cách truy cập `Architecture > "Top level module" > Insert STALL flags`  
@@ -291,7 +291,7 @@ interface một cách tự động. Bằng cách truy cập `Architecture > "Top
 
 Cách này hệ thống không bị STALL ở input hay output như cách trên, mà được stall ở `STALLER`, không có ý nghĩa nhiều trong việc test.
 
-## Pipeline mode
+## 7. Pipeline mode
 
 Chúng ta sẽ tìm hiểu kỹ phần này ở những phần sau. Ở đây, tôi chỉ muốn giới thiệu thoáng quá về hiện tượng để người thiết kế chú ý hơn. 
 

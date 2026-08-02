@@ -20,7 +20,7 @@ The following sections will describe step-by-step how to use modelsim/questasim.
 
 In my case, I am using Questasim-Intel FE version.
 
-### <ins><strong>INSTALLATION</strong></ins>
+### 1.1 <ins><strong>INSTALLATION</strong></ins>
 
 To run modelsim or questasim in batch mode, the program must be in the path of your shell. You can add these lines into your `~/.bashrc` after installing Quartus. Changing `/opt/Intel/22.3/` to your installation path.
 
@@ -30,7 +30,7 @@ export PATH=/opt/Intel/22.3/quartus/bin:/opt/Intel/22.3/questa_fe/bin:$PATH
 ```
 
 
-### <ins><strong>IMPORTANT COMMANDS</strong></ins>
+### 1.2 <ins><strong>IMPORTANT COMMANDS</strong></ins>
 
 The section is from [this source](https://vhdlwhiz.com/the-modelsim-commands-you-need-to-know/)
 
@@ -193,7 +193,7 @@ In order to run simulation on Model/Questa-sim, you need to prepare 3 things
 
 For 2 formers, no need to discuss more since it is straight-forward. The later is what you need to study more if you switched from other simulator such as XSIM (Xililnx).
 
-### <ins>Scripting</ins>
+### 2.1 <ins>Scripting</ins>
 
 There are 3 important scripts that are used for simulation.
 
@@ -366,12 +366,12 @@ run 1 us
 ```
 
 
-## How to stop a simulator
+## 5. How to stop a simulator
 
 https://vhdlwhiz.com/how-to-stop-testbench/
 
 
-### Simulating NIOS II
+### 5.1 Simulating NIOS II
 
 https://www.youtube.com/watch?v=Jw3rr76QEIc
 

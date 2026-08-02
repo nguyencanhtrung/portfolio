@@ -7,14 +7,14 @@ key: catapult-journey-1
 tags: ['catapult']
 ---
 
-## Mục đích
+## 1. Mục đích
 
 * Sử dụng g++ đi kèm với Catapult để biên dịch C/C++ model
 * Biết đường dẫn của thư viện C/C++ của Catapult cũng như cách thêm thư viện vào khi biên dịch
 * Debug lỗi data types
 * Hiểu về cách hoạt động của phép dịch trái với AC data types
 
-## Makefile
+## 2. Makefile
 
 Makefile bao gồm những thành phần sau để thực hiện được việc compiling C/C++ model
 
@@ -53,7 +53,7 @@ clean:
 ```
 
 
-### Compiling cmd
+### 2.1 Compiling cmd
 
 ```bash
 $(CC) -o $(TDIR)/tb tb.cpp tb.cpp test_chan_assert.cpp -I$(IDIR) $(CFLAGS)
@@ -63,13 +63,13 @@ $(CC) -o $(TDIR)/tb tb.cpp tb.cpp test_chan_assert.cpp -I$(IDIR) $(CFLAGS)
 * `-I$(IDIR)` : include library which stores in `IDIR` variable
 * `$CFLAGS` : C flag
 
-### Debuging cmd
+### 2.2 Debuging cmd
 
 ```bash
 $(MGC_HOME)/bin/gdb $(TDIR)/tb
 ```
 
-## Section 1
+## 3. Section 1
 
 #### Understand makefile and simple errors
 
@@ -155,7 +155,7 @@ make: *** [tb0] Error 1
  printf("sat_behavior = %3d, ",sat_behavior.to_uint());
  ```
 
-## Section 2
+## 4. Section 2
 #### Working with debugger (dbg) to trace back the error cause in source code
 
 ```cpp
@@ -284,7 +284,7 @@ Giải pháp: Thực hiện kiểm tra channel có dữ liệu hay không trư�
  }
 ```
 
-## Section 3
+## 5. Section 3
 #### Understand behaviour of shifting in AC data types
 
 Khi thực hiện dịch trái một vector ac_* phải cast vector đó với một kích thước đủ lớn để đảm bảo giá trị của kết quả thu được phản ánh đúng toán tử dịch trái.

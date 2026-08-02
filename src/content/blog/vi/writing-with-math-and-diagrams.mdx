@@ -14,7 +14,7 @@ tin, một đoạn RTL. Vậy nên trước khi viết gì "thật", bài đầu
 xem tất cả những thứ đó có render đúng như mong đợi không. Nó đồng thời là
 template tôi copy cho mọi bài sau.
 
-## Công thức
+## 1. Công thức
 
 Công thức inline nằm ngay trong câu, như suy hao không gian tự do ở khoảng
 cách $d$ và tần số $f$: $\mathrm{FSPL} = \left(\tfrac{4\pi d f}{c}\right)^2$.
@@ -28,7 +28,7 @@ Dung lượng Shannon là chặn trên hữu ích trong mọi lập luận về 
 công suất thu $P_r$ trên băng thông $B$, không mẹo waveform nào đưa bạn vượt
 qua $C$ — nó chỉ quyết định bạn tiến đến gần giới hạn đó "êm" tới mức nào.
 
-## Sơ đồ
+## 2. Sơ đồ
 
 Sơ đồ được viết bằng khối Mermaid và render ngay trên trình duyệt, khớp với
 theme của site. Một phiên trao đổi an toàn V2V qua sidelink PC5:
@@ -44,7 +44,7 @@ sequenceDiagram
     B-->>A: Sự kiện cần cảnh báo
 ```
 
-## Code
+## 3. Code
 
 Code block được highlight lúc build, ở cả hai theme. Vì site này một phần là
 câu chuyện về FPGA, đoạn demo là VHDL — một thanh ghi pipeline hai tầng, thứ
@@ -133,14 +133,14 @@ Và JSON cho các file config gắn kết một scenario mô phỏng:
 }
 ```
 
-## Bảng
+## 4. Bảng
 
 | Giao diện | Đường đi | Đặc tính độ trễ | Cần vùng phủ |
 | --------- | -------- | ---------------- | ------------ |
 | Uu | xe → mạng → xe | hàng chục ms, dao động | có |
 | PC5 | xe → xe | vài ms, trực tiếp | không |
 
-## Hình vẽ
+## 5. Hình vẽ
 
 Hình có thể là ảnh markdown thông thường, hoặc SVG inline khi cần bám theo
 theme của site:
@@ -158,7 +158,7 @@ theme của site:
   <figcaption>Hình SVG inline — tự kế thừa màu của theme.</figcaption>
 </figure>
 
-## Trích dẫn
+## 6. Trích dẫn
 
 > Phần cứng không bao giờ là bản lý tưởng trên giấy: clock thật thì trôi,
 > cảm biến thật thì lệch. Phần kỹ thuật thú vị bắt đầu ở nơi mô hình dừng lại.
