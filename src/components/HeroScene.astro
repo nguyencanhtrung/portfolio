@@ -74,8 +74,11 @@
   </g>
 
   <!-- ══ the signal: square wave → modulated carrier → up the mast ══ -->
+  <!-- One signal in three drawn segments (the FPGA and the DFE box are the
+       gaps it passes through). Each is its own path so the sweep can hand
+       off between them at a constant speed — see hs-sweep-1/2/3. -->
   <path
-    class="sa sig"
+    class="sa sig sig1"
     pathlength="1"
     d="M 8 216 h 26 v -26 h 30 v 26 h 30 v -26 h 26 v 26 h 26 h 36"
   />
@@ -86,8 +89,9 @@
        c 26 -46 52 -46 78 0
        c 26 46 52 46 78 0
        c 26 -46 52 -46 78 0
-       h 30 M 708 216 h 32 v -66"
+       h 78"
   />
+  <path class="sa sig sig3" pathlength="1" d="M 708 216 h 32 v -66" />
 
   <!-- ══ rays into the twin world ══ -->
   <g class="sa dash rays appear a3">
@@ -244,22 +248,22 @@
         stroke-dasharray: 1;
         stroke-dashoffset: 1;
         /* Linear, not eased: an eased sweep races through its middle and
-           reads as a blink rather than a trace. */
-        animation: hs-sweep 9.5s linear infinite;
+           reads as a blink rather than a trace. Every segment shares this
+           duration and starts together — the hand-off is baked into the
+           keyframes, so no animation-delay and therefore no drift. */
+        animation-duration: 9.5s;
+        animation-timing-function: linear;
+        animation-iteration-count: infinite;
       }
-      .sig2 {
-        /* Starts as the square wave finishes entering the FPGA, so the two
-           traces read as one signal propagating. */
-        animation-delay: 1.8s;
-      }
+      .sig1 { animation-name: hs-sweep-1; }
+      .sig2 { animation-name: hs-sweep-2; }
+      .sig3 { animation-name: hs-sweep-3; }
       /* On a phone the drawing is a third of the size, so the same sweep
-         covers too little distance to read as motion — stretch it out. */
+         covers too little distance to read as motion — stretch it out.
+         Percentages scale with the duration, so the hand-off still holds. */
       @media (max-width: 700px) {
         .sig {
           animation-duration: 14s;
-        }
-        .sig2 {
-          animation-delay: 2.6s;
         }
       }
       .appear {
@@ -277,13 +281,32 @@
         animation: hs-pulse 3.2s ease-in-out 2.6s infinite;
       }
     }
-    /* Percentages of the duration above: 1.9s draw, 5.7s hold, 1.9s sweep
-       at 9.5s — all three stretch together when the duration changes. */
-    @keyframes hs-sweep {
-      0% { stroke-dashoffset: 1; }    /* off-screen ahead of the path */
-      20% { stroke-dashoffset: 0; }   /* drawn */
-      80% { stroke-dashoffset: 0; }   /* held */
-      100% { stroke-dashoffset: -1; } /* swept off the end */
+    /* One pulse crossing the whole chain at a constant speed. Each segment's
+       share of the cycle is its share of the 812 units of path: 278 for the
+       square wave, 436 for the carrier, 98 for the mast riser. Head travels
+       0–31.6%, the line holds, then the tail follows on the same schedule
+       shifted by 57.9% — and the last segment clears before the cycle wraps,
+       so a new pulse never starts while the old one is still leaving. */
+    @keyframes hs-sweep-1 {
+      0% { stroke-dashoffset: 1; }
+      10.8% { stroke-dashoffset: 0; }
+      57.9% { stroke-dashoffset: 0; }
+      68.7% { stroke-dashoffset: -1; }
+      100% { stroke-dashoffset: -1; }
+    }
+    @keyframes hs-sweep-2 {
+      0%, 10.8% { stroke-dashoffset: 1; }
+      27.8% { stroke-dashoffset: 0; }
+      68.7% { stroke-dashoffset: 0; }
+      85.7% { stroke-dashoffset: -1; }
+      100% { stroke-dashoffset: -1; }
+    }
+    @keyframes hs-sweep-3 {
+      0%, 27.8% { stroke-dashoffset: 1; }
+      31.6% { stroke-dashoffset: 0; }
+      85.7% { stroke-dashoffset: 0; }
+      89.5% { stroke-dashoffset: -1; }
+      100% { stroke-dashoffset: -1; }
     }
     @keyframes hs-fade {
       to { opacity: 1; }
