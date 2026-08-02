@@ -28,11 +28,17 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   <section class="hero">
     <div class="container hero-copy">
       <p class="kicker mono">{c.heroKicker}</p>
-      <h1>{c.heroName}</h1>
-      <p class="tagline">{c.heroTagline}</p>
-      <p class="intro">{c.heroIntro}</p>
-      <p class="role mono">{c.heroRole}</p>
-      <a class="cta mono" href="#journey">{t(locale, 'hero.cta')} <span class="arrow">↓</span></a>
+      <div class="hero-grid">
+        <div class="name-col">
+          <h1>{c.heroName}</h1>
+          <p class="tagline">{c.heroTagline}</p>
+        </div>
+        <div class="say-col">
+          <p class="intro">{c.heroIntro}</p>
+          <p class="role mono">{c.heroRole}</p>
+          <a class="cta mono" href="#journey">{t(locale, 'hero.cta')} <span class="arrow">↓</span></a>
+        </div>
+      </div>
     </div>
     <div class="scene">
       <HeroScene />
@@ -114,8 +120,26 @@ const altPath = locale === 'en' ? '/vi/' : '/';
        the copy shares its left edge with the journey below. */
     width: 100%;
   }
-  .hero-copy > * {
+  /* Name left, explanation right — the copy fills the same frame as the
+     panorama and the timeline instead of stopping two thirds across.
+     Below 900px it stacks, keeping the reading order of the markup. */
+  .hero-grid {
+    display: grid;
+    gap: 2.5rem 3rem;
+  }
+  .name-col,
+  .say-col {
     max-width: var(--w-content);
+  }
+  @media (min-width: 900px) {
+    .hero-grid {
+      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
+      align-items: start;
+    }
+    .name-col,
+    .say-col {
+      max-width: none;
+    }
   }
   .cta {
     display: inline-block;
@@ -174,16 +198,16 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     font-style: italic;
     font-size: clamp(1.25rem, 3vw, 1.6rem);
     color: var(--ink-2);
-    margin: 0.75rem 0 2rem;
+    margin: 0.75rem 0 0;
   }
   .intro {
-    margin-top: 1.25rem;
     font-size: 1.1rem;
   }
   .role {
     margin-top: 1.25rem;
     color: var(--accent);
-    font-size: 0.8rem;
+    font-size: 0.75rem;
+    text-wrap: balance;
   }
 
   .section-label {
