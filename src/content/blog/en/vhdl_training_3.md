@@ -1,9 +1,9 @@
 ---
-title: 'VHDL-3--Composite data types'
+title: 'VHDL - Composite data types'
 description: 'Learn VHDL syntax'
 date: 2023-02-25
 lang: en
-key: vhdl_training_3
+key: vhdl_training
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 3

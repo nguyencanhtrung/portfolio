@@ -1,9 +1,9 @@
 ---
-title: 'VHDL-2--Scalar data types'
+title: 'VHDL - Scalar data types'
 description: 'Learn VHDL syntax'
 date: 2023-02-25
 lang: en
-key: vhdl_training_2
+key: vhdl_training
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 2

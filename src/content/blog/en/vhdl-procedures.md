@@ -3,8 +3,10 @@ title: 'VHDL - Procedures'
 description: 'Working with procedures'
 date: 2022-11-28
 lang: en
-key: vhdl-procedures
+key: vhdl_training
 tags: ['vhdl']
+series: 'VHDL training'
+seriesOrder: 5
 ---
 
 ## 1. VHDL Procedures
