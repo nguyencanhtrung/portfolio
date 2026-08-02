@@ -1,6 +1,5 @@
 ---
 import Base from '../layouts/Base.astro';
-import ContactIcon from './ContactIcon.astro';
 import type { Locale } from '../i18n/ui';
 
 interface Props {
@@ -42,9 +41,6 @@ const content = {
       'B.Eng. Electrical & Electronics Engineering — Hanoi University of Science and Technology (Microelectronics)',
     ],
     pubLabel: 'Publications',
-    contactLabel: 'Get in touch',
-    contact:
-      'The fastest way to reach me is email. I’m also on GitHub and LinkedIn.',
   },
   vi: {
     title: 'Giới thiệu',
@@ -60,8 +56,6 @@ const content = {
       'Kỹ sư Điện — Điện tử — Đại học Bách khoa Hà Nội (chuyên ngành vi điện tử)',
     ],
     pubLabel: 'Công bố khoa học',
-    contactLabel: 'Liên hệ',
-    contact: 'Cách nhanh nhất để liên hệ với tôi là email. Tôi cũng có mặt trên GitHub và LinkedIn.',
   },
 }[locale];
 
@@ -97,19 +91,6 @@ const altPath = locale === 'en' ? '/vi/about/' : '/about/';
           ))
         }
       </ul>
-      <h2>{content.contactLabel}</h2>
-      <p>{content.contact}</p>
-      <p class="links">
-        <a href="mailto:nguyencanhtrung@me.com" aria-label="Email" title="nguyencanhtrung@me.com">
-          <ContactIcon name="mail" />
-        </a>
-        <a href="https://github.com/nguyencanhtrung" rel="me noopener" aria-label="GitHub" title="github.com/nguyencanhtrung">
-          <ContactIcon name="github" />
-        </a>
-        <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener" aria-label="LinkedIn" title="linkedin.com/in/nguyencanhtrung">
-          <ContactIcon name="linkedin" />
-        </a>
-      </p>
     </div>
   </section>
 </Base>
@@ -123,22 +104,6 @@ const altPath = locale === 'en' ? '/vi/about/' : '/about/';
   }
   .prose {
     margin-top: 2rem;
-  }
-  .links {
-    display: flex;
-    gap: 1.1rem;
-  }
-  .links a {
-    color: var(--ink-2);
-    transition: color 0.15s ease;
-  }
-  .links a:hover {
-    color: var(--accent);
-  }
-  .links :global(svg) {
-    display: block;
-    width: 22px;
-    height: 22px;
   }
   .pubs li {
     margin-top: 0.6rem;
