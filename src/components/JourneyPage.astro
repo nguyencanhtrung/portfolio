@@ -353,10 +353,14 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     line-height: 1.55;
   }
   .story li::before {
-    content: '—';
+    content: '';
     position: absolute;
     left: 0;
-    color: var(--accent);
+    top: 0.52em;
+    width: 6px;
+    height: 6px;
+    border-radius: 50%;
+    background: var(--accent);
   }
   .metrics {
     list-style: none;

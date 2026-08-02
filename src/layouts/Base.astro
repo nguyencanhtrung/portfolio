@@ -6,6 +6,7 @@ import '@fontsource/jetbrains-mono/400.css';
 import '@fontsource/jetbrains-mono/vietnamese-400.css';
 import '../styles/global.css';
 import { t, localePath, type Locale } from '../i18n/ui';
+import ContactIcon from '../components/ContactIcon.astro';
 
 interface Props {
   locale: Locale;
@@ -97,11 +98,19 @@ const isActive = (href: string) =>
 
     <footer class="site-footer">
       <div class="container footer-inner">
-        <div class="mono footer-links">
-          <a href="mailto:nguyencanhtrung@me.com">nguyencanhtrung@me.com</a>
-          <a href="https://github.com/nguyencanhtrung" rel="me noopener">GitHub</a>
-          <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener">LinkedIn</a>
-          <a href="/rss.xml">RSS</a>
+        <div class="footer-links">
+          <a href="mailto:nguyencanhtrung@me.com" aria-label="Email" title="nguyencanhtrung@me.com">
+            <ContactIcon name="mail" />
+          </a>
+          <a href="https://github.com/nguyencanhtrung" rel="me noopener" aria-label="GitHub" title="github.com/nguyencanhtrung">
+            <ContactIcon name="github" />
+          </a>
+          <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener" aria-label="LinkedIn" title="linkedin.com/in/nguyencanhtrung">
+            <ContactIcon name="linkedin" />
+          </a>
+          <a href="/rss.xml" aria-label="RSS" title="RSS">
+            <ContactIcon name="rss" />
+          </a>
         </div>
         <p class="mono footer-meta">
           © {new Date().getFullYear()} {t(locale, 'footer.rights')} · {t(locale, 'footer.builtwith')}
@@ -220,13 +229,19 @@ const isActive = (href: string) =>
       .footer-links {
         display: flex;
         flex-wrap: wrap;
-        gap: 1.25rem;
+        gap: 1.1rem;
       }
       .footer-links a {
         color: var(--ink-2);
+        transition: color 0.15s ease;
       }
       .footer-links a:hover {
         color: var(--accent);
+      }
+      .footer-links :global(svg) {
+        display: block;
+        width: 20px;
+        height: 20px;
       }
       .footer-meta {
         color: var(--ink-3);
