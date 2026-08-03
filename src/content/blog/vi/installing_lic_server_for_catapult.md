@@ -1,36 +1,42 @@
 ---
-title: 'License server for Catapult (Mentor HLS)'
-description: 'Standing up a FLEXlm licence server for Catapult HLS: what to download, how to make the host match the MAC address and hostname the licence was issued against, and the commands for running it day to day.'
+title: 'Dựng license server cho Catapult (Mentor HLS)'
+description: 'Dựng FLEXlm license server cho Catapult HLS: cần tải những gì, làm sao để MAC address và hostname của máy khớp với thông tin license được cấp, và bộ lệnh vận hành hằng ngày.'
 date: 2022-12-16
-lang: en
+lang: vi
 key: installing_lic_server_for_catapult
 tags: ['catapult']
 ---
 
-## 1. Requirements
+## 1. Chuẩn bị
 
-You need 3 things to setup a license server:
+Cần 3 thứ để dựng license server:
 
 * License server
-* License file
-* Software to change your MAC address if you running license server which has different MAC address
+* File license
+* Phần mềm đổi MAC address, trong trường hợp máy chạy license server có MAC
+  khác với MAC ghi trong file license
 
 ### 1.1 License server
 
-Catapult uses FLEXlm daemon to run license server. Firstly, you need to download `License Server` from Mentor [website](https://account.mentor.com/licenses/download).
+Catapult dùng FLEXlm daemon để chạy license server. Trước hết tải
+`License Server` từ [website](https://account.mentor.com/licenses/download) của
+Mentor.
 
-The FlexNet software includes `lmgrd` deamon, `lmutil` and etc.
+Gói FlexNet gồm daemon `lmgrd`, `lmutil` và một số tiện ích khác.
 
-If already installed Catapult software, just need to go to `<path_to_installation>/Mgc_home/pkgs/` to get the above software. 
+Nếu đã cài sẵn Catapult thì chỉ cần vào
+`<path_to_installation>/Mgc_home/pkgs/` là có đủ các chương trình trên.
 
 ### 1.2 MAC changer
 
-You can install `macchanger` to change your MAC address.
+Cài `macchanger` để đổi MAC address:
 
 ```bash
 $ sudo apt install macchanger
 ```
-For more information, please look at this [website](https://linuxconfig.org/change-mac-address-with-macchanger-linux-command)
+
+Chi tiết thêm xem
+[ở đây](https://linuxconfig.org/change-mac-address-with-macchanger-linux-command).
 
 ```bash
 $ ip a
@@ -57,59 +63,64 @@ $ ip a
 
 ```
 
-Looking for MAC address of your ethernet interface. In my case, it is `eno2` and the MAC is `00:20:00:04:10:AC`. Just remember the interface name `eno2`.
+Tìm MAC address của interface ethernet. Ở đây là `eno2` với MAC
+`00:20:00:04:10:AC`. Nhớ lấy tên interface `eno2`.
 
-### 1.3 Name your host
+### 1.3 Đặt tên host
 
-Open `etc/hosts` and adding the following line, then saving it. `<hostname>` is the name you want to name your host.
+Mở `etc/hosts`, thêm dòng dưới đây rồi lưu lại. `<hostname>` là tên muốn đặt
+cho máy.
 
 ```bash
 127.0.1.1       <hostname>
 ```
 
-In my case, it is 
+Ở đây là:
+
 ```bash
 127.0.1.1    tesla
 ```
 
-### 1.4 Openning tcp port
+### 1.4 Mở cổng TCP
 
-If your firewall is not active like mine, no need to open anything.
+Nếu firewall đang tắt như máy này thì không cần mở gì cả.
 
 ```bash
 $ sudo ufw status verbose
 Status: inactive
 ```
 
-If firewall is enable, using this [instruction](https://www.cyberciti.biz/faq/how-to-open-firewall-port-on-ubuntu-linux-12-04-14-04-lts/) to open a port dedicated to license server.
+Nếu firewall đang bật, làm theo
+[hướng dẫn này](https://www.cyberciti.biz/faq/how-to-open-firewall-port-on-ubuntu-linux-12-04-14-04-lts/)
+để mở một cổng riêng cho license server.
 
-## 2. Modifying license file
+## 2. Sửa file license
 
-After finishing section 1, open the license file and edit it
-
+Sau khi xong phần 1, mở file license ra sửa:
 
 ```bash
 SERVER <hostname> <MAC ADDRESS> <port>
 DAEMON mgcld <PATH to mgcld inside license server package>
 ```
 
-Here is my setting
+Cấu hình thực tế:
+
 ```bash
 SERVER tesla 0020000410AC 1718
 DAEMON mgcld /home/tesla/license/catapult/mgls_v9-23_5-6-0.aol/lib/mgcld
 ```
 
-**Catapult 2023.1 and later use `SALTD` instead of `MGCLD`, so replace `mgcld` with `saltd`:**
+**Catapult từ bản 2023.1 trở đi dùng `SALTD` thay cho `MGCLD`, nên chỉ cần thay
+`mgcld` bằng `saltd`:**
 
 ```bash
 SERVER tesla 0020000410AC 1718
 DAEMON saltd /opt/Siemens/Catapult/2023.1/Mgc_home/pkgs/FlexNet-11-19-0/Lnx64_x86-64/saltd
 ```
 
+## 3. Tạo script khởi động
 
-## 3. Create scripting file
-
-Creating script file named `start.sh` to start deamon has following content
+Tạo file `start.sh` để chạy daemon với nội dung sau:
 
 ```bash
 # Change MAC
@@ -120,16 +131,18 @@ export LM_LICENSE_FILE=/home/tesla/license/catapult/catapult.txt
 export PATH="/home/tesla/license/catapult/mgls_v9-23_5-6-0.aol/bin":$PATH
 /home/tesla/license/catapult/mgls_v9-23_5-6-0.aol/bin/lmgrd
 ```
-Commands `sudo macchanger -m 00:20:00:04:10:AC eno2` is used to change MAC ADDRESS to match with the one in the license file.
 
-The third command is the pointer to license file.
+Lệnh `sudo macchanger -m 00:20:00:04:10:AC eno2` đổi MAC address cho khớp với
+MAC ghi trong file license.
 
-The fourth command is `PATH` to executable files which contains the program in the last command.
+Lệnh thứ ba trỏ tới file license.
 
-The last command is to run license deamon.
+Lệnh thứ tư đưa thư mục chứa các file thực thi vào `PATH`, tức là nơi có chương
+trình được gọi ở lệnh cuối.
 
-Note: You can get export `lmgrd` from installation path of Catapult like following:
+Lệnh cuối khởi động license daemon.
 
+Lưu ý: có thể lấy `lmgrd` ngay từ thư mục cài đặt Catapult:
 
 ```bash
 # Change MAC
@@ -141,53 +154,53 @@ export PATH="/opt/Siemens/Catapult/2023.1/Mgc_home/bin":$PATH
 /opt/Siemens/Catapult/2023.1/Mgc_home/bin/lmgrd
 ```
 
-Then, running
+Sau đó chạy:
 
 ```bash
 source start.sh
 ```
 
-Another way, to start license server deamon directly without scripting
+Cách khác, khởi động license daemon trực tiếp không cần script:
 
 ```bash
 <FLEXlm location>/lmgrd -c <path to license file>/license.txt \[-l <log file name>]
 ```
 
-## 4. Important commands
+## 4. Các lệnh cần nhớ
 
-### 4.1 Stop license server
+### 4.1 Dừng license server
 
 ```bash
 lmutil lmdown -q -force
 ```
 
-### 4.2 Restart license server
+### 4.2 Khởi động lại license server
 
 ```bash
 lmgrd -c lic.dat -l debug.log
 ```
 
-## 5. Checking status of license
+## 5. Kiểm tra trạng thái license
 
-### 5.1 Having only one licence server running
+### 5.1 Khi chỉ chạy một license server
 
 ```bash
 lmutil lmstat -a -c
 ```
 
-### 5.2 Having multiple license server running
+### 5.2 Khi chạy nhiều license server
 
 ```bash
-lmutil lmstat -a -c <port>@<hostname or host IP ~>
+lmutil lmstat -a -c <port>@<hostname hoặc IP của host>
 ```
 
-Example
+Ví dụ:
 
 ```bash
 lmutil lmstat -a -c 1718@tesla
 ```
 
-The message below is OK.
+Log như dưới đây là đạt.
 
 ```bash
 lmutil - Copyright (c) 1989-2018 Flexera. All Rights Reserved.
@@ -221,16 +234,16 @@ Users of zncwmbase:  (Total of 1 license issued;  Total of 0 licenses in use)
 Users of CatapultUltra_c:  (Total of 1 license issued;  Total of 1 license in use)
 ```
 
-
-### 5.3 Errors may happen
+### 5.3 Lỗi có thể gặp
 
 ```bash
 lmgrd: No such file or directory
 ```
 
-**Cause**
+**Nguyên nhân**
 
-A possible reason is the missing Linux Standard Base (LSB) components which are required by the lmgrd. To check, if the requirements are installed, the following commands can be executed:
+Một khả năng là thiếu các thành phần Linux Standard Base (LSB) mà `lmgrd` cần.
+Kiểm tra bằng các lệnh sau:
 
 ```bash
 $ ldd lmgrd
@@ -244,9 +257,11 @@ $ ldd lmgrd
 $ ls -l /lib64/ld-lsb-x86-64.so.3
 ls: cannot access '/lib64/ld-lsb-x86-64.so.3': No such file or directory
 ```
-As seen, the `/lib64/ld-lsb-x86-64.so.3` is missing.
 
-**Solution**
+Ở đây thiếu `/lib64/ld-lsb-x86-64.so.3`.
+
+**Cách xử lý**
+
 ```bash
 $ sudo apt-get install lsb
 ```

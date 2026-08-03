@@ -1,14 +1,16 @@
 ---
 title: 'Psioniq file header for VScode'
-description: 'Tự động chèn file header trong VSCode bằng extension psioniq: cấu hình từng trường, template riêng cho từng ngôn ngữ, và tự động cập nhật thông tin sửa đổi mỗi lần lưu file.'
+description: 'Automatic file headers in VSCode with the psioniq extension: what each config block controls, per-language templates, and keeping the modification fields up to date on every save.'
 date: 2023-09-15
-lang: vi
+lang: en
 key: vscode-psioniq-file-header
 tags: ['vscode']
 ---
-## 1. Giới thiệu về psioniq extension
+## 1. What the psioniq extension does
 
-Đây là một extension hỗ trợ chèn header vào file code chỉ với phím tắt `Ctrl+Alt+H` (x2 - nhấn 2 lần). Ngoài ra, nó còn hỗ trợ chèn `Revision` với tổ hợp phím `Ctrl+Alt+C` (x2 - nhấn 2 lần). Dưới đây là một ví dụ header được chèn vào code VHDL:
+It inserts a header into a source file with a single shortcut, `Ctrl+Alt+H`
+(pressed twice). It also inserts a `Revision` entry with `Ctrl+Alt+C` (twice).
+Here is a header it produced for a VHDL file:
 
 ```
 //-----------------------------------------------------------------------------
@@ -37,14 +39,15 @@ tags: ['vscode']
 //-----------------------------------------------------------------------------
 ```
 
+## 2. Configuration
 
-## 2. Thiết lập
+This section covers how to set psioniq up so that it recognises the `language`
+of the file and inserts the matching header.
 
-Phần này sẽ mô tả cách thiết lập psioniq, để nó có thể tự động nhận diện `language` và chèn header phù hợp. 
+Get to the settings via `File` > `Preferences` > `Settings` > `Extensions` >
+`psioniq File Header` > `Editing settings.json`.
 
-Thiết lập `psioniq` bằng cách truy cập:  `File` > `Preferences` > `Settings` > `Extensions` > `psioniq File Header` > `Editing settings.json`
-
-### 2.1 Trường `psi-header.config`
+### 2.1 `psi-header.config`
 
 ```jsonc
 "psi-header.config": {
@@ -62,13 +65,14 @@ Thiết lập `psioniq` bằng cách truy cập:  `File` > `Preferences` > `Sett
     }
 ```
 
-Trường này chứa thông tin chung về `LICENSE`, `author`, `initials` (viết tắt tên tác giả để chèn vào phần `HISTORY` hay `Revision`)
+This block holds the general information: `LICENSE`, `author`, and `initials`
+(the short form of the author's name used in the `HISTORY` and `Revision`
+entries).
 
+### 2.2 `psi-header.changes-tracking`
 
-### 2.2 Trường `psi-header.changes-tracking`
-
-Trường này thiết lập cơ chế tracking của extension và cách extension update header như ở ví dụ dưới đây:
-
+This block sets up the extension's tracking behaviour and how it updates an
+existing header:
 
 ```jsonc
   "psi-header.changes-tracking": {
@@ -93,26 +97,32 @@ Trường này thiết lập cơ chế tracking của extension và cách extens
     }
 ```
 
-Tracking được `activate`, extension sẽ tìm đến trường text `Modified By` và `Last Modified` để cập nhật thông tin với format được mô tả ở `modDateFormat`.
+With tracking active, the extension looks for the text `Modified By` and
+`Last Modified` and refreshes them using the format given in `modDateFormat`.
 
-Chú ý rằng: trường text `Modified By` và `Last Modified` phụ thuộc vào nội dung header mà bạn quy định. Việc thiết lập nội dung của header được thực hiện ở mục 2.4.
+Note that those two strings have to match whatever your header template
+actually says — they are labels the extension searches for, not fixed field
+names. The template itself is set up in section 2.4.
 
-### 2.3 Trường `psi-header.lang-config`
+### 2.3 `psi-header.lang-config`
 
-Trường này thiết lập định dạng của header ứng với mỗi một `language` khác nhau. 
+This block defines the header's shape for each `language`:
 
-* `Language`: được quy định bởi VScode theo [link](https://code.visualstudio.com/docs/languages/identifiers)
-* `begin`   : dòng đầu tiên của header
-* `prefix`  : Ký tự đầu dòng của header - thường là comment syntax của mỗi `language`. Đối với C là `//`, VHDL là `--`
-* `suffix`  : Ký tự cuối dòng của header -- thường để taọ header dưới dạng một `text box`
-* `linelength`: quy định chiều dài tối đa của một dòng.
-* `end`     : dòng cuối cùng của header
-* `forceToTop`: force chèn header vào top của file, thay vì tại vị trí con trỏ.
-* `mapTo`   : ánh xạ cấu hình của một `language` với cấu hình được định nghĩa trước, tránh việc khai báo nhiều lần.
-* `afterHeader`: được dùng để thiết lập đoạn text bên dưới header, thường là code template
+* `Language`: the identifier VSCode uses, listed [here](https://code.visualstudio.com/docs/languages/identifiers)
+* `begin`: the first line of the header
+* `prefix`: the characters that open each line — usually the language's comment
+  syntax, `//` for C and `--` for VHDL
+* `suffix`: the characters that close each line — mostly used to draw the
+  header as a text box
+* `linelength`: the maximum line length
+* `end`: the last line of the header
+* `forceToTop`: insert the header at the top of the file rather than at the
+  cursor
+* `mapTo`: reuse another language's configuration instead of repeating it
+* `afterHeader`: text placed below the header, typically a code template
 
-Trên đây là một vài thiết lập phổ biến, nếu bạn muốn tìm hiểu thêm các thiết lập khác hãy truy cập vào psioniq [language config](https://marketplace.visualstudio.com/items?itemName=psioniq.psi-header#language-configuration)
-
+Those are the common settings; the rest are in psioniq's
+[language config](https://marketplace.visualstudio.com/items?itemName=psioniq.psi-header#language-configuration).
 
 ```jsonc
 "psi-header.lang-config": [
@@ -146,14 +156,16 @@ Trên đây là một vài thiết lập phổ biến, nếu bạn muốn tìm h
 ]
 ```
 
-Đây là một ví dụ về việc thiết lập header file cho file `SystemVerilog`, `verilog` và các ngôn ngữ còn lại.
+That is a header setup for `SystemVerilog`, `verilog`, and everything else.
 
+### 2.4 `psi-header.templates`
 
-### 2.4 Trường `psi-header.templates`
+This block describes the header's content. If you use different wording for
+`Last Modified` and `Modified By`, change `psi-header.changes-tracking` to
+match — otherwise the extension cannot find the fields it is supposed to
+update.
 
-Mô tả template của header. Chú ý: nếu bạn sử dụng cụm từ khác để mô tả `Last Modified` và `Modified by` thì phải thay đổi `si-header.changes-tracking` bằng cụm từ tương ứng để extension có thể lọc và thay đổi nội dụng.
-
-Dưới đây là ví dụ về header teamplate của `SystemVerilog` và các định dạng còn lại.
+Here are the templates for `SystemVerilog` and for everything else:
 
 ```jsonc
 "psi-header.templates": [
@@ -216,10 +228,9 @@ Dưới đây là ví dụ về header teamplate của `SystemVerilog` và các 
 ]
 ```
 
-## 3. Cấu hình hoàn thiện
+## 3. The complete configuration
 
-Cấu hình hoàn thiện bao gồm tất cả các trường mô tả bên trên và được lưu tại `settings.json`
-
+Everything above, assembled into one `settings.json`:
 
 ```jsonc
 {
