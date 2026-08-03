@@ -1,43 +1,48 @@
 ---
-title: 'VHDL - Procedures'
-description: 'Procedures in VHDL: parameter modes and classes, where to declare one so the right code can see it, and two worked examples — a bus-access routine for a testbench and a synthesisable register-field procedure.'
+title: 'VHDL - Procedure'
+description: 'Procedure trong VHDL: mode và class của tham số, khai báo ở đâu để đúng phần code nhìn thấy được, cùng hai ví dụ thực tế — một routine truy cập bus cho testbench và một procedure ghi register field tổng hợp được.'
 date: 2022-11-28
-lang: en
+lang: vi
 key: vhdl-procedures
 tags: ['vhdl']
 series: 'VHDL training'
 seriesOrder: 5
 ---
 
-## 1. VHDL Procedures
+## 1. Procedure trong VHDL
 
-In a large design, there are some portions of code which might be repeated or called multiple times.
+Trong một thiết kế lớn, có những đoạn code bị lặp lại hoặc được gọi nhiều lần.
 
-A common block that encapsulates some functionality within the design, it is called sub-program.
+Một khối chung đóng gói một chức năng nào đó trong thiết kế được gọi là
+sub-program.
 
-Procedure is a type of subprogram that can be called multiple times throughout the design
+Procedure là một dạng sub-program, có thể gọi nhiều lần ở khắp thiết kế.
 
-**Advantages of using a procedure**
+**Lợi ích của việc dùng procedure**
 
-* Avoids code repetition
-* Can be declared with or without any arguments
-* Can have input, output and inout ports
-* May/may not include timing delays as procedures can be executed in non-zero simulation time
+* Tránh lặp code
+* Khai báo được với hoặc không có tham số
+* Có được cổng input, output và inout
+* Có thể có hoặc không có timing delay, vì procedure được phép thực thi trong
+  khoảng thời gian mô phỏng khác 0
 
-## 2. Highlights for procedure
+## 2. Những điểm cần nhớ về procedure
 
-* No return as the function
-* Unlike functions, procedures can contain wait-statements
-* Do not have to specify the length of data type like port declaration. Just need to specify type `std_logic_vector`, for example, is enough.
-* Procedure can be declared with or without arguments
-  * Procedures without arguments are used to run sequences of events - mostly used in testbench where procedure is used to drive specific signals
-  * Parameters (inputs/outputs/inout) to a procedure can be signals, variables, or constants
-* Procedure is declared within the architecture's declarative region or in the package
+* Không trả về giá trị như function
+* Khác function, procedure chứa được câu lệnh `wait`
+* Không cần chỉ định độ dài của kiểu dữ liệu như khi khai báo port. Chỉ cần ghi
+  kiểu, ví dụ `std_logic_vector`, là đủ.
+* Procedure khai báo được có hoặc không có tham số
+  * Procedure không tham số dùng để chạy một chuỗi sự kiện — chủ yếu gặp trong
+    testbench, nơi procedure được dùng để lái một số tín hiệu cụ thể
+  * Tham số (input/output/inout) của procedure có thể là signal, variable hoặc
+    constant
+* Procedure được khai báo trong vùng declarative của architecture, hoặc trong
+  package
 
+## 3. Cấu trúc của procedure
 
-## 3. Procedure structure
-
-**Syntax**
+**Cú pháp**
 
 ```vhdl
 procedure PROC1 ( <class> <arg1> : <mode|direction> <type>;
@@ -51,42 +56,46 @@ end procedure PROC1;
 
 ```
 
-A procedure’s parameter list defines its inputs and outputs, kind of like a mini-module. It can be a signal or a constant, but unlike a module, it can also be a variable. You can declare objects between the “is” and “begin” keywords that are only valid inside the procedure. These may include constants, variables, types, subtypes, and aliases, but not signals.
+Danh sách tham số của procedure định nghĩa đầu vào và đầu ra của nó, gần giống
+một module thu nhỏ. Tham số có thể là signal hoặc constant, nhưng khác module ở
+chỗ nó còn có thể là variable. Giữa hai từ khoá `is` và `begin`, bạn khai báo
+được những đối tượng chỉ có hiệu lực bên trong procedure: constant, variable,
+type, subtype và alias — nhưng không có signal.
 
-Unlike functions, procedures may contain wait-statements. Therefore, they are often used in testbenches like simple BFM’s for simulating interfaces, or for checking output from the device under test (DUT).
+Khác function, procedure chứa được câu lệnh `wait`. Vì vậy nó hay được dùng
+trong testbench như một BFM đơn giản để mô phỏng interface, hoặc để kiểm tra
+đầu ra của DUT.
 
-### 3.1 Procedure parameters
+### 3.1 Tham số của procedure
 
-Procedure parameters are similar to port declartions.
+Tham số của procedure tương tự như khai báo port.
 
-It can be:
+Có thể là:
 
 * Mode IN
 * Mode OUT
 * Mode INOUT
 
-Inside a procedure, parameters with specified mode or direction is restricted as following table. 
+Bên trong procedure, tham số với mode tương ứng bị ràng buộc như bảng sau:
 
-| Mode  | Readable | Changed |
+| Mode  | Đọc được | Thay đổi được |
 | :-:   | :-:      | :-:  |
-| IN    | OK       | NO   |
-| OUT   | NO       | Assign back to caller |
-| INOUT | OK       | Assign back to caller |
+| IN    | Có       | Không   |
+| OUT   | Không    | Gán ngược về nơi gọi |
+| INOUT | Có       | Gán ngược về nơi gọi |
 
-The "not readable" rule for mode OUT is a VHDL-93 restriction. VHDL-2008 lifted
-it, so an OUT parameter can be read back inside the procedure — but only if the
-tool is actually running in 2008 mode, which for many synthesis flows it is
-not.
+Quy tắc "mode OUT không đọc được" là ràng buộc của VHDL-93. VHDL-2008 đã bỏ
+ràng buộc này, nên tham số OUT đọc lại được bên trong procedure — nhưng chỉ khi
+tool thực sự chạy ở chế độ 2008, điều mà nhiều flow tổng hợp không bật.
 
-
-**Example**
+**Ví dụ**
 
 ```vhdl
 procedure SLV_REVERSE   ( SLV_IN  : IN  std_logic_vector;
                           SLV_OUT : OUT std_logic_vector
                         ) is
-  -- Normalise both parameters to a 0-based downto range, so the procedure
-  -- works no matter how the caller declared its vectors.
+  -- Đưa cả hai tham số về cùng một range downto đánh số từ 0, để procedure
+  -- chạy đúng bất kể nơi gọi khai báo vector kiểu gì.
   alias a : std_logic_vector(SLV_IN'length-1 downto 0)  is SLV_IN;
   alias b : std_logic_vector(SLV_OUT'length-1 downto 0) is SLV_OUT;
 begin
@@ -97,18 +106,17 @@ end procedure SLV_REVERSE;
 
 ```
 
-Two details in there are worth stopping on, because both are easy to get wrong:
+Có hai chi tiết trong đoạn trên đáng dừng lại, vì cả hai đều rất dễ sai:
 
-- `SLV_OUT` has no explicit class, so by the table in 3.2 it is a **variable**,
-  and a variable is assigned with `:=`. Writing `<=` here does not compile. If
-  you want `<=`, declare the parameter `signal SLV_OUT : out std_logic_vector`.
-- Never index an unconstrained parameter with a hard-coded range. The caller
-  decides whether its vector is `downto` or `to`, and where it starts. The two
-  aliases pin both parameters to the same 0-based `downto` range, and the loop
-  works from there.
+- `SLV_OUT` không khai báo class, nên theo bảng ở mục 3.2 nó là **variable**, và
+  variable thì gán bằng `:=`. Viết `<=` ở đây sẽ không biên dịch được. Muốn
+  dùng `<=` thì phải khai báo `signal SLV_OUT : out std_logic_vector`.
+- Đừng bao giờ đánh index một tham số unconstrained bằng range cứng. Nơi gọi
+  mới là chỗ quyết định vector của họ là `downto` hay `to`, và bắt đầu từ đâu.
+  Hai dòng alias ghim cả hai tham số về cùng một range `downto` đánh số từ 0,
+  và vòng lặp làm việc trên đó.
 
-
-Want to call the above procedure?
+Gọi procedure trên như sau:
 
 ```vhdl
 SLV_REVERSE   ( SLV_IN      => D_IN, 
@@ -116,48 +124,47 @@ SLV_REVERSE   ( SLV_IN      => D_IN,
               );
 ```
 
-To make the mapping valid, the `formal` and `actual` must be of same `data type`, `class` and `mode`
+Để ánh xạ hợp lệ, `formal` và `actual` phải trùng nhau về `data type`, `class`
+và `mode`.
 
+### 3.2 Class của tham số
 
-### 3.2 Parameters classes
-
-VHDL supports four classes of objects
+VHDL hỗ trợ bốn class đối tượng:
 
 * Constant
-* Variable 
+* Variable
 * Signal
 * File
 
-If classes are not specified in the argument list. The default class will be selected
+Nếu không chỉ định class trong danh sách tham số, class mặc định sẽ được dùng:
 
-| Mode  | Default classes|
+| Mode  | Class mặc định |
 | :-:   | :-:   |
 | IN    | constant |
 | OUT   | variable |
 | INOUT | variable |
 
+### 3.3 Chỉ định tường minh class của tham số
 
-### 3.3 Explicitly specify class of procedure parameters
+Chỉ định tường minh class cho tham số input và output của procedure thường rất
+có ích. Nó làm việc sử dụng đơn giản hơn và mở rộng khả năng của procedure.
 
-Explicitly specify class of input and output parameters declared in a procedure is oftern helpful. It simplifies usage and expands capabilities of a procedure.
-
-Here is an example when not specified class in the argument list
+Đây là ví dụ khi không chỉ định class trong danh sách tham số:
 
 ![](/images/blog/vhdl-procedures/3.png)
 
-We need a variable `TEMP_BUS` to pass value to a signal `OUT_BUS`.
+Ta cần một variable `TEMP_BUS` để chuyển giá trị sang signal `OUT_BUS`.
 
-
-And explicitly specified class for parameters
+Còn đây là khi chỉ định tường minh class:
 
 ![](/images/blog/vhdl-procedures/4.png)
 
-We can see, with explicited declaration, there is no need of variable `TEMP_BUS` to pass value to signal `OUT_BUS`.
+Có thể thấy, với khai báo tường minh thì không cần variable `TEMP_BUS` để
+chuyển giá trị sang signal `OUT_BUS` nữa.
 
+## 4. Khai báo procedure ở đâu?
 
-## 4. Where to declare a procedure?
-
-**In the declarative region of an architecture**
+**Trong vùng declarative của architecture**
 
 ```vhdl
 library ieee;
@@ -244,7 +251,7 @@ end process rx_test_proc;
 end architecture;
 ```
 
-**In a package**
+**Trong package**
 
 ```vhdl
 library ieee;
@@ -332,17 +339,16 @@ end package body soc_sim;
 
 ```
 
-
-In the testbench
+Trong testbench:
 
 ```vhdl
 library work;
   use work.soc_sim.all;
 ```
 
-## 5. Practical examples
+## 5. Ví dụ thực tế
 
-### 5.1 BUS access (testbench)
+### 5.1 Truy cập BUS (testbench)
 
 ```vhdl
 p_control : process
@@ -465,20 +471,20 @@ wait;
 end process p_control;
 ```
 
-### 5.2 Synthesized procedure
+### 5.2 Procedure tổng hợp được
 
-A procedure is synthesisable as long as it describes only combinational or
-clocked behaviour — no `wait`, no `after`, no absolute time. What makes it
-useful in RTL is that the *caller* stays readable while the repeated logic
-lives in one place.
+Một procedure tổng hợp được, miễn là nó chỉ mô tả hành vi tổ hợp hoặc hành vi
+theo clock — không `wait`, không `after`, không thời gian tuyệt đối. Cái làm nó
+đáng dùng trong RTL là *nơi gọi* vẫn đọc được dễ dàng, còn phần logic lặp đi
+lặp lại thì nằm gọn ở một chỗ.
 
-Here a procedure updates a register bank field, called from inside a clocked
-process:
+Dưới đây là một procedure cập nhật field của register bank, được gọi từ bên
+trong một process theo clock:
 
 ```vhdl
 architecture rtl of csr_block is
 
-  -- Declared in the architecture: visible to every process below.
+  -- Khai báo trong architecture: mọi process bên dưới đều nhìn thấy.
   procedure set_field (
     signal   reg    : inout std_logic_vector(31 downto 0);
     constant hi     : in    natural;
@@ -508,19 +514,19 @@ begin
 end architecture rtl;
 ```
 
-Three rules keep a procedure synthesisable:
+Ba quy tắc giữ cho procedure tổng hợp được:
 
-- **No timing control.** `wait`, `wait for`, and signal assignments with
-  `after` are simulation-only. A synthesisable procedure is pure logic that the
-  caller places inside its own clocked process.
-- **Signal parameters need a class.** A parameter the procedure assigns to must
-  be declared `signal ... inout` (or `out`). Leaving the class implicit makes it
-  a variable, and the assignment then never reaches the outside world.
-- **The procedure inherits the caller's clock.** It has no clock of its own; it
-  simply expands inline where it is called. Calling the same procedure from two
-  different clocked processes creates two independent copies of the logic.
+- **Không điều khiển thời gian.** `wait`, `wait for`, và phép gán signal có
+  `after` đều chỉ dành cho mô phỏng. Một procedure tổng hợp được là logic
+  thuần, và nơi gọi mới là chỗ đặt nó vào trong process theo clock của mình.
+- **Tham số signal phải khai báo class.** Tham số mà procedure gán vào phải
+  được khai báo là `signal ... inout` (hoặc `out`). Để class ngầm định thì nó
+  thành variable, và phép gán sẽ không bao giờ ra được tới bên ngoài.
+- **Procedure thừa hưởng clock của nơi gọi.** Bản thân nó không có clock riêng;
+  nó chỉ được trải thẳng vào đúng chỗ được gọi. Gọi cùng một procedure từ hai
+  process khác clock sẽ tạo ra hai bản logic độc lập.
 
-Where to declare it decides the reach: inside an architecture for one entity,
-inside a package for the whole project. A package is the right home once two
-entities need the same routine — it also means the procedure gets reviewed once
-instead of drifting into two slightly different copies.
+Khai báo ở đâu quyết định phạm vi dùng lại: trong architecture thì chỉ một
+entity dùng được, trong package thì cả project dùng được. Package là chỗ đúng
+một khi có hai entity cùng cần một routine — và nó cũng có nghĩa là procedure
+đó được review một lần, thay vì trôi dần thành hai bản hơi khác nhau.
