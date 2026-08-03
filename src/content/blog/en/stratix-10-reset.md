@@ -93,13 +93,18 @@ sys_rst 	<= locked AND (NOT(ninit_done));
 
 ![](/images/blog/stratix-10-reset/9.png)
 
-Note: Có thể thấy logic của `sys_rst <= locked AND (NOT(ninit_done))` không hoàn toàn đúng với bảng truth table mà nó phải là`sys_rst <= ninit_done OR (NOT(locked))`. Tuy nhiên, thực tế xảy ra 2 điều sau:
-<ul>
-	<li>Ở giai đoạn power-up, trạng thái `locked` của PLL luôn đạt được sớm hơn so với việc toàn bộ fabric hoàn thành việc chuyển sang trạng thái người dùng</li>
-	<li>Khi ở trong trạng thái operating, lúc này sys_rst chỉ phụ thuộc vào `rst_in` để reset user logic => chỉ phụ thuộc vào trạng thái của `locked`</li>
-</ul>
+Note that `sys_rst <= locked AND (NOT(ninit_done))` is not strictly what the
+truth table asks for — that would be
+`sys_rst <= ninit_done OR (NOT(locked))`. Two things make the simpler form safe
+in practice:
 
-Từ đó có thể thấy trạng thái thứ 4 của truth table sẽ không xảy ra trong thực tế, nên có thể sử dụng `sys_rst <= locked AND (NOT(ninit_done))` để điều khiển `sys_rst`
+* During power-up, the PLL reaches `locked` before the whole fabric has finished
+  entering user mode. So `ninit_done` is the later of the two, and it dominates.
+* Once running, `sys_rst` only follows `rst_in` to reset user logic, which means
+  it only depends on `locked`.
+
+In other words the fourth row of the truth table never occurs on real hardware,
+so `sys_rst <= locked AND (NOT(ninit_done))` is a valid way to drive `sys_rst`.
 
 ## 3. Register initialization during Power-On
 
