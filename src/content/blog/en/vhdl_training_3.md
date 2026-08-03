@@ -44,19 +44,22 @@ signal A_WORD: std_logic_vector (3 downto 0) := "0011";
 ```
 The A_WORD signal shown here has a composite data type. 
 * It's an array of four elements, each with the `std_logic` type. 
-* There is <strong>no pre-defined LSB or MSB interpretation</strong>
+* There is **no pre-defined LSB or MSB interpretation**
 * Therefore, the compiler does not automatically read this value as 3.
 * Note that the double quotes are used for any `bit_vector`, `std_logic_vector`, or `string` object.
 * In this case, VHDL does not infer that the higher index is MSB (3 in this example) but simply indexes the vector from left to right.
 * Choosing and using one indexing method consistently is good design practice. The most popular is the `(3 downto 0)` method
 
-## 2. std logic vector and signed, unsigned
+## 2. std_logic_vector, signed and unsigned
 
-### 2.1 std logic vector
+### 2.1 std_logic_vector
 * An array of type `std_logic`.
 * Defined in the `std_logic_1164` package, which is part of the IEEE library.
-* Have no positional meaning (signed bit)
-* "0110" in `std_logic_vector` is always interpreted as 6.
+* Has no positional meaning — no sign bit, and no numeric interpretation at all
+* `"0110"` in a `std_logic_vector` is just a pattern of four bits. It is not the
+  number 6; nothing in the language reads it as a number. Give it to
+  `unsigned` and it means 6, give it to `signed` and it still means 6, but as a
+  `std_logic_vector` the question has no answer.
 
 ### 2.2 signed and unsigned
 * Arrays of type `std_logic`
@@ -72,7 +75,7 @@ The A_WORD signal shown here has a composite data type.
 entity bcd_add_and_display is
     port(
         clk         : in std_logic;
-        bcd_a_in    : in unsigned (3 odwnto 0);
+        bcd_a_in    : in unsigned (3 downto 0);
         bcd_b_in    : in unsigned (3 downto 0);
         led_7seg_out: out std_logic_vector (6 downto 0)
 
@@ -96,7 +99,7 @@ The `NUMERIC_STD` library contains appropriate overloading functions to support 
 
 ### 3.1 Arrays
 
-Arrays are groups of elements, all of the <strong>same type</strong>. The syntax of an array declaration is shown here.
+Arrays are groups of elements, all of the **same type**. The syntax of an array declaration is shown here.
 
 ```vhdl
 type <new type name> is array ( <range> ) of <data_type>
@@ -113,7 +116,7 @@ signal B_BUS : WORD;
 
 In this example, `WORD` is an array of four elements of the type `std_logic`.
 
-If a signal B_BUS is of type WORD, then it becomes an array of std_logic. Thus, the possible values for each element are 'U', 'X', '0', '1', 'Z', 'W, 'U, 'H', or '-'. Therefore, there are 9^4 (6561) possibilities versus 16 if the type were "bit".
+If a signal B_BUS is of type WORD, then it becomes an array of std_logic. Thus, the possible values for each element are 'U', 'X', '0', '1', 'Z', 'W', 'L', 'H', or '-'. Therefore, there are 9^4 (6561) possibilities versus 16 if the type were "bit".
 
 ```vhdl
 type DATA is array (0 to 3) of integer range 0 to 9;
@@ -161,14 +164,22 @@ DATA_WORD <= O"5157";
 DATA_WORD <= B"1010_0110_1111";
 ```
 
-Vivado synthesis <strong>only allows underscores</strong> when the base is explicitly defined via <strong>hex, octal, or binary</strong> notation.
+Vivado synthesis **only allows underscores** when the base is explicitly defined via **hex, octal, or binary** notation.
 
 ```vhdl
 signal DATA_WORD : std_logic_vector(10 downto 0);
 DATA_WORD <= B"100_0110_1111";
 DATA_WORD <= X"46F";
 ```
-Example 2 illustrates that the size of the vector must be an integer multiple of the base. That is, to use the binary base, the length of the vector must be divisible by two. This is not the case here as the length of the DATA WORD is eleven. Similarly, for hexadecimal base, the length of the vector must be divisible by sixteen, but it is twelve in this case. Hence, both the assignments show an error. [Note: I think the first assignment of binary base is correct]
+Example 2 is about the length each base implies. A based literal carries a
+fixed number of bits per digit: 1 for binary, 3 for octal, 4 for hexadecimal.
+So the literal's total width has to match the signal it is assigned to.
+
+`DATA_WORD` is eleven bits. `B"100_0110_1111"` is eleven binary digits, so that
+one is fine — binary can express any width. `X"46F"` is three hex digits, which
+is twelve bits, and twelve does not fit into eleven: that assignment is the
+error. Octal has the same constraint at three bits per digit, which is why an
+eleven-bit vector cannot be written in octal or hex at all.
 
 ### 3.4 Array slices
 
@@ -181,11 +192,11 @@ A slice is a sub-array of a one-dimensional array, from a single element up to a
 The example has A, B, and Z as arrays, where A and B have eight elements and Z has 16 elements.
 
 ```vhdl
-signal A_VEC,B_VEC  : std logic vector (7 downto 0);
-signal Z_VEC        : std _logic_vector (15 downto 0);
+signal A_VEC,B_VEC  : std_logic_vector (7 downto 0);
+signal Z_VEC        : std_logic_vector (15 downto 0);
 signal A_BIT, C_BIT, D_BIT: std_logic;
 
-Z_VEC(15 downto 8) <= A VEC;
+Z_VEC(15 downto 8) <= A_VEC;
 B_VEC <= Z_VEC (12 downto 5);
 A_VEC (1 downto 0) <= C_BIT & D_BIT;
 Z_VEC (5 downto 1) <= B_VEC(1 to 5);
@@ -204,8 +215,8 @@ Out of the four array assignments:
 ```vhdl
 entity REG_4 is
 port (
-        reset   : in std logic.
-        clk     : in std logic;
+        reset   : in std_logic;
+        clk     : in std_logic;
         d_in    : in std_logic_vector (3 downto 0);
         cntrl   : in std_logic_vector (1 downto 0);
         q       : out std_logic_vector (3 downto 0)
@@ -219,6 +230,7 @@ signal E : std_logic_vector (3 downto 0);
 
 ```
 
+| Assignment    | Verdict   |
 | :-:           | :-:       |
 | A <= C        | GOOD      |
 | A <= cntrl(1) | GOOD      |
@@ -226,23 +238,23 @@ signal E : std_logic_vector (3 downto 0);
 | A <= B        | ERROR     |
 | D <= E        | ERROR     |
 | B <= D        | ERROR     |
-| Q <= cntrl    | ERROR     |
+| q <= cntrl    | ERROR     |
 
 The VHDL code here has reset and clock inputs with the `std_logic` type, and the `d_in` and `cntrl` inputs as 4-bit and
 2-bit arrays, respectively. q is an output array of 4 bits. The code also defines A, B, C, D, and E as signals.
 
-* `A <= C` is avalid assignment since both A and C are of type `std_logic`.
+* `A <= C` is a valid assignment since both A and C are of type `std_logic`.
 * `A <= cntrl(1)` is a valid assignement as it pulls out a single bit (second from the right) from cntrl and assigns it to A. Here, cntrl is an array of std logic types, and one element from this array is a `std_logic`.
-* `E <= d_in+1` is an error as d_in is a std_logic type and 1 is an integer. This is valid if the conversion function `E <= d_in+ std_logic_vector(to_unsigned(1, 4));` is used.
+* `E <= d_in+1` is an error because `d_in` is a `std_logic_vector` and `1` is an integer: `numeric_std` defines `+` for `signed` and `unsigned`, never for `std_logic_vector`. Written as `E <= std_logic_vector(unsigned(d_in) + 1);` it is valid — cast into a type that has arithmetic, add, cast back.
 * In `A <= B`, A can represent all the information specified in B (and 7 more values on top of that). But as they are
 not equal, this is an invalid assignment.
 * In `D <= E`, although E may contain a pattern which represents an integer, it is a pattern without meaning. E must be converted to an integer in order to be assigned to an integer.
 * In `B <= D`, a conversion function is required to make this assignment, because an integer is being assigned to a bit.
-* In `Q <= cntrl`, even though Q and CNTRL are both of type std_logic_vector, Q is 4-bits wide and CNTRL is only 2-bits wide; therefore, the error is in size, and not type.
+* In `q <= cntrl`, even though `q` and `cntrl` are both `std_logic_vector`, `q` is 4 bits wide and `cntrl` is only 2; the error is in size, not in type.
 
 ### 3.5 String
 
-String is a user-defined <strong>array</strong> of characters. 
+String is a user-defined **array** of characters. 
 * Its range is always positive and non-zero and it is less than the largest
 integer. 
 * Once you define a string, its size is fixed and cannot be changed.
@@ -333,17 +345,17 @@ begin
 
     -- Loop through the matrix and multiply each element by a scalar
     rowLoop: for row in 1 to 3 loop
-        colLoop: for col in 1 to 3 Joop
-            dthLoop: for depth in 1 to 3 Toop
-                report  integer’ image (row) & & integer’ image(col) & "," &
-                        integer image(depth) & " * " & integer’ image(k) &
+        colLoop: for col in 1 to 3 loop
+            dthLoop: for depth in 1 to 3 loop
+                report  integer'image(row) & "," & integer'image(col) & "," &
+                        integer'image(depth) & " * " & integer'image(k);
                 matrix3D (row,col, depth) := k * matrix3D (row,col,depth);
                 report " " & integer'image(matrix3D (row,col,depth));
             end loop dthLoop;
         end loop colLoop;
     end loop rowLoop;
 wait;
-end process mult;
+end process mmult;
 ```
 
 In this example, a higher order array having three dimensions is shown, where each individual element inside this array is of the integer type. 
@@ -356,18 +368,18 @@ Each element of this variable matrix3D is then multiplied by a scalar constant t
 
 ### 4.1 What is record?
 
-A record is a group of elements that may be of <strong>different types</strong>. An example of record is given here.
+A record is a group of elements that may be of **different types**. An example of record is given here.
 
 ```vhdl
 type PACKET is record
-PARITY      : bit
+PARITY      : bit;
 ADDRESS     : std_logic_vector (0 to 3);
 DATA_BYTE   : std_logic_vector (7 downto 0);
-NUM_VALUE   : integer range (0 to 6);
+NUM_VALUE   : integer range 0 to 6;
 STOP_BITS   : bit_vector (1 downto 0);
 end record;
 ...
-signal TX PACKET, RX PACKET : PACKET;
+signal TX_PACKET, RX_PACKET : PACKET;
 ```
 
 PACKET is a record with elements like:
@@ -389,14 +401,14 @@ For packet-handling applications, an array of records can be useful. The ability
 
 ```vhdl
 type PACKET is record
-PARITY      : bit
+PARITY      : bit;
 ADDRESS     : std_logic_vector (0 to 3);
 DATA_BYTE   : std_logic_vector (7 downto 0);
-NUM_VALUE   : integer range (0 to 6);
+NUM_VALUE   : integer range 0 to 6;
 STOP_BITS   : bit_vector (1 downto 0);
 end record;
 ...
-signal TX PACKET, RX PACKET : PACKET;
+signal TX_PACKET, RX_PACKET : PACKET;
 ```
 The PACKET here is a record having five elements, out of which `PARITY` is of the `bit` type and the rest are arrays of the `std_logic_vector` type, each having a different array length. 
 
@@ -407,12 +419,12 @@ signal MY_DATA : DATA_ARRAY;
 
 Once this `PACKET` record is declared, a new type `DATA_ARRAY`, an array of record `PACKET` having three elements, is created. 
 
-A new signal MY_DATA is then declared which is of the DATA ARRAY type. The diagram here shows a pictorial representation of MY_DATA, showing all three elements.
+A new signal MY_DATA is then declared, of the DATA_ARRAY type. The diagram here shows a pictorial representation of MY_DATA, showing all three elements.
 
 ![](/images/blog/vhdl_training_3/5.png)
 
 
-## 5. Array aggreates and record aggregates
+## 5. Array aggregates and record aggregates
 
 ### 5.1 Array aggregates
 
@@ -431,7 +443,7 @@ signal WORD             : std_logic_vector (3 downto 0);
 (A, B, C, D) <= WORD;
 ```
 
-An aggregate of A, B,C, and D has been assigned a WORD, which is an array of `std_logic`. This is valid since both sides have the same length and the same std logic type.
+An aggregate of A, B,C, and D has been assigned a WORD, which is an array of `std_logic`. This is valid since both sides have the same length and the same `std_logic` element type.
 
 ```vhdl
 WORD <= (2 => '1', 3 => D, others => '0');
@@ -452,7 +464,7 @@ The fourth example is an exact opposite of the first one and it is valid.
 ```vhdl
 H_BYTE <= (7|6|0|1 => '1', 2 to 5 => '0');
 ```
-The fifth example assigns index 7,6,0, and 1 of H_BYTE to avalue of '1' and index 2, 3, 4, and 5 of H_BYTE to '0'.
+The fifth example assigns indices 7, 6, 0 and 1 of H_BYTE the value '1', and indices 2 to 5 the value '0'. Note the two forms of choice: `|` lists individual indices, `to` gives a range.
 
 
 ### 5.2 Record aggregates
@@ -476,4 +488,9 @@ signal H_BYTE, L_BYTE   : std_logic_vector (0 to 7);
  DATA_WORD <= (others => H_BYTE);
  
  ```
-DATA WORD here is a record having H_BYTE and L BYTE arrays of the std_logic type. Record can only accept array aggregates.
+`DATA_WORD` is a record whose two fields, `UPPER` and `LOWER`, are both
+eight-bit `std_logic_vector`s. All four forms above are legal, and they are the
+same four forms arrays get: positional, named by field, several fields sharing
+one value with `|`, and `others` for the rest. The one rule specific to records
+is that a named and a positional element cannot be mixed in the same aggregate,
+and `others` is only allowed when every remaining field has the same type.
