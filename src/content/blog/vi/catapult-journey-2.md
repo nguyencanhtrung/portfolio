@@ -21,20 +21,20 @@ Một project sẽ được thực hiện theo thứ tự sau
 ![](/images/blog/catapult-journey-2/3.png)
 
 
-<b>1. Thêm input files</b>
+**1. Thêm input files**
   * Thêm file testbench nhưng exclude khỏi quá trình biên dịch 
   * Chỉ cần thêm các file `*.cpp`, file header `*.h` sẽ được tự động thêm
 
-<b>2. Cấu hình hierarchy</b>
+**2. Cấu hình hierarchy**
   * Lựa chọn `top-level` module để tool biên dịch
 
-<b>3. Cấu hình library</b>
+**3. Cấu hình library**
   * Lựa chọn devices, part number, công nghệ và enable các thư viên về RAM, ROM ... tương ứng của mỗi vendor
 
-<b>4. Cấu hình mapping</b>
+**4. Cấu hình mapping**
   * clocking, reset (asynchronous hay synchronous; active high or active low)
 
-<b>5. Cấu hình architecture</b>
+**5. Cấu hình architecture**
   * Interface/ IOs
   * Memories
   * Loops
@@ -94,7 +94,7 @@ go extract
 
 Có 2 cách khởi chạy script
 
-<strong><ins>Script-based</ins></strong>
+**Script-based**
 
 
 ```bash
@@ -107,7 +107,7 @@ Mở `project` tạo ra từ script bằng cách
 catapult ./Catapult
 ```
 
-<strong><ins>GUI-based</ins></strong>
+**GUI-based**
 
 Mở Catapult,
 
@@ -232,7 +232,7 @@ CCS_MAIN(int argv, char **argc)
 
 Đoạn code này sẽ thực hiện báo cho SCVERIFY thực hiện chèn `STALL` vào tín hiệu input `a` khi `i = 3` và chèn vào tín hiệu output `result` khi `i = 7`. Mỗi một `STALL` kéo dài 2 chu kỳ clock.
 
-<strong><ins>Chú ý quan trọng</ins></strong> 
+**Chú ý quan trọng** 
 
 Để có thể chèn được `STALL` thì input và output phải được constraint về dạng `ccs_io_*_wait` để đảm bảo ngoài `DATA`, tín hiệu đó khi tổng hợp xuống RTL có đủ tín hiệu `VALID` và `READY`.
 
@@ -249,7 +249,7 @@ Error: ../../src/crc_tb.cpp(76): error: 'stream_in_wait_ctrl' is not a member of
                       ^~~~~~~~~~~~~~~~~~~
 ```
 
-<strong><ins>Syntax</ins></strong> 
+**Cú pháp** 
 
 Chèn `STALL` có độ dài `Y` chu kỳ clock cho một tín hiệu bất kỳ `X` trong testbench.
 
