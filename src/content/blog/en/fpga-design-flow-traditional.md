@@ -11,21 +11,19 @@ tags: ['rtl']
 > [unicornsnippets](https://unicornsnippets.wordpress.com/2017/10/16/fpga-note-design-flow/)
 > (2017-10-16).
 
-**The design flow — the steps for building an IP core** — is something every
-FPGA developer needs to have straight. This post walks through the design flows
-in use and explains where each of them came from.
-
-We start with the traditional design flow, the most common one and the one most
-widely applied.
+The **design flow** — the sequence of steps that turns a request into a working
+IP core — is something every FPGA developer needs to have straight. This post
+walks through the traditional flow, the oldest of them and still the most
+widely used, one stage at a time.
 
 ## 1. Specification
 
-When customer A asks company B for an IP core C, they have to list the
-properties that core must have and hand that over to the design house. That
-document is the **informal specification**.
+When customer A asks design house B for an IP core, they have to write down
+what that core must do and hand it over. That document is the **informal
+specification**.
 
-An example: company A wants an IP core that computes the area of a circle, with
-these properties:
+Say customer A wants a core that computes the area of a circle. The properties
+are:
 
 * The core computes in single precision floating point
 * It follows the IEEE rounding standard
@@ -33,79 +31,86 @@ these properties:
 * Throughput < 500 ps
 * Latency < 10 ns
 
-Those bullet points are the informal specification the IP core is designed
+Those bullet points are the informal specification the core is designed
 from.
 
 ## 2. Modeling
 
-From the **informal specification**, a model is built as quickly as possible in
-a high-level language (MATLAB, Python, …) to evaluate what the core does:
-*functional behaviour only*, *no concern for how the data is represented*, *no
-concern for timing*. This step is **functional modeling**, and its product is
-the **floating-point model**.
+From the informal specification, a model is thrown together as quickly as
+possible in a high-level language — MATLAB, Python — to check what the core
+does. Only the *functional behaviour* matters at this point: not how the data
+is represented, and not timing. This step is **functional modeling**, and what
+comes out of it is the **floating-point model**.
 
-Once the function is confirmed, a second model should be built to *check the
-data representation*. Put differently, this model simulates the core's input
-and output data — only INPUT and OUTPUT matter here. The point is to produce
-the stimulus and the golden results for verification later. Its product is the
-**fixed-point / bit true model**, also written in a high-level language (C/C++).
+Once the function is confirmed, a second model should be built, this time to
+pin down *how the data is represented*. It simulates only what goes into the
+core and what comes out, and its purpose is to produce the stimulus and the
+golden results that verification will need later. What comes out of it is the
+**fixed-point, or bit true, model**, also written in a high-level language such
+as C or C++.
 
 ## 3. RTL design
 
-With the function and the data representation both settled, the next step is
-translating the high-level model (bit true, floating point) into an RTL-level
-model. In this flow the translation is **entirely manual**, and the language is
-HDL — VHDL or Verilog. The step goes by several names; one of them is **RTL
-design**.
+With the function and the data representation both settled, the high-level
+model is translated into an RTL model. In this flow that translation is
+**entirely by hand**, into an HDL — VHDL or Verilog. The step goes by several
+names; one of them is **RTL design**.
 
-To confirm this model matches the high-level one, the developer runs a
-behaviour simulation here, with the VHDL model + testbench + stimulus.
+To confirm the RTL matches the high-level model, the developer runs a behaviour
+simulation here, feeding the stimulus through the HDL model and its testbench.
 
-Note: timing is not guaranteed at this stage of simulation. Neither is the
-question of whether the core will actually run on hardware.
+Two things this simulation does not tell you: nothing about timing is
+guaranteed at this stage, and nothing yet says the core will work on real
+hardware.
 
-## 4. Synthesize
+## 4. Synthesis
 
-Next, the VHDL is compiled and synthesized. The end product is a **gate
-netlist**, produced entirely automatically by the compiler and the synthesis
-tool. This process is called RTL synthesis (or logic synthesis) — a later post
-will go into it properly.
+Next the HDL is compiled and synthesized, entirely automatically, into a **gate
+netlist**. This is RTL synthesis, also called logic synthesis; it deserves a
+post of its own.
 
-After this step the developer can run a **post-synthesis simulation**, also
-known as gate-level simulation, where the stimulus is exercised against the
-gate netlist. If that passes, the function of the core has survived synthesis.
+With the netlist in hand the developer can run a **post-synthesis simulation**,
+also known as gate-level simulation, driving the same stimulus through the gate
+netlist instead of the RTL. If that passes, the core's function has survived
+synthesis.
 
 ## 5. Implementation
 
 ### 5.1 Translate
 
-Once the gate netlist (`*.NGC` — Native Generic Circuit) exists, the tool
-combines it with the UCF and NCF to produce an NGD (Native Generic Database).
+Once the gate netlist (`*.NGC`, Native Generic Circuit) exists, the tool merges
+it with the UCF and NCF constraint files into an NGD, a Native Generic
+Database.
 
 ### 5.2 Map
 
-The core now lives in that database, and is mapped down onto the FPGA
-architecture (the LUT architecture) to program the gate arrays. The product of
-this step is the NCD (Native Circuit Description).
+The design now lives in that database as generic logic. Mapping fits it onto
+what the device actually offers — LUTs and the other primitives of the FPGA
+fabric. The product of this step is the NCD, a Native Circuit Description.
 
 ### 5.3 Place & Route
 
-Place and route arrange the LUTs into CLBs at positions that satisfy the timing
+Placement assigns the mapped LUTs to specific CLBs on the die, and routing
+connects them, both working towards positions and paths that meet the timing
 constraints.
 
 ### 5.4 Simulation during implementation
 
-* Post-translate simulation: static timing analysis with estimated gate delays
-* Post place & route simulation: static timing analysis with exact delays
+* Post-translate simulation: static timing analysis against estimated gate
+  delays
+* Post place & route simulation: static timing analysis against the real delays
 
-Static timing analysis only looks at timing, never at function.
+Static timing analysis only ever looks at timing. It says nothing about whether
+the design computes the right answer.
 
-## 6. Generate bitstream
+## 6. Bitstream generation
 
-The routed NCD is translated into the binary bitstream file (`*.BIT`) that
-programs the FPGA board.
+The routed NCD is translated into the binary bitstream (`*.BIT`) that programs
+the FPGA.
 
 ## 7. In-circuit simulation
 
-Testing directly on the programmed hardware. An ILA core captures the physical
-signals on the board, and ChipScope displays the waveforms on the host computer.
+Testing on the programmed hardware itself. An ILA core captures the real
+signals on the board, and ChipScope brings the waveforms back to the host
+computer — the first point in the whole flow where you are looking at the
+device rather than a model of it.
