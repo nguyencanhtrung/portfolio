@@ -1,30 +1,29 @@
 ---
 title: 'Catapult Journey - Untimed C++ - lab 1'
-description: 'Lab 1 của loạt bài Catapult HLS: Makefile để compile và debug C++ model, cách đọc những lỗi thường gặp, và hành vi của phép dịch trên kiểu ac_int/ac_fixed — nơi mất bit xảy ra âm thầm.'
+description: 'Lab 1 of the Catapult HLS series: a Makefile for compiling and debugging the C++ model, how to read the errors it produces, and how shifting behaves on ac_int/ac_fixed — where bits go missing without a single warning.'
 date: 2022-11-02
-lang: vi
+lang: en
 key: catapult-journey-1
 tags: ['catapult']
 ---
 
-## 1. Mục đích
+## 1. Goals
 
-* Sử dụng g++ đi kèm với Catapult để biên dịch C/C++ model
-* Biết đường dẫn của thư viện C/C++ của Catapult cũng như cách thêm thư viện vào khi biên dịch
-* Debug lỗi data types
-* Hiểu về cách hoạt động của phép dịch trái với AC data types
+* Compile the C/C++ model with the g++ that ships with Catapult
+* Know where Catapult's C/C++ libraries live and how to add them to the build
+* Debug data-type errors
+* Understand how left shift behaves on AC data types
 
 ## 2. Makefile
 
-Makefile bao gồm những thành phần sau để thực hiện được việc compiling C/C++ model
+A Makefile needs these four pieces to compile the C/C++ model:
 
-| Thư viện  | `IDIR =$(MGC_HOME)/shared/include`  |
+| Library   | `IDIR =$(MGC_HOME)/shared/include`  |
 | g++       | `CC=$(MGC_HOME)/bin/g++`            |
 | C flag    | `CFLAGS=-g`                         |
 | Debugger  | `$(MGC_HOME)/bin/gdb`               |
 
-
-Ví dụ Makefile:
+An example Makefile:
 
 ```bash
 IDIR =$(MGC_HOME)/shared/include
@@ -52,24 +51,24 @@ clean:
   rm -f $(TDIR)/tb 
 ```
 
-
-### 2.1 Compiling cmd
+### 2.1 Compile command
 
 ```bash
 $(CC) -o $(TDIR)/tb tb.cpp tb.cpp test_chan_assert.cpp -I$(IDIR) $(CFLAGS)
 ```
-* `-o $(TDIR)/tb`: biên dịch và đặt file kết quả tên `tb` vào `$(TDIR)`
-* `test_chan_assert.cpp`: các file source
-* `-I$(IDIR)`: include thư viện nằm ở đường dẫn trong biến `IDIR`
-* `$CFLAGS`: C flag
 
-### 2.2 Lệnh debug
+* `-o $(TDIR)/tb`: compile and put the output file named `tb` in `$(TDIR)`
+* `test_chan_assert.cpp`: the source files
+* `-I$(IDIR)`: include the library stored in the `IDIR` variable
+* `$CFLAGS`: C flags
+
+### 2.2 Debug command
 
 ```bash
 $(MGC_HOME)/bin/gdb $(TDIR)/tb
 ```
 
-## 3. Đọc Makefile và các lỗi đơn giản
+## 3. Reading the Makefile and the simple errors
 
 ```cpp
 //test_chan_assert.cpp
@@ -93,7 +92,6 @@ void test(ac_int<4,false>                   data0,
 }
 
 ```
-
 
 ```cpp
 
@@ -135,7 +133,7 @@ int main()
 
 ```
 
-Kết quả compile
+The compile result:
 
 ```bash
 [administrator@centos lab1]$ make tb0
@@ -147,13 +145,14 @@ tb_pod_err.cpp:31:47: error: cannot pass objects of non-trivially-copyable type 
 make: *** [tb0] Error 1
 ```
 
-`sat_behavior` là kiểu `ac_fixed` do đó nó cần gọi method để convert về dạng unsigned integer.
+`sat_behavior` is an `ac_fixed`, so it needs a method call to convert it to an
+unsigned integer before it can go through `printf`'s variadic arguments.
 
 ```bash
  printf("sat_behavior = %3d, ",sat_behavior.to_uint());
  ```
 
-## 4. Dùng debugger để truy ngược nguyên nhân lỗi về source code
+## 4. Using the debugger to trace an error back to the source code
 
 ```cpp
 // tb.cpp
@@ -200,7 +199,7 @@ int main()
 }
 ```
 
-Kết quả compile
+The compile result:
 
 ```bash
 make tb1
@@ -213,23 +212,22 @@ make: *** [tb1] Aborted (core dumped)
 
 ```
 
-Lỗi này xảy ra khi xảy ra trường hợp đọc data từ empty channel. Ở error message, ta chỉ có thể nhìn thấy đoạn thông tin assert trong thư viện `ac_channel`. Để backtrack tới đoạn code lỗi, dbg được sử dụng như sau:
-
+This fires when something reads from an empty channel. The message alone only
+points into the `ac_channel` library, never at your own code. To get back to
+the offending line, run it under the debugger:
 
 ```bash
 $(MGC_HOME)/bin/gdb $(TDIR)/tb
 ```
 
-Chạy debugger (gdb)
+Start it:
 
 ```bash
 (gdb) run
 ```
 
-Gõ `up` để kiểm tra theo thứ tự từ trong ra ngoài của hierarchy, để phát hiện lỗi ở user source code.
-
-Sau đó, gõ `quit` để thoát.
-
+Then type `up` repeatedly to walk out of the library frames until you land in
+your own source. Type `quit` to leave.
 
 ```bash
 Program received signal SIGABRT, Aborted.
@@ -268,9 +266,9 @@ Undefined command: "ip".  Try "help".
 
 ```
 
-Ta thấy rằng dòng code `chan_in.read()` gây ra lỗi "read empty channel"
+Frame #8 is the answer: `chan_in.read()` is what read the empty channel.
 
-Giải pháp: Thực hiện kiểm tra channel có dữ liệu hay không trước khi thực hiện đọc như phần dưới đây
+The fix is to check that the channel has data before reading it:
 
 ```cpp
 // test_chan_assert
@@ -281,32 +279,32 @@ Giải pháp: Thực hiện kiểm tra channel có dữ liệu hay không trư�
  }
 ```
 
-## 5. Hành vi của phép dịch trên kiểu dữ liệu AC
+## 5. How shifting behaves on AC data types
 
-Đây là lỗi âm thầm nhất trong bài lab này, vì nó không assert và không báo lỗi
-biên dịch — chỉ ra sai số.
+This is the quietest bug in the lab, because it neither asserts nor fails to
+compile — it just produces the wrong number.
 
 ```cpp
-ac_int<4,false> data0;          // 4 bit, giá trị 0..15
+ac_int<4,false> data0;          // 4 bits, 0..15
 ac_int<5,false> shift_behavior;
 
-shift_behavior = data0 << 1;    // mất MSB
+shift_behavior = data0 << 1;    // MSB is gone
 ```
 
-Trực giác quen thuộc từ C là "gán vào biến rộng hơn thì đủ chỗ". Với AC data
-type thì không: `data0 << 1` được tính **ngay trên kiểu của `data0`**, tức là
-`ac_int<4,false>`, nên bit cao nhất bị đẩy ra ngoài và mất trước cả khi phép
-gán xảy ra. `shift_behavior` rộng 5 bit cũng không cứu được, vì lúc đó đã muộn.
-Với `data0 = 12` thì kết quả ra 8 chứ không phải 24.
+The habit from plain C is that assigning into a wider variable leaves room for
+the result. AC data types do not work that way: `data0 << 1` is evaluated **in
+the type of `data0`**, that is `ac_int<4,false>`, so the top bit falls off the
+end before the assignment ever happens. Making `shift_behavior` 5 bits wide
+does not help, because by then the bit is already lost. With `data0 = 12` the
+result is 8, not 24.
 
-Cách xử lý là ép kiểu sang một độ rộng đủ chứa **trước khi** dịch:
+Cast to a type wide enough to hold the result **before** shifting:
 
 ```cpp
 shift_behavior = ac_int<5,false>(data0) << 1;
 ```
 
-Quy tắc chung: mỗi lần dịch trái `n` bit, kiểu trung gian phải rộng hơn toán
-hạng đúng `n` bit. Đây cũng là lý do nên tính bề rộng cho từng nút trong
-datapath thay vì để trình biên dịch tự suy — HLS sẽ tổng hợp đúng những gì mô
-hình C++ mô tả, kể cả những bit đã bị vứt đi.
-
+The general rule: an `n`-bit left shift needs an intermediate type `n` bits
+wider than the operand. It is also the reason to size every node in the
+datapath deliberately rather than trusting inference — HLS synthesizes exactly
+what the C++ model describes, including the bits it threw away.
