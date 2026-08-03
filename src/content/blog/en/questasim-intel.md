@@ -305,7 +305,7 @@ So to do "Standard-Alone" simulation, you just need to copy 3 scripts above alon
 
 ## 3. Design with no third party IP Cores
 
-Đối với hệ thống không sử dụng các IP từ Intel thì có thể tạo project, biên dịch và mô phỏng trực tiếp với modelsim theo flow sau đây
+For a design that uses no Intel IP, you can create the project, compile and simulate directly in ModelSim with the following flow.
 
 https://www.intel.com/content/www/us/en/support/programmable/support-resources/design-examples/quartus/simulation-manual-howto.html
 

@@ -88,9 +88,14 @@ virsh nodedev-detach pci_0000_01_00_0
 
 When using a multi-function PCI device that does not support FLR (function level reset) or PM (power management) reset, you need to detach all its functions from the VM Host Server. The whole device must be reset for security reasons. libvirt will refuse to assign the device if one of its functions is still in use by the VM Host Server or another VM Guest.
 
-**Note:**
+**Note:** in the setup used throughout this series, `detach` and `reattach`
+are almost meaningless, because the card was pinned to `vfio-pci` on the grub
+command line back in part 3 — the host never really owned it.
 
-Trong trường hợp của ta, `detach` or `reattach` không có ý nghĩa, vì ta đã cố định card FPGA với `VFIO` ở GRUB. Tôi sẽ thử bỏ command đó đi và chạy theo flow này xem ntn. Vì với flow này có thể sử dụng card FPGA ở cả host lẫn VM.
+If you want the card usable from both the host and the guest depending on the
+moment, do the opposite: drop `vfio-pci.ids` from grub, let the host bind its
+normal driver, and use `virsh nodedev-detach` each time you hand the card to the
+guest and `virsh nodedev-reattach` to give it back.
 
 ### 1.4 Convert the domain, bus, slot and function from dec to hex
 
@@ -164,7 +169,7 @@ When the VM Guest is not running, you can make the device available for the host
 virsh nodedev-reattach pci_0000_01_00_0
 ```
 
-Sẽ test flow này sau ... Nếu có thể flexible attach với VM và Host thì ngon quá.
+Worth testing later: being able to move the card between host and guest on demand would be the ideal setup.
 
 
 ## 2. Another way to attach PCIe devices
