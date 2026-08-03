@@ -41,7 +41,7 @@ Scalar data types in VHDL represent single values. These includes:
 
 ### 1.3 Bit & boolean
  
-<strong>BIT</strong>
+**bit**
 
 * Built-in data type 
 * Takes values 0 and 1. 
@@ -60,7 +60,7 @@ end Behavioral;
 `A`,`B`, `SEL`, and `Z` declared with the bit data type. It executes a simple multiplexer behavior.
 
 
-<strong>Boolean</strong>
+**boolean**
 
 * Frequently used in behavioral modeling. 
 * Takes the values True or False. 
@@ -72,7 +72,7 @@ Both the data type declarations are taken from library `STD` and the package `St
 
 ### 1.4 std_ulogic & std_logic
  
-<strong> std_ulogic </strong>
+**std_ulogic**
 
 `std_ulogic` was developed from the Multi-Value Logic (MVD) system. It provides a detailed hardware modeling option
 
@@ -96,7 +96,7 @@ It supports different signal strengths, don't care conditions, and tristate driv
 
 It is defined in the package `std_logic_1164` of `IEEE`.
 
-<strong> std_ulogic </strong>
+**std_logic**
 
 `std_logic` is the resolved form of `std_ulogic` and is more commonly used. 
 
@@ -147,7 +147,7 @@ It can be resolved by using the tristate buffer modeling technique.
 * First, the RES_OUT signal should have the `std logic` type
 * Then the tristate buffer is implemented using a conditional signal statement.
 
-Atthe board level, these signals are combined via open-drain or open-collector outputs-in which case, `std_logic` weak high (H) and weak low (1) could be used to model
+Atthe board level, these signals are combined via open-drain or open-collector outputs-in which case, `std_logic` weak high (`H`) and weak low (`L`) can model that
 
 ```vhdl
 signal A, B, C, RES_OUT: std_logic;
@@ -164,16 +164,16 @@ RES_OUT <= C when EN2 = '1' else 'Z';
 * Specifying the range of any integer has significant impact during synthesis. 
 * Without specifying a range, the compiler defaults to the maximum range.
 * Total range of the type integer is somewhat compiler dependent; 
-* However, it defaults to the range -2E31+1 to 2E31-1, which implies a 32-bit value.
+* However, it defaults to the range -2^31+1 to 2^31-1, which implies a 32-bit value.
 
 The syntax and an example of the type integer is shown here
 
-<strong>Syntax</strong>
+**Syntax**
 ```vhdl
 type integer is range ...
 ```
 
-<strong>Example</strong>
+**Example**
 ```vhdl
 signal A: integer range 0 to 7;
 signal B: integer range 15 downto 0;
@@ -187,12 +187,12 @@ signal B: integer range 15 downto 0;
 * Used with physical constants (such as Time or Voltage) within simulation environments.
 * Real type can also be used in synthesizable code if the results they produce are resolvable during synthesis.
 
-<strong>Syntax</strong>
+**Syntax**
 ```vhdl
 type real is range ...
 ```
 
-<strong>Example</strong>
+**Example**
 ```vhdl
 type CAPACITY is range -25.0 to 25.0;
 signal SIG_1: CAPACITY := 3.0;
@@ -385,15 +385,15 @@ type <new type name> is (<list of items>);
 * By default, enumerated values are sequentially encoded from left to right within the parentheses.
 
 ```vhdl
-type MY STATE is (RST, LOAD, FETCH, STORE, SHIFT);
+type MY_STATE is (RST, LOAD, FETCH, STORE, SHIFT);
 ...
-signal STATE, NEXT STATE: MY STATE;
+signal STATE, NEXT_STATE: MY_STATE;
 ...
 
 case (STATE) is
     when LOAD =>
-        if COND_A and COND B then
-            NEXT STATE <= FETCH;
+        if COND_A and COND_B then
+            NEXT_STATE <= FETCH;
         else
             NEXT_STATE <= STORE;
         ...
@@ -410,16 +410,21 @@ In this example,
 
 * Different synthesis tools may apply a different encoding scheme based on technology-specific optimization algorithms or other proprietary factors.
 
-* Caution needs to be taken while handling enumerated types
-    * Although VHDL is a case-insensitive language, enumerated types are case sensitive
-    * Enumerated types enclosed in single quotes
+* Two things about enumerated literals that trip people up:
+    * They are identifiers, so they are **not** quoted. `IDLE`, not `"IDLE"` and
+      not `'IDLE'`. Quotes make it a string or a character literal, which is a
+      different type entirely.
+    * They are case-insensitive like every other VHDL identifier, so `IDLE` and
+      `Idle` are the same literal. The exception is the character literals in
+      `std_logic` — `'X'` and `'x'` do differ there, because those are
+      characters rather than identifiers.
 
 ```vhdl
 type rx_states is (IDLE, START, DATA, PARITY, STOP);
 type tx_states is (IDLE, START, DATA, PARITY, STOP);
 
-signal rx_states: rx states := IDLE;
-signal tx_states: tx states := IDLE;
+signal rx_state: rx_states := IDLE;
+signal tx_state: tx_states := IDLE;
 ```
 
 Consider an example of a UART transmitter and receiver. Here, `rx_states` and `tx_states` are of the enumerated type.
