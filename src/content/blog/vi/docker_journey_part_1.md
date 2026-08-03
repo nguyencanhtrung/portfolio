@@ -18,7 +18,12 @@ Bước 4: Commit để lưu thành 1 images mới chứa bộ tools đã đư�
 
 Một container có thể hiểu như là một phần mềm đã được cài đặt từ bộ cài `image`. Có một điều khác biệt căn bản ở so sánh trên là: một bộ cài chỉ cài được duy nhất 1 phần mềm trên 1 máy tính, nhưng với docker, một image có thể tạo được không giới hạn các container trên cùng một máy tính.
 
-Một container luôn có hệ điều hành giống như một máy ảo, tuy nhiên nó có thể sử dụng được toàn bộ sức mạnh phần cứng của host, không phải phân chia core hay ram như một máy ảo.
+Container nhìn từ bên trong thì giống một hệ điều hành riêng, nhưng khác máy ảo
+ở chỗ nó **dùng chung kernel với host** — cái nằm trong image chỉ là phần
+userspace (thư viện, tiện ích, filesystem). Vì không phải chạy thêm một kernel
+và một lớp ảo hoá nữa, container mặc định dùng được toàn bộ CPU và RAM của
+host, không phải cắt sẵn số core hay dung lượng RAM như khi tạo máy ảo. Hệ quả
+kèm theo: container Linux chỉ chạy được trên kernel Linux.
 
 ## 2. Các trạng thái của một container
 
@@ -217,3 +222,30 @@ ubuntu       20.04     1c5c8d0b973a   3 weeks ago   72.8MB
 ```bash
 docker rmi 08d22c0ceb15
 ```
+
+### 3.8 $docker commit
+
+Đây là bước 4 trong workflow ở đầu bài: đóng gói trạng thái hiện tại của một
+container thành một image mới.
+
+```bash
+docker commit <container> <ten_image_moi>:<tag>
+```
+
+Ví dụ, sau khi đã cài đủ bộ tool trong container `bi`:
+
+```bash
+docker commit bi bi-tools:v1
+```
+
+Image mới sẽ xuất hiện trong `docker images` và dùng để `docker run` ra bao
+nhiêu container tuỳ ý, trên máy này hay máy khác.
+
+Hai điểm cần lưu ý:
+
+* Commit chỉ chụp lại **filesystem** của container. Dữ liệu nằm trong volume
+  mount bằng `-v` không nằm trong image — đó chính là mục đích của volume.
+* Image tạo bằng `commit` không có công thức tái tạo. Sáu tháng sau sẽ không ai
+  biết bên trong có gì và cài bằng lệnh nào. Cách này tiện để chốt nhanh một
+  môi trường đang chạy dở, còn với môi trường dùng lâu dài thì nên viết
+  `Dockerfile`.
