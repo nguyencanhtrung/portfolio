@@ -1,11 +1,11 @@
 ---
-title: 'Series - Setup KVM with PCIe passthrough - p2'
+title: 'Setup KVM với PCIe passthrough - phần 2: cài đặt KVM'
 description: 'Phần 2: cài KVM, libvirt và bộ công cụ đi kèm trên Ubuntu, kiểm tra CPU có hỗ trợ ảo hoá, cấp quyền cho user, dựng mạng NAT và mạng bridge, rồi tạo máy ảo đầu tiên bằng virt-install.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p2
 tags: ['kvm']
-series: 'Setup KVM with PCIe passthrough'
+series: 'Setup KVM với PCIe passthrough'
 seriesOrder: 2
 ---
 ## 1. Giới thiệu

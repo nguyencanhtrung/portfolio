@@ -1,11 +1,11 @@
 ---
-title: 'Series - Setup KVM with PCIe passthrough - p4'
+title: 'Setup KVM với PCIe passthrough - phần 4: tách IOMMU group'
 description: 'Phần 4: khi mainboard không hỗ trợ ACS, cả nhóm thiết bị dính chung một IOMMU group và không tách ra được. Cách vá kernel bằng ACS override, build và cài kernel đã vá.'
 date: 2023-09-28
 lang: vi
 key: journey-to-install-kvm-with-pcie-passthrough-p4
 tags: ['kvm']
-series: 'Setup KVM with PCIe passthrough'
+series: 'Setup KVM với PCIe passthrough'
 seriesOrder: 4
 ---
 ## 1. Tách IOMMU group
