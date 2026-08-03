@@ -1,34 +1,37 @@
 ---
-title: 'Quartus - Program FPGA'
-description: 'Programming an FPGA from the command line with quartus_pgm and jtagconfig, including the JTAG daemon, and two failures that cost real time: multiple programming cables in the chain, and a Cyclone 10 GX kit that changes USB ID mid-programming.'
+title: 'Quartus - Nạp bitstream cho FPGA'
+description: 'Nạp FPGA từ dòng lệnh bằng quartus_pgm và jtagconfig, kể cả JTAG daemon, cùng hai lỗi từng ngốn khá nhiều thời gian: nhiều programming cable cùng cắm, và kit Cyclone 10 GX đổi USB ID ngay giữa lúc nạp.'
 date: 2022-10-01
-lang: en
+lang: vi
 key: quartus-program-fpga
 tags: ['intel']
 ---
 
-## 1. Command-line
+## 1. Dòng lệnh
 
-All programs such as `quartus_pgm`, `jtagconfig`, etc. locate in the Quartus installation folder or in the standard alone FPGA programmer folder.
+Các chương trình như `quartus_pgm`, `jtagconfig`… nằm trong thư mục cài Quartus
+hoặc trong thư mục FPGA programmer bản standalone.
 
 ```bash
 export LD_LIBRARY_PATH=/home/administrator/data/intelFPGA_pro/21.3/qprogrammer/quartus/linux64:$LD_LIBRARY_PATH
 export PATH=/home/administrator/data/intelFPGA_pro/21.3/qprogrammer/quartus/bin:$PATH
 ```
-Exporting the library and programs to use in the latter sections.
 
+Export thư viện và chương trình để dùng cho các phần sau.
 
-### 1.1 JTAG scanning
+### 1.1 Quét JTAG
 
-To list all devices that are found (the cable is auto-detected)
+Liệt kê toàn bộ device tìm thấy (cable được tự động nhận diện):
 
 ```bash
 quartus_pgm --auto
 ```
 
-Note that listing the devices as shown above is not necessary for loading the bitstream. It might be useful to tell the position of the FPGA in the JTAG chain, maybe. Really something that is done once to explore the board.
+Lưu ý là bước liệt kê này không bắt buộc để nạp bitstream. Nó hữu ích để biết
+vị trí của FPGA trong JTAG chain — kiểu việc làm một lần cho biết board có gì.
 
-In case, the server has more than one programming cable, the program could not enumerate position of FPGA in the JTAG chain.
+Trường hợp máy có nhiều hơn một programming cable, chương trình sẽ không xác
+định được vị trí FPGA trong JTAG chain:
 
 ```bash
 $ quartus_pgm --auto
@@ -37,7 +40,7 @@ Error (213043): More than one programming cable found in available hardware list
     programming cable
 ```
 
-Lets use following command
+Dùng lệnh sau:
 
 ```bash
 quartus_pgm --list
@@ -77,13 +80,14 @@ Info: Quartus Prime Programmer was successful. 0 errors, 0 warnings
     Info: System process ID: 3834
 ```
 
-There are 2 JTAG cables USB-Blaster and USB-BlasterII. Now we can check which devices connect with each JTAG cable
+Có 2 cable JTAG là USB-Blaster và USB-BlasterII. Giờ kiểm tra xem device nào
+nối với cable nào:
 
 ```bash
 jtagconfig -n
 ```
 
-OR
+hoặc
 
 ```bash
 jtagconfig -d
@@ -114,27 +118,36 @@ $ jtagconfig -n
 5) Remote server jtagsrv.local:1310: Unable to connect
 ```
 
-Cable 2 (USB-BlasterII) is connected to Stratix 10 GX board (1SG280HH)
+Cable số 2 (USB-BlasterII) đang nối với board Stratix 10 GX (1SG280HH).
 
+### 1.2 JTAGD daemon
 
-### 1.2 JTAGD deamon
+Daemon này lắng nghe ở cổng TCP/IP 1309. Nó chịu trách nhiệm nói chuyện với
+JTAG adapter qua USB, nên cả GUI programmer lẫn công cụ dòng lệnh đều phụ thuộc
+vào nó. Nếu chưa có daemon nào chạy, cả hai đều tự khởi động nó.
 
-This deamon listens to TCP/IP port 1309. It is responsible for talking with the JTAG adapter through the USB bus, so both the GUI programmer and command line tool rely on it. If there’s no daemon running, both of these start it.
-
-But if you use multiple versions of Quartus, this may be a source of confusion, in particular if you make a first attempt to load an FPGA with an older version, and then try a newer one. That’s because the newer version of Quartus will keep using the older version of jtagd. And this older jtagd may not support FPGAs that the newer version of Quartus does. So the conclusion is that if weird things happen, this may fix it, and won’t hurt anyhow:
+Nhưng nếu máy cài nhiều phiên bản Quartus thì đây là nguồn gây rối, đặc biệt
+khi bạn thử nạp FPGA bằng bản cũ trước rồi mới chuyển sang bản mới. Lý do là
+bản Quartus mới vẫn tiếp tục dùng `jtagd` của bản cũ, mà `jtagd` cũ có thể
+không hỗ trợ những dòng FPGA mà bản Quartus mới hỗ trợ. Kết luận: khi thấy hiện
+tượng lạ, lệnh này thường chữa được và không gây hại gì:
 
 ```bash
 killall jtagd
 ```
-### 1.3 Programming FPGA
 
-`quartus_pgm` displays most of its output in green text. Generally speaking, if there’s no text in red, all went fine.
+### 1.3 Nạp FPGA
+
+`quartus_pgm` in phần lớn output bằng chữ màu xanh lá. Nói chung, không có chữ
+đỏ là mọi thứ ổn.
 
 ```bash
 quartus_pgm -m jtag -o "p;path/to/file.sof"
 ```
 
-Alternatively, add the position of the JTAG in the JTAG chain explicitly (in particular if it’s not the first device). In this case it’s @1, meaning it’s the first device in the JTAG chain. If it’s the second device, pick @2 etc.
+Hoặc chỉ định rõ vị trí của FPGA trong JTAG chain (nhất là khi nó không phải
+device đầu tiên). Ở đây là `@1`, tức device đầu tiên trong chain. Nếu là device
+thứ hai thì dùng `@2`, v.v.
 
 ```bash
 $ quartus_pgm -m jtag -o "p;path/to/file.sof@1"
@@ -173,22 +186,24 @@ Info: Quartus Prime Programmer was successful. 0 errors, 0 warnings
     Info: Total CPU time (on all processors): 00:00:03
 ```
 
-If anything goes wrong — device mismatch, a failure to scan the JTAG chain or anything else, it will be hard to miss that, because of the errors written in red. The good thing with the command line interface is that every attempt starts everything from the beginning, so just turn the board on and try again.
+Nếu có gì đó sai — device không khớp, quét JTAG chain thất bại hay bất cứ lỗi
+nào khác — thì không thể bỏ sót được, vì lỗi in ra màu đỏ. Điểm hay của giao
+diện dòng lệnh là mỗi lần chạy đều bắt đầu lại từ đầu, nên chỉ cần bật lại
+board rồi thử tiếp.
 
-**With more than one JTAG cable plugged in, you have to say which one to program through.**
-
+**Khi cắm nhiều cable JTAG cùng lúc, bắt buộc phải chỉ rõ nạp qua cable nào.**
 
 ```bash
 quartus_pgm -c $1 -m JTAG -o p\;$BITSTREAM@$2
 ```
 
-`$BITSTREAM` path to bitstream
+`$BITSTREAM` đường dẫn tới bitstream
 
-`$1` position of JTAG cable
+`$1` vị trí của cable JTAG
 
-`$2` position of FPGA device in the JTAG chain
+`$2` vị trí của FPGA trong JTAG chain
 
-Example:
+Ví dụ:
 
 ```bash
 $ jtagconfig -n
@@ -215,27 +230,32 @@ $ jtagconfig -n
 5) Remote server jtagsrv.local:1310: Unable to connect
 ```
 
-Lets program the 2nd cable (USB-BlasterII) - the FPGA device (stratix 10 GX is at the first position of JTAG chain)
+Nạp qua cable thứ 2 (USB-BlasterII) — FPGA (Stratix 10 GX) nằm ở vị trí đầu
+tiên của JTAG chain:
 
 ```bash
 quartus_pgm -c 2 -m JTAG -o p\;$BITSTREAM@1
 ```
 
-
-## 2. Issues
+## 2. Các lỗi gặp phải
 
 ### 2.1 Cyclone 10 GX FPGA development kit
 
-This board caused me some extra trouble, so a few words about it. When this board is connected to a computer, it appears as 09fb:6810, however after attempting to load the FPGA (note the "@2" in the end) with:
+Board này gây khá nhiều rắc rối nên xin nói kỹ. Khi cắm vào máy tính, nó xuất
+hiện với ID `09fb:6810`; nhưng sau khi thử nạp FPGA (chú ý `@2` ở cuối lệnh):
 
 ```bash
 $ quartus_pgm -m jtag -o "p;thecode.sof@2"
 Error (213019): Can't scan JTAG chain. Error code 86.
 ```
 
-The device's ID changes to 09fb:6010. So there's clearly some reprogramming of the firmware (the system log shows a disconnection and reconnection with the new ID). The board is detected as GX0000406 by Quartus' GUI Programming Tool, but clicking "Auto Detect" results in "Unable to scan device chain. Hardware is not connected".
+thì ID của thiết bị đổi thành `09fb:6010`. Rõ ràng có một quá trình nạp lại
+firmware ở đây (system log ghi nhận thiết bị ngắt kết nối rồi kết nối lại với
+ID mới). Board được GUI Programming Tool của Quartus nhận là GX0000406, nhưng
+bấm "Auto Detect" thì báo "Unable to scan device chain. Hardware is not
+connected".
 
-OK, so how about trying a scan?
+Thử quét xem sao:
 
 ```bash
 $ quartus_pgm --auto
@@ -245,7 +265,10 @@ Info (213045): Using programming cable "10CGX0000406 [1-5.1.2]"
   Unable to read device chain - Hardware not attached
 ```
 
-The problem in my case was apparently that the jtagd that was running was started by an older version of Quartus, which didn’t recognize Cyclone 10 devices. So follow the advice above, and kill it. After that, programming with the command above worked with Quartus Pro 17.1:
+Vấn đề trong trường hợp của tôi hoá ra là `jtagd` đang chạy được khởi động bởi
+một bản Quartus cũ, và bản đó không nhận biết dòng Cyclone 10. Vậy nên làm theo
+lời khuyên ở trên: kill nó đi. Sau đó nạp bằng lệnh trên chạy ngon với Quartus
+Pro 17.1:
 
 ```bash
 $ quartus_pgm --auto
@@ -256,10 +279,11 @@ Info (213045): Using programming cable "USB-BlasterII [1-5.1.2]"
   02E120DD   10CX220Y
 ```
 
+### 2.2 Sai JTAG ID
 
-### 2.2 Mismatch JTAG ID
-
-The design is deployed on Stratix 10 GX development kit which contains FPGA chip "1SG280HU2F50E2VG". However, setting the same device and generating bitstream, programing it on the device prompts following error.
+Thiết kế chạy trên Stratix 10 GX development kit, chip FPGA là
+"1SG280HU2F50E2VG". Tuy nhiên khi đặt đúng device đó, sinh bitstream rồi nạp
+xuống board thì báo lỗi sau:
 
 ```bash
 $ ./pgm.sh 2 1 ./bitstream/gx_board/qts_pcie.sof 
@@ -303,10 +327,10 @@ Error: Quartus Prime Programmer was unsuccessful. 2 errors, 0 warnings
     Error: System process ID: 18686
 ```
 
-#### Debugging flow
+#### Quy trình debug
 
-* **Check the order of the JTAG cables**
-* **Check the position of the FPGA chip**
+* **Kiểm tra thứ tự các cable JTAG**
+* **Kiểm tra vị trí của chip FPGA**
 
 ```bash
 jtagconfig -d
@@ -342,26 +366,33 @@ jtagconfig -d
 
 ```
 
-The log means: The target is programmed through 2nd cable (USB-BlasterII) and the position of FPGA chip is the first position.
+Log này có nghĩa: target được nạp qua cable thứ 2 (USB-BlasterII) và chip FPGA
+nằm ở vị trí đầu tiên.
   `C32150DD   1SG280HH(1S2|2S2|3S2)/.. (IR=10)`
 
-If it shows like
+Nếu log hiện ra như thế này:
+
 ```bash
 1) USB-BlasterII [1-2.3]
 020A40DD 5M(1270ZF324|2210Z)/EPM2210
 C32250DD 1SG280HH1(.|S3|AS)/1SG280HH2/..
 ```
-that means FPGA chip located in the second position, the first position is chip 1270ZF324
 
-In the command, I set correct parameters for cable order and position of FPGA chip
+thì có nghĩa chip FPGA nằm ở vị trí thứ hai, còn vị trí đầu tiên là chip
+1270ZF324.
 
-* **Check the JTAG ID and which chip it belongs to**
+Trong lệnh nạp, tôi đã đặt đúng tham số cho thứ tự cable và vị trí chip FPGA.
 
-The reference list is [here](https://bsdl.info/list.htm?f=828&page=1&sort=name&sorttype=true).
+* **Kiểm tra JTAG ID và chip tương ứng với nó**
 
-It turns out the target FPGA is `1SG280LU2F50E2VG` that corresponds to `Jtag ID: 0xC32250DD`. This is L-Tile version of GX development kit. Our first assumption is H-Tile version.
+Danh sách tra cứu
+[ở đây](https://bsdl.info/list.htm?f=828&page=1&sort=name&sorttype=true).
 
-The lesson: the part number printed on a development kit is not proof of what
-is on it. `jtagconfig` reads the JTAG ID out of the silicon itself — take that
-number to the BSDL list and set the device in the project from what you find
-there, not from the kit's label.
+Hoá ra FPGA trên board là `1SG280LU2F50E2VG`, ứng với `Jtag ID: 0xC32250DD`.
+Đây là bản L-Tile của GX development kit, trong khi giả định ban đầu của chúng
+tôi là bản H-Tile.
+
+Bài học rút ra: mã part in trên development kit không phải là bằng chứng về con
+chip thực sự nằm trên đó. `jtagconfig` đọc JTAG ID ra từ chính con silicon —
+hãy lấy con số đó đi tra bảng BSDL rồi đặt device trong project theo kết quả
+tra được, chứ đừng đặt theo nhãn của kit.
