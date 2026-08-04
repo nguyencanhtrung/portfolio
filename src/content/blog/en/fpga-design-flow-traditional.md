@@ -7,10 +7,6 @@ key: fpga-design-flow-traditional
 tags: ['rtl']
 ---
 
-> Brought over from my old personal blog,
-> [unicornsnippets](https://unicornsnippets.wordpress.com/2017/10/16/fpga-note-design-flow/)
-> (2017-10-16).
-
 The **design flow** — the sequence of steps that turns a request into a working
 IP core — is something every FPGA developer needs to have straight. This post
 walks through the traditional flow, the oldest of them and still the most

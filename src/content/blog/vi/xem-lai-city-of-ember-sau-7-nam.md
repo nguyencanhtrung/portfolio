@@ -7,8 +7,6 @@ key: xem-lai-city-of-ember-sau-7-nam
 tags: ['my-snippets']
 ---
 
-> Bài này lấy về từ blog cá nhân cũ của tôi, [unicornsnippets](https://unicornsnippets.wordpress.com/2015/02/23/xem-lai-bo-phim-city-of-ember-2008-sau-7-nam/) (2015-02-23).
-
 Xem lại bộ phim cũ,\
 Cảm nhận thời gian trôi…\
 Cũng chính bộ phim này.\

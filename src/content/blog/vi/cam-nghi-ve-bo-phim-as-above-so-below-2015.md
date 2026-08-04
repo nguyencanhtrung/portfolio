@@ -7,8 +7,6 @@ key: cam-nghi-ve-bo-phim-as-above-so-below-2015
 tags: ['my-snippets']
 ---
 
-> Bài này lấy về từ blog cá nhân cũ của tôi, [unicornsnippets](https://unicornsnippets.wordpress.com/2015/02/17/cam-nghi-ve-bo-phim-as-above-so-below-2015/) (2015-02-17).
-
 0 AM – ngồi ôn thì Architecture of Digital Systems II thấy chán lại ngồi mở phimhd.vn lên xem một bộ phim mới …
 
 Xem xong lại ngồi mất gần nửa tiếng ngồi suy nghĩ và viết cái khỉ gió này … Thôi thì tập viết cảm nghĩ, nâng cao khả năng văn chương – cũng là học …

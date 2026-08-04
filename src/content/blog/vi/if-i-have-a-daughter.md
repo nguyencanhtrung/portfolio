@@ -7,9 +7,7 @@ key: if-i-have-a-daughter
 tags: ['my-snippets']
 ---
 
-> Bài này lấy về từ blog cá nhân cũ của tôi, [unicornsnippets](https://unicornsnippets.wordpress.com/2016/01/28/if-i-have-a-daughter/) (2016-01-28).
->
-> Đây là bài **sưu tầm**, không phải tôi viết. Bản tiếng Việt của **Nguyễn Thảo**, dịch từ **Huffington Post**. Ảnh minh hoạ đăng kèm bài nằm ở bản gốc.
+> Đây là bài **sưu tầm**, không phải tôi viết. Bản tiếng Việt của **Nguyễn Thảo**, dịch từ **Huffington Post**.
 
 1. Đừng để sự sợ hãi ngăn cản con làm việc mà con thực sự muốn.
 2. Trang điểm chưa chắc đã làm con xinh đẹp, mà là sự tử tế.

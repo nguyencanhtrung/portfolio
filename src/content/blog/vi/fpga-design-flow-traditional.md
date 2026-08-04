@@ -7,8 +7,6 @@ key: fpga-design-flow-traditional
 tags: ['rtl']
 ---
 
-> Bài này lấy về từ blog cá nhân cũ của tôi, [unicornsnippets](https://unicornsnippets.wordpress.com/2017/10/16/fpga-note-design-flow/) (2017-10-16).
-
 **Design flow – các bước thiết kế một IP core** là kiến thức vô cùng quan trọng
 và cần được nắm vững bởi bất kỳ FPGA developer nào. Bài viết này lần lượt phân
 tích các design flow đang được sử dụng, cũng như giải thích về sự ra đời của

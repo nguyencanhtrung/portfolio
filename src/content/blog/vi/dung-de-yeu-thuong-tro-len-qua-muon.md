@@ -7,9 +7,7 @@ key: dung-de-yeu-thuong-tro-len-qua-muon
 tags: ['my-snippets']
 ---
 
-> Bài này lấy về từ blog cá nhân cũ của tôi, [unicornsnippets](https://unicornsnippets.wordpress.com/2016/05/31/dung-de-yeu-thuong-tro-len-qua-muon/) (2016-05-31).
->
-> Đây là bài **sưu tầm**, không phải tôi viết. Bản gốc trên blog cũ chỉ ghi nguồn là "Google" nên tôi không xác định được tác giả. Ảnh minh hoạ đăng kèm bài nằm ở bản gốc.
+> Đây là bài **sưu tầm**, không phải tôi viết. Nguồn gốc chỉ được ghi là "Google" nên không xác định được tác giả.
 
 Hôm nay tôi sẽ kể cho bạn nghe câu chuyện về một nhân vật “tôi” khác và một cô gái nhỏ cùng với cuộc điện thoại kì diệu.
 
