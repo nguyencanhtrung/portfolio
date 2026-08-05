@@ -177,7 +177,6 @@ const searchZero = t(locale, 'blog.searchZero');
   <style is:global>
     .search {
       margin-top: 2.5rem;
-      max-width: var(--w-content);
       --pagefind-ui-scale: 0.9;
       --pagefind-ui-primary: var(--accent);
       --pagefind-ui-text: var(--ink);
@@ -188,9 +187,20 @@ const searchZero = t(locale, 'blog.searchZero');
       --pagefind-ui-border-radius: 8px;
       --pagefind-ui-font: var(--font-sans);
     }
-    .search .pagefind-ui__search-input::placeholder {
+    /* Pagefind hardcodes a bold, oversized input (and a 0.2-opacity placeholder)
+       behind two-class selectors that load after this sheet — the extra `input`
+       qualifier is needed to out-rank them. Match the site's body voice. */
+    .search input.pagefind-ui__search-input {
+      font-weight: 400;
+      font-size: 1.0625rem;
+    }
+    .search input.pagefind-ui__search-input::placeholder {
       color: var(--ink-3);
       opacity: 1;
+    }
+    /* The input spans the list frame; results keep the reading measure. */
+    .search .pagefind-ui__drawer {
+      max-width: var(--w-content);
     }
     .search .pagefind-ui__result-link {
       color: var(--accent);
