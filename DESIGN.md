@@ -8,7 +8,7 @@ colors:
   surface-white: "#ffffff"
   ink: "#1c1c21"
   ink-secondary: "#52525b"
-  ink-tertiary: "#85858f"
+  ink-tertiary: "#70707c"
   hairline: "#e5e2dc"
   code-paper: "#f2f0eb"
 typography:
@@ -99,7 +99,7 @@ An ink-on-warm-paper palette with a single dark-red seal.
 - **Surface White** (#ffffff): raised paper — cards and framed images only (#1b1b22 in dark).
 - **Ink** (#1c1c21): headings and primary text (#e9e7e3 in dark).
 - **Ink Secondary** (#52525b): body-adjacent text — intros, nav, org lines, card excerpts (#a6a6b0 in dark).
-- **Ink Tertiary** (#85858f): metadata — dates, section labels, captions, footer (#74747f in dark).
+- **Ink Tertiary** (#70707c): metadata — dates, section labels, captions, footer (#83838e in dark). Tuned to hold ≥4.5:1 on both grounds at the small mono sizes it labels.
 - **Hairline** (#e5e2dc): every border and divider on the site (#2a2a33 in dark).
 - **Code Paper** (#f2f0eb): code blocks, inline code, and metric chips (#1f1f28 in dark).
 

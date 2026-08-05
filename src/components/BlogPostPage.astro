@@ -70,7 +70,7 @@ const partLabel =
       )
     }
     <header class="head">
-      <p class="back mono"><a href={localePath(locale, '/blog/')}>{t(locale, 'blog.backToList')}</a></p>
+      <p class="back mono" data-pagefind-ignore><a href={localePath(locale, '/blog/')}>{t(locale, 'blog.backToList')}</a></p>
       <h1>{post.data.title}</h1>
       <p class="meta mono">
         <time datetime={post.data.date.toISOString()}>{fmt.format(post.data.date)}</time>
@@ -85,7 +85,7 @@ const partLabel =
       }
       {
         altPath && (
-          <p class="switch">
+          <p class="switch" data-pagefind-ignore>
             <a href={altPath} rel="alternate" hreflang={other}>
               {t(locale, 'blog.readInOther')}
             </a>
@@ -417,7 +417,8 @@ const partLabel =
 
   <style is:global>
     /* Anchor jumps must clear the sticky header (smooth scroll is set globally). */
-    .prose h2 {
+    .prose h2,
+    .prose h3 {
       scroll-margin-top: 5.5rem;
     }
   </style>

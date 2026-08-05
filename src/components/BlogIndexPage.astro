@@ -13,8 +13,13 @@ const { locale, page = 1 } = Astro.props;
 // ponytail: PAGE_SIZE hardcoded here and in blog/page/[num].astro — keep in sync
 const PAGE_SIZE = 10;
 
+// Same-day posts (e.g. a series published at once) need a stable tie-break,
+// or their order shuffles between builds.
 const all = (await getCollection('blog', (p) => p.data.lang === locale && !p.data.draft)).sort(
-  (a, b) => b.data.date.valueOf() - a.data.date.valueOf(),
+  (a, b) =>
+    b.data.date.valueOf() - a.data.date.valueOf() ||
+    (a.data.seriesOrder ?? 0) - (b.data.seriesOrder ?? 0) ||
+    a.data.title.localeCompare(b.data.title),
 );
 const totalPages = Math.max(1, Math.ceil(all.length / PAGE_SIZE));
 const posts = all.slice((page - 1) * PAGE_SIZE, page * PAGE_SIZE);
@@ -189,6 +194,12 @@ const searchZero = t(locale, 'blog.searchZero');
     }
     .search .pagefind-ui__result-link {
       color: var(--accent);
+    }
+    /* Result titles speak in the site's serif voice, not Pagefind's bold sans. */
+    .search .pagefind-ui__result-title {
+      font-family: var(--font-serif);
+      font-weight: 500;
+      letter-spacing: -0.01em;
     }
     .search .pagefind-ui--reset mark,
     .search mark {

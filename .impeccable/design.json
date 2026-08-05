@@ -49,8 +49,8 @@
       "ink-tertiary": {
         "role": "neutral",
         "displayName": "Ink Tertiary",
-        "canonical": "#85858f",
-        "darkTheme": "#74747f",
+        "canonical": "#70707c",
+        "darkTheme": "#83838e",
         "tonalRamp": ["oklch(22% 0.01 285)", "oklch(33% 0.01 285)", "oklch(45% 0.01 285)", "oklch(57% 0.01 285)", "oklch(66% 0.01 285)", "oklch(76% 0.008 285)", "oklch(86% 0.006 285)", "oklch(94% 0.004 285)"]
       },
       "hairline": {
