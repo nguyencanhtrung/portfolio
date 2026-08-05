@@ -1,0 +1,180 @@
+{
+  "schemaVersion": 2,
+  "generatedAt": "2026-08-05T00:00:00Z",
+  "title": "Design System: bibo.id.vn — Canh-Trung Nguyen",
+  "extensions": {
+    "colorMeta": {
+      "oxblood": {
+        "role": "primary",
+        "displayName": "Oxblood",
+        "canonical": "#8e2433",
+        "darkTheme": "#e08b96",
+        "tonalRamp": ["oklch(20% 0.09 15)", "oklch(30% 0.11 15)", "oklch(40% 0.13 15)", "oklch(48% 0.14 15)", "oklch(58% 0.13 15)", "oklch(70% 0.10 15)", "oklch(82% 0.06 15)", "oklch(93% 0.03 15)"]
+      },
+      "oxblood-wash": {
+        "role": "primary",
+        "displayName": "Oxblood Wash",
+        "canonical": "#f3e4e6",
+        "darkTheme": "#35222a",
+        "tonalRamp": ["oklch(25% 0.03 15)", "oklch(38% 0.03 15)", "oklch(52% 0.03 15)", "oklch(64% 0.03 15)", "oklch(75% 0.03 15)", "oklch(84% 0.03 15)", "oklch(91% 0.025 15)", "oklch(96% 0.015 15)"]
+      },
+      "warm-paper": {
+        "role": "neutral",
+        "displayName": "Warm Paper",
+        "canonical": "#faf9f7",
+        "darkTheme": "#131318",
+        "tonalRamp": ["oklch(18% 0.008 80)", "oklch(30% 0.008 80)", "oklch(45% 0.008 80)", "oklch(60% 0.008 80)", "oklch(72% 0.008 80)", "oklch(84% 0.008 80)", "oklch(93% 0.006 80)", "oklch(98% 0.004 80)"]
+      },
+      "surface-white": {
+        "role": "neutral",
+        "displayName": "Surface White",
+        "canonical": "#ffffff",
+        "darkTheme": "#1b1b22",
+        "tonalRamp": ["oklch(22% 0.01 280)", "oklch(35% 0.008 280)", "oklch(50% 0.006 280)", "oklch(65% 0.004 280)", "oklch(78% 0.003 280)", "oklch(88% 0.002 280)", "oklch(95% 0.001 280)", "oklch(100% 0 0)"]
+      },
+      "ink": {
+        "role": "neutral",
+        "displayName": "Ink",
+        "canonical": "#1c1c21",
+        "darkTheme": "#e9e7e3",
+        "tonalRamp": ["oklch(15% 0.01 285)", "oklch(24% 0.01 285)", "oklch(35% 0.01 285)", "oklch(48% 0.01 285)", "oklch(60% 0.01 285)", "oklch(72% 0.008 285)", "oklch(85% 0.006 285)", "oklch(94% 0.004 285)"]
+      },
+      "ink-secondary": {
+        "role": "neutral",
+        "displayName": "Ink Secondary",
+        "canonical": "#52525b",
+        "darkTheme": "#a6a6b0",
+        "tonalRamp": ["oklch(20% 0.012 285)", "oklch(30% 0.012 285)", "oklch(42% 0.012 285)", "oklch(52% 0.012 285)", "oklch(63% 0.012 285)", "oklch(74% 0.01 285)", "oklch(85% 0.008 285)", "oklch(94% 0.005 285)"]
+      },
+      "ink-tertiary": {
+        "role": "neutral",
+        "displayName": "Ink Tertiary",
+        "canonical": "#85858f",
+        "darkTheme": "#74747f",
+        "tonalRamp": ["oklch(22% 0.01 285)", "oklch(33% 0.01 285)", "oklch(45% 0.01 285)", "oklch(57% 0.01 285)", "oklch(66% 0.01 285)", "oklch(76% 0.008 285)", "oklch(86% 0.006 285)", "oklch(94% 0.004 285)"]
+      },
+      "hairline": {
+        "role": "neutral",
+        "displayName": "Hairline",
+        "canonical": "#e5e2dc",
+        "darkTheme": "#2a2a33",
+        "tonalRamp": ["oklch(25% 0.008 80)", "oklch(37% 0.008 80)", "oklch(50% 0.008 80)", "oklch(62% 0.008 80)", "oklch(73% 0.008 80)", "oklch(83% 0.008 80)", "oklch(91% 0.006 80)", "oklch(96% 0.004 80)"]
+      },
+      "code-paper": {
+        "role": "neutral",
+        "displayName": "Code Paper",
+        "canonical": "#f2f0eb",
+        "darkTheme": "#1f1f28",
+        "tonalRamp": ["oklch(20% 0.008 90)", "oklch(32% 0.008 90)", "oklch(46% 0.008 90)", "oklch(59% 0.008 90)", "oklch(71% 0.008 90)", "oklch(82% 0.008 90)", "oklch(90% 0.007 90)", "oklch(96% 0.005 90)"]
+      }
+    },
+    "typographyMeta": {
+      "display": { "displayName": "Display", "purpose": "Hero name and page titles. Newsreader opsz 72, balanced wrapping." },
+      "headline": { "displayName": "Headline", "purpose": "Chapter titles and prose h2." },
+      "title": { "displayName": "Title", "purpose": "Card and blog-list entry titles." },
+      "body": { "displayName": "Body", "purpose": "All running text, Inter, 44rem max column." },
+      "label": { "displayName": "Label (Mono)", "purpose": "Section labels, era codes, metrics, dates, table headers — every number worth believing." }
+    },
+    "shadows": [],
+    "motion": [
+      { "name": "ease-standard", "value": "0.15s ease", "purpose": "The single transition recipe: border-color, color, and small transforms on hover." },
+      { "name": "blink", "value": "1.2s steps(1) infinite", "purpose": "The brand cursor underscore. The only looping animation on the site." },
+      { "name": "reduced-motion", "value": "all durations → 0.01ms", "purpose": "Global prefers-reduced-motion kill-switch; never bypass it." }
+    ],
+    "breakpoints": [
+      { "name": "header-wrap", "value": "640px" },
+      { "name": "cards-stack", "value": "700px" },
+      { "name": "timeline-spine", "value": "900px" }
+    ]
+  },
+  "components": [
+    {
+      "name": "CTA Pill Button",
+      "kind": "button",
+      "refersTo": "button-cta",
+      "description": "The site's one button: hairline pill, mono uppercase label, reveals Oxblood on hover.",
+      "html": "<a href=\"#\" class=\"ds-cta\">Read the journey <span class=\"ds-cta-arrow\">↓</span></a>",
+      "css": ".ds-cta { display: inline-block; padding: 0.65rem 1.3rem; border: 1px solid var(--hairline, #e5e2dc); border-radius: 999px; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-2, #52525b); text-decoration: none; transition: border-color 0.15s ease, color 0.15s ease; } .ds-cta:hover, .ds-cta:focus-visible { border-color: var(--accent, #8e2433); color: var(--accent, #8e2433); } .ds-cta-arrow { display: inline-block; transition: transform 0.15s ease; } .ds-cta:hover .ds-cta-arrow { transform: translateY(3px); }"
+    },
+    {
+      "name": "Metric Chip",
+      "kind": "chip",
+      "refersTo": "chip-metric",
+      "description": "A verified number rendered as a datasheet spec chip. Mono, pill, Code Paper ground.",
+      "html": "<span class=\"ds-chip\">68× speedup @ 100 MHz</span>",
+      "css": ".ds-chip { display: inline-block; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.72rem; letter-spacing: 0.02em; color: var(--ink-2, #52525b); background: var(--code-bg, #f2f0eb); border: 1px solid var(--hairline, #e5e2dc); border-radius: 999px; padding: 0.25rem 0.7rem; }"
+    },
+    {
+      "name": "Project Card",
+      "kind": "card",
+      "refersTo": "card",
+      "description": "Surface White card on Warm Paper; hairline turns Oxblood and lifts -2px on hover; mono arrow pinned bottom-right.",
+      "html": "<a href=\"#\" class=\"ds-card\"><h3 class=\"ds-card-title\">Connected Driving — C-V2X Sidelink</h3><p class=\"ds-card-body\">Direct vehicle-to-vehicle communication over the 5G PC5 sidelink.</p><span class=\"ds-card-more\">→</span></a>",
+      "css": ".ds-card { position: relative; display: block; max-width: 24rem; background: var(--surface, #ffffff); border: 1px solid var(--hairline, #e5e2dc); border-radius: 10px; padding: 1.4rem 1.5rem 2.4rem; color: inherit; text-decoration: none; transition: border-color 0.15s ease, transform 0.15s ease; } .ds-card:hover, .ds-card:focus-visible { border-color: var(--accent, #8e2433); transform: translateY(-2px); } .ds-card-title { font-family: 'Newsreader Variable', Georgia, serif; font-weight: 500; font-size: 1.15rem; line-height: 1.15; letter-spacing: -0.01em; margin: 0; color: var(--ink, #1c1c21); } .ds-card-body { margin: 0.6rem 0 0; font-family: 'Inter Variable', system-ui, sans-serif; font-size: 0.9rem; line-height: 1.65; color: var(--ink-2, #52525b); } .ds-card-more { position: absolute; right: 1.25rem; bottom: 1rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.8125rem; color: var(--accent, #8e2433); }"
+    },
+    {
+      "name": "Section Label",
+      "kind": "custom",
+      "description": "The page-structure primitive: mono uppercase label over a full-width hairline.",
+      "html": "<h2 class=\"ds-section-label\">The journey</h2>",
+      "css": ".ds-section-label { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem; font-weight: 400; letter-spacing: 0.14em; text-transform: uppercase; color: var(--ink-3, #85858f); border-bottom: 1px solid var(--hairline, #e5e2dc); padding-bottom: 0.6rem; margin: 0; width: 100%; }"
+    },
+    {
+      "name": "Header Nav",
+      "kind": "nav",
+      "description": "Sticky translucent bar: mono brand with blinking Oxblood cursor, sans links, active page in Oxblood.",
+      "html": "<div class=\"ds-nav\"><a href=\"#\" class=\"ds-nav-brand\">ctn<span class=\"ds-nav-cursor\">_</span></a><nav class=\"ds-nav-links\"><a href=\"#\" class=\"ds-nav-link ds-active\">Journey</a><a href=\"#\" class=\"ds-nav-link\">Projects</a><a href=\"#\" class=\"ds-nav-link\">Blog</a><a href=\"#\" class=\"ds-nav-link\">About</a></nav><button class=\"ds-nav-toggle\" aria-label=\"Toggle theme\">◐</button></div>",
+      "css": ".ds-nav { display: flex; align-items: center; gap: 1.5rem; height: 3.5rem; padding: 0 1.25rem; background: color-mix(in srgb, var(--bg, #faf9f7) 88%, transparent); backdrop-filter: blur(8px); border-bottom: 1px solid var(--hairline, #e5e2dc); } .ds-nav-brand { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 1rem; font-weight: 500; letter-spacing: 0.02em; color: var(--ink, #1c1c21); text-decoration: none; } .ds-nav-brand:hover { color: var(--accent, #8e2433); } .ds-nav-cursor { color: var(--accent, #8e2433); animation: ds-blink 1.2s steps(1) infinite; } @keyframes ds-blink { 50% { opacity: 0; } } .ds-nav-links { display: flex; gap: 1.1rem; flex: 1; } .ds-nav-link { font-family: 'Inter Variable', system-ui, sans-serif; font-size: 0.9rem; color: var(--ink-2, #52525b); text-decoration: none; white-space: nowrap; } .ds-nav-link:hover { color: var(--ink, #1c1c21); } .ds-nav-link.ds-active { color: var(--accent, #8e2433); } .ds-nav-toggle { background: none; border: 1px solid var(--hairline, #e5e2dc); border-radius: 4px; color: var(--ink-2, #52525b); font-size: 0.9rem; padding: 0.1rem 0.45rem; cursor: pointer; font-family: 'JetBrains Mono', ui-monospace, monospace; } .ds-nav-toggle:hover { color: var(--accent, #8e2433); border-color: var(--accent, #8e2433); }"
+    },
+    {
+      "name": "Blog List Row",
+      "kind": "custom",
+      "description": "A hairline-ruled entry: mono date column, serif title that turns Oxblood on hover.",
+      "html": "<a href=\"#\" class=\"ds-post\"><time class=\"ds-post-date\">2026-08-01</time><div><h2 class=\"ds-post-title\">The traditional FPGA design flow</h2><p class=\"ds-post-desc\">Where the hours actually go between RTL and bitstream.</p><span class=\"ds-post-tags\">fpga · toolchain</span></div></a>",
+      "css": ".ds-post { display: grid; grid-template-columns: 8rem 1fr; gap: 1.5rem; padding: 1.6rem 0.25rem; border-bottom: 1px solid var(--hairline, #e5e2dc); color: inherit; text-decoration: none; max-width: 40rem; } .ds-post-date { font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.75rem; color: var(--ink-3, #85858f); padding-top: 0.4rem; } .ds-post-title { font-family: 'Newsreader Variable', Georgia, serif; font-weight: 500; font-size: 1.35rem; line-height: 1.15; letter-spacing: -0.01em; margin: 0; color: var(--ink, #1c1c21); transition: color 0.15s ease; } .ds-post:hover .ds-post-title { color: var(--accent, #8e2433); } .ds-post-desc { margin: 0.4rem 0 0; font-family: 'Inter Variable', system-ui, sans-serif; font-size: 1rem; line-height: 1.65; color: var(--ink-2, #52525b); } .ds-post-tags { display: block; margin-top: 0.4rem; font-family: 'JetBrains Mono', ui-monospace, monospace; font-size: 0.72rem; color: var(--ink-3, #85858f); }"
+    },
+    {
+      "name": "Blockquote",
+      "kind": "custom",
+      "description": "The one italic voice: serif italic on an Oxblood left rule.",
+      "html": "<blockquote class=\"ds-quote\">Learned to read a specification as an executable contract.</blockquote>",
+      "css": ".ds-quote { margin: 0; padding: 0.2em 0 0.2em 1.25em; border-left: 2px solid var(--accent, #8e2433); color: var(--ink-2, #52525b); font-family: 'Newsreader Variable', Georgia, serif; font-size: 1.15rem; font-style: italic; line-height: 1.65; max-width: 34rem; }"
+    }
+  ],
+  "narrative": {
+    "northStar": "The Datasheet Memoir",
+    "overview": "A technical datasheet written as a memoir. The page is warm paper, not screen-white; the type is a literary serif carrying an engineer's story; every measurement on it is real. The system borrows its graphic language from engineering documents — hairline rules, mono-spaced labels tracking wide and uppercase, hand-drawn schematic line-art — but its voice is narrative. Precision supplies the credibility, prose supplies the warmth, and neither is allowed to drown the other.\n\nDensity is generous and editorial: one column of measured text (44rem), wide hairline-bounded frames (62rem), and a single accent used the way a rubber stamp is used on a document — small, deliberate, and rare. Depth is flat like paper. Illustration is never photographic: the site draws its own subject matter as datasheet-style SVG line-art, with one binding convention inherited from the product itself: dashed strokes mean simulated, solid strokes mean real.",
+    "keyCharacteristics": [
+      "Warm paper ground (#faf9f7) with true-white surfaces only for raised cards and code frames.",
+      "One accent (Oxblood) applied as punctuation, never as area.",
+      "Three typefaces with strict roles: serif narrates, sans explains, mono measures.",
+      "Hairline (1px) borders carry all structure; no shadows anywhere.",
+      "Hand-drawn schematic SVG line-art; dashed = simulated, solid = real.",
+      "Full light/dark mirror driven entirely by CSS custom properties."
+    ],
+    "rules": [
+      { "name": "The Stamp Rule", "body": "Oxblood is a stamp, not a paint. It appears on strokes, glyphs, dots, and text — never as a large fill or background. If a surface is turning red, it's wrong.", "section": "colors" },
+      { "name": "The Two-Theme Mirror Rule", "body": "Every color exists only as a CSS custom property with a light and a dark value; components never hard-code a hex. New work must land in both themes at once.", "section": "colors" },
+      { "name": "The Three Hands Rule", "body": "Serif narrates, sans explains, mono measures. A heading is never sans, running text is never serif, and a number worth believing is set in mono.", "section": "typography" },
+      { "name": "The No-Shadow Rule", "body": "Never add a box-shadow. If an element needs to feel raised, give it Surface White, a hairline border, and — if interactive — the -2px hover lift.", "section": "elevation" },
+      { "name": "The Dashed Twin Rule", "body": "Dashed strokes (5 7 dasharray) mean simulated, reflected, or scaffold — the digital-twin reflection, the timeline wave. Solid strokes mean real. Never use a dashed stroke decoratively; it is semantic.", "section": "elevation" }
+    ],
+    "dos": [
+      "Do define every color as a CSS custom property with both a light and dark value before using it (The Two-Theme Mirror Rule).",
+      "Do set section openers as the mono label + full-width hairline primitive with 5rem top margin.",
+      "Do keep readable text at 44rem and framed visual structure at 62rem.",
+      "Do express interactivity as border-color → Oxblood plus a small transform, at 0.15s ease.",
+      "Do set every real number (metrics, dates, versions, era codes) in JetBrains Mono.",
+      "Do draw new illustrations as line-art SVG in the existing stroke classes, honoring dashed = simulated / solid = real.",
+      "Do respect prefers-reduced-motion — the global kill-switch already zeroes animation and transition durations."
+    ],
+    "donts": [
+      "Don't add box-shadows, gradients, or glassmorphism beyond the header's existing backdrop blur (The No-Shadow Rule).",
+      "Don't use Oxblood as a background or large fill; it is punctuation (The Stamp Rule).",
+      "Don't introduce a second accent hue, photographic imagery, or stock icons; the line-art system is the imagery.",
+      "Don't hard-code hex values in components; tokens only.",
+      "Don't set headings in Inter or body copy in Newsreader (The Three Hands Rule).",
+      "Don't use dashed strokes decoratively; dashed is a semantic claim that the thing is simulated."
+    ]
+  }
+}
