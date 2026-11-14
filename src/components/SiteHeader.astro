@@ -1,0 +1,146 @@
+---
+import { localePath, t, type Locale } from '../i18n/ui';
+
+interface Props {
+  locale: Locale;
+  /** Path of this page in the other locale; omit if no counterpart exists. */
+  altPath?: string;
+}
+
+const { locale, altPath } = Astro.props;
+const other: Locale = locale === 'en' ? 'vi' : 'en';
+const path = Astro.url.pathname;
+const nav = [
+  { href: localePath(locale, '/'), label: t(locale, 'nav.journey') },
+  { href: localePath(locale, '/projects/'), label: t(locale, 'nav.projects') },
+  { href: localePath(locale, '/about/'), label: t(locale, 'nav.about') },
+];
+const isActive = (href: string) =>
+  href === localePath(locale, '/') ? path === href : path.startsWith(href);
+---
+
+<header class="site-header">
+  <div class="container header-inner">
+    <a class="brand mono" href={localePath(locale, '/')}>ctn<span class="cursor">_</span></a>
+    <nav aria-label="Main">
+      {nav.map((item) => <a href={item.href} class:list={{ active: isActive(item.href) }}>{item.label}</a>)}
+    </nav>
+    <div class="controls">
+      {
+        altPath ? (
+          <a class="lang mono" href={altPath} rel="alternate" hreflang={other}>
+            {other.toUpperCase()}
+          </a>
+        ) : (
+          <span class="lang mono lang-off">{other.toUpperCase()}</span>
+        )
+      }
+      <button id="theme-toggle" class="theme mono" type="button" aria-label="Toggle theme">◐</button>
+    </div>
+  </div>
+</header>
+
+<script src="../scripts/theme.ts"></script>
+
+<style>
+  .site-header {
+    position: sticky;
+    top: 0;
+    z-index: 10;
+    background: color-mix(in srgb, var(--bg) 88%, transparent);
+    backdrop-filter: blur(8px);
+    border-bottom: 1px solid var(--hairline);
+  }
+  .header-inner {
+    display: flex;
+    align-items: center;
+    gap: 1.5rem;
+    height: 3.5rem;
+  }
+  .brand {
+    color: var(--ink);
+    font-size: 1rem;
+    font-weight: 500;
+  }
+  .brand:hover {
+    color: var(--accent);
+    text-decoration: none;
+  }
+  .cursor {
+    color: var(--accent);
+    animation: blink 1.2s steps(1) infinite;
+  }
+  @keyframes blink {
+    50% {
+      opacity: 0;
+    }
+  }
+  nav {
+    display: flex;
+    flex: 1;
+    gap: 1.1rem;
+    overflow-x: auto;
+  }
+  nav a {
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    white-space: nowrap;
+  }
+  nav a:hover {
+    color: var(--ink);
+    text-decoration: none;
+  }
+  nav a.active {
+    color: var(--accent);
+  }
+  .controls {
+    display: flex;
+    align-items: center;
+    gap: 0.9rem;
+  }
+  .lang {
+    color: var(--ink-2);
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    padding: 0.15rem 0.45rem;
+  }
+  .lang:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+    text-decoration: none;
+  }
+  .lang-off {
+    opacity: 0.35;
+    cursor: not-allowed;
+  }
+  .theme {
+    background: none;
+    border: 1px solid var(--hairline);
+    border-radius: 4px;
+    color: var(--ink-2);
+    font-size: 0.9rem;
+    padding: 0.1rem 0.45rem;
+    cursor: pointer;
+  }
+  .theme:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  @media (max-width: 640px) {
+    .header-inner {
+      flex-wrap: wrap;
+      height: auto;
+      padding-block: 0.55rem;
+      row-gap: 0.1rem;
+      gap: 1rem;
+    }
+    .controls {
+      margin-left: auto;
+    }
+    nav {
+      order: 3;
+      flex-basis: 100%;
+      gap: 0.85rem;
+    }
+  }
+</style>

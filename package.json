@@ -6,7 +6,8 @@
   "scripts": {
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
-    "preview": "astro preview"
+    "preview": "astro preview",
+    "test": "node --experimental-strip-types --test tests/theme.test.ts"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
