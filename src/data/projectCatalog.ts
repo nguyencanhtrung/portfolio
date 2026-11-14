@@ -75,13 +75,8 @@ const independentProjects: Record<Locale, IndependentProject[]> = {
     ],
     links: [
       {
-        label: 'View on GitHub',
+        label: 'Github',
         href: 'https://github.com/nguyencanhtrung/asr-studio',
-        external: true,
-      },
-      {
-        label: 'Features & setup',
-        href: 'https://github.com/nguyencanhtrung/asr-studio#quickstart',
         external: true,
       },
       { label: 'Website', href: 'https://asr.bibo.id.vn', external: true },
@@ -107,13 +102,8 @@ const independentProjects: Record<Locale, IndependentProject[]> = {
     ],
     links: [
       {
-        label: 'Xem trên GitHub',
+        label: 'Github',
         href: 'https://github.com/nguyencanhtrung/asr-studio',
-        external: true,
-      },
-      {
-        label: 'Tính năng & cài đặt',
-        href: 'https://github.com/nguyencanhtrung/asr-studio#quickstart',
         external: true,
       },
       { label: 'Website', href: 'https://asr.bibo.id.vn', external: true },

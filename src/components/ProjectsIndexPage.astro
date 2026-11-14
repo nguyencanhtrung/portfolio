@@ -1,6 +1,7 @@
 ---
 import Base from '../layouts/Base.astro';
 import ProjectCatalogCategory from './ProjectCatalogCategory.astro';
+import ProjectSectionBreak from './ProjectSectionBreak.astro';
 import { getProjectCatalog } from '../data/projectCatalog';
 import type { Locale } from '../i18n/ui';
 
@@ -21,8 +22,11 @@ const altPath = locale === 'en' ? '/vi/projects/' : '/projects/';
       <p>{catalog.description}</p>
     </header>
     <div class="categories">
-      {catalog.categories.map((category) => (
-        <ProjectCatalogCategory category={category} locale={locale} labels={catalog.labels} />
+      {catalog.categories.map((category, index) => (
+        <>
+          {index > 0 && <ProjectSectionBreak locale={locale} />}
+          <ProjectCatalogCategory category={category} locale={locale} labels={catalog.labels} followsBreak={index > 0} closesWithBreak={index < catalog.categories.length - 1} />
+        </>
       ))}
     </div>
   </section>

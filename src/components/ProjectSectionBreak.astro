@@ -1,0 +1,44 @@
+---
+import { wavePaths } from '../lib/section-wave';
+import type { Locale } from '../i18n/ui';
+interface Props { locale: Locale }
+const { locale } = Astro.props;
+const paths = wavePaths(0);
+const labels = locale === 'vi'
+  ? { pause: 'Tạm dừng sóng', play: 'Chạy sóng' }
+  : { pause: 'Pause wave', play: 'Play wave' };
+---
+
+<div class="section-wave" data-section-wave>
+  <svg class="wave-art" viewBox="0 0 960 96" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <path class="echo" data-wave-echo d={paths.echo} />
+    <path class="carrier" data-wave-main d={paths.main} />
+  </svg>
+  <button type="button" class="wave-toggle" data-wave-toggle data-label-pause={labels.pause} data-label-play={labels.play} aria-label={labels.pause} aria-pressed="false" title={labels.pause} hidden>
+    <svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" aria-hidden="true">
+      <path class="pause-icon" d="M9 6v12M15 6v12" />
+      <path class="play-icon" d="m9 6 9 6-9 6Z" />
+    </svg>
+  </button>
+</div>
+
+<script src="../scripts/section-wave.ts"></script>
+
+<style>
+  .section-wave { position: relative; display: grid; align-items: center; height: 6rem; }
+  .wave-art { display: block; width: 100%; height: 100%; overflow: hidden; }
+  .wave-art path { fill: none; stroke-width: 1; vector-effect: non-scaling-stroke; }
+  .carrier { stroke: var(--accent); opacity: .48; }
+  .echo { stroke: var(--ink-3); opacity: .22; stroke-dasharray: 3 5; }
+  .wave-toggle { position: absolute; right: 0; bottom: 0; display: grid; place-items: center; width: 32px; height: 32px; padding: 6px; background: var(--bg); color: var(--ink-3); border: 1px solid var(--hairline); border-radius: 4px; cursor: pointer; }
+  .wave-toggle[hidden] { display: none; }
+  .wave-toggle:hover { color: var(--accent); border-color: var(--accent); }
+  .wave-toggle svg { width: 18px; height: 18px; }
+  .wave-toggle[aria-pressed='false'] .play-icon, .wave-toggle[aria-pressed='true'] .pause-icon { display: none; }
+  @media(prefers-reduced-motion: reduce) {
+    .wave-toggle { display: none; }
+  }
+  @media(max-width:700px) {
+    .section-wave { height: 4rem; margin-top: -2rem; }
+  }
+</style>

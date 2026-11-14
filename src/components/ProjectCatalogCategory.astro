@@ -8,19 +8,21 @@ interface Props {
   category: Category;
   locale: Locale;
   labels: ProjectCatalogLabels;
+  followsBreak?: boolean;
+  closesWithBreak?: boolean;
 }
 
-const { category, locale, labels } = Astro.props;
+const { category, locale, labels, followsBreak = false, closesWithBreak = false } = Astro.props;
 ---
 
-<section class:list={['catalog-group', `${category.id}-group`]} aria-labelledby={`${category.id}-title`}>
+<section class:list={['catalog-group', `${category.id}-group`, { 'follows-break': followsBreak }]} aria-labelledby={`${category.id}-title`}>
   <header class="catalog-group-head">
     <ProjectCatalogIcon name={category.icon} />
     <h2 id={`${category.id}-title`}>{category.title}</h2>
     <p>{category.description}</p>
   </header>
   <div class="entries">
-    {category.entries.map((entry) => <ProjectCatalogEntry entry={entry} locale={locale} labels={labels} />)}
+    {category.entries.map((entry, index) => <ProjectCatalogEntry entry={entry} locale={locale} labels={labels} closesWithBreak={closesWithBreak && index === category.entries.length - 1} />)}
   </div>
 </section>
 
@@ -31,8 +33,8 @@ const { category, locale, labels } = Astro.props;
     gap: 2rem;
     margin-top: 4rem;
   }
-  .catalog-group + .catalog-group {
-    margin-top: 5rem;
+  .catalog-group.follows-break {
+    margin-top: 0;
   }
   .catalog-group-head {
     position: sticky;
@@ -61,10 +63,11 @@ const { category, locale, labels } = Astro.props;
   }
   @media (max-width: 700px) {
     .catalog-group,
-    .catalog-group + .catalog-group {
+    .catalog-group.follows-break {
       display: block;
       margin-top: 3.5rem;
     }
+    .catalog-group.follows-break { margin-top: 3rem; }
     .catalog-group-head {
       position: static;
       margin-bottom: 1.5rem;
