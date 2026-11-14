@@ -7,7 +7,7 @@
     "dev": "astro dev",
     "build": "astro build && pagefind --site dist",
     "preview": "astro preview",
-    "test": "node --experimental-strip-types --test tests/theme.test.ts"
+    "test": "node --experimental-strip-types --test tests/*.test.ts tests/*.test.mjs"
   },
   "dependencies": {
     "@astrojs/mdx": "^4.0.0",
@@ -24,6 +24,7 @@
   },
   "devDependencies": {
     "pagefind": "^1.5.2",
-    "playwright-core": "^1.62.0"
+    "playwright-core": "^1.62.0",
+    "esbuild": "0.27.7"
   }
 }

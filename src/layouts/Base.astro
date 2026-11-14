@@ -8,6 +8,7 @@ import '../styles/global.css';
 import SiteHeader from '../components/SiteHeader.astro';
 import SiteFooter from '../components/SiteFooter.astro';
 import type { Locale } from '../i18n/ui';
+import themeBootstrap from 'virtual:portfolio-theme-bootstrap';
 
 interface Props {
   locale: Locale;
@@ -27,6 +28,7 @@ const path = Astro.url.pathname;
   <head>
     <meta charset="utf-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <script is:inline set:html={themeBootstrap} />
     <title>{title}</title>
     <meta name="description" content={description} />
     <meta name="author" content="Canh-Trung Nguyen" />
