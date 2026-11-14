@@ -21,7 +21,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'connected-driving',
       name: 'Connected Driving — C-V2X Sidelink',
       period: 'Ongoing',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'Direct vehicle-to-vehicle communication over the 5G PC5 sidelink, built around SAE-defined safety scenarios.',
       sections: [
@@ -49,7 +49,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'My role',
           body: [
-            'Tech lead: system architecture, turning 3GPP and SAE text into implementable behaviour, and holding the review gate — I read the specifications myself rather than approving against a summary of them.',
+            'Tech Lead & Developer: system architecture, turning 3GPP and SAE text into implementable behaviour, and holding the review gate. I read the specifications myself, then develop the features that carry those decisions into the product.',
           ],
         },
       ],
@@ -66,7 +66,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'v2x-protocol-stack',
       name: 'V2X Protocol Stack',
       period: 'Ongoing',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'A 5G sidelink stack kept honest by the standards that define it — and by tests that can catch a bug both ends agree on.',
       sections: [
@@ -94,8 +94,8 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'My role',
           body: [
-            'Leading the protocol team: architecture, the verification methodology above, and the review discipline that keeps a multi-standard codebase compliant while both the code and the standards keep moving.',
-            'I also maintain the reference the team reviews against — a knowledge base compiled from the raw specifications, so that a design argument can be settled by citation instead of by seniority.',
+            'Tech Lead & Developer: leading the protocol team, setting the architecture and verification methodology, and keeping a multi-standard codebase compliant while both the code and the standards keep moving.',
+            'I also maintain the reference the team reviews against — a knowledge base compiled from the raw specifications — and contribute directly to the feature work it helps the team validate.',
           ],
         },
       ],
@@ -112,7 +112,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'digital-twin-channel-sim',
       name: 'Digital Twin & Channel Simulation',
       period: 'Ongoing',
-      role: 'Program Lead / Tech Lead',
+      role: 'Program Lead / Tech Lead & Developer',
       oneLiner:
         'GPU ray-traced radio channels for network and vehicle digital twins — and the ISAC sensing research built on top.',
       sections: [
@@ -140,7 +140,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'My role',
           body: [
-            'I lead the program: simulation architecture, the channel-modelling methodology, and the ISAC research direction.',
+            'Program Lead / Tech Lead & Developer: I lead the program across simulation architecture, the channel-modelling methodology, and the ISAC research direction while developing features alongside the teams.',
             'It grew from nine engineers to around twenty across world simulation, channel modelling and protocol — three disciplines that use three different vocabularies for the same physics. Writing that shared vocabulary down turned out to be part of the architecture, not a nicety.',
           ],
         },
@@ -159,7 +159,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'robotics-sim2real',
       name: 'Robotics Sim2Real',
       period: 'Ongoing',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'Closing the gap between a simulated robot and the real one — measured, not assumed, and carried from virtual prototype to silicon.',
       sections: [
@@ -187,7 +187,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'My role',
           body: [
-            'Tech lead: the methodology, the evaluation gates, and the decision records that stop them eroding quietly over time. I review the diagnostics and the physics arguments directly — on this program, telling a real gap apart from a plausible story about a gap is the whole job.',
+            'Tech Lead & Developer: the methodology, the evaluation gates, and the decision records that stop them eroding quietly over time. I review the diagnostics and physics arguments directly, and develop the features that make those checks usable.',
           ],
         },
       ],
@@ -206,7 +206,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'connected-driving',
       name: 'Connected Driving — C-V2X Sidelink',
       period: 'Đang triển khai',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'Giao tiếp trực tiếp xe-với-xe qua sidelink PC5 của 5G, xây quanh các kịch bản an toàn theo chuẩn SAE.',
       sections: [
@@ -234,7 +234,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Vai trò của tôi',
           body: [
-            'Tech lead: kiến trúc hệ thống, chuyển văn bản 3GPP và SAE thành hành vi triển khai được, và giữ cửa review — tôi tự đọc spec chứ không duyệt dựa trên một bản tóm tắt của nó.',
+            'Tech Lead & Developer: kiến trúc hệ thống, chuyển văn bản 3GPP và SAE thành hành vi triển khai được, và giữ cửa review. Tôi tự đọc spec, rồi trực tiếp phát triển những tính năng đưa các quyết định đó vào sản phẩm.',
           ],
         },
       ],
@@ -251,7 +251,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'v2x-protocol-stack',
       name: 'V2X Protocol Stack',
       period: 'Đang triển khai',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'Một sidelink stack 5G được giữ trung thực bởi chính các chuẩn định nghĩa nó — và bởi những bài test bắt được cả con bug mà hai đầu đều đồng ý.',
       sections: [
@@ -279,8 +279,8 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Vai trò của tôi',
           body: [
-            'Dẫn dắt đội protocol: kiến trúc, phương pháp kiểm chứng ở trên, và kỷ luật review giữ cho một codebase đa chuẩn luôn tuân thủ trong khi cả code lẫn chuẩn đều không đứng yên.',
-            'Tôi cũng duy trì bản tham chiếu mà cả đội dựa vào khi review — một knowledge base biên soạn từ chính các bản spec gốc, để một tranh luận thiết kế được kết bằng trích dẫn thay vì bằng thâm niên.',
+            'Tech Lead & Developer: dẫn dắt đội protocol, đặt kiến trúc và phương pháp kiểm chứng ở trên, và giữ cho một codebase đa chuẩn luôn tuân thủ trong khi cả code lẫn chuẩn đều không đứng yên.',
+            'Tôi cũng duy trì bản tham chiếu mà cả đội dựa vào khi review — một knowledge base biên soạn từ chính các bản spec gốc — và trực tiếp phát triển những tính năng mà bản tham chiếu giúp kiểm chứng.',
           ],
         },
       ],
@@ -297,7 +297,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'digital-twin-channel-sim',
       name: 'Digital Twin & Channel Simulation',
       period: 'Đang triển khai',
-      role: 'Program Lead / Tech Lead',
+      role: 'Program Lead / Tech Lead & Developer',
       oneLiner:
         'Kênh vô tuyến ray-traced trên GPU cho digital twin của mạng và của xe — cùng hướng nghiên cứu ISAC sensing dựng trên đó.',
       sections: [
@@ -325,7 +325,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Vai trò của tôi',
           body: [
-            'Tôi dẫn dắt chương trình: kiến trúc mô phỏng, phương pháp mô hình hoá kênh, và hướng nghiên cứu ISAC.',
+            'Program Lead / Tech Lead & Developer: tôi dẫn dắt chương trình qua kiến trúc mô phỏng, phương pháp mô hình hoá kênh, và hướng nghiên cứu ISAC, đồng thời trực tiếp phát triển tính năng cùng các đội.',
             'Nó đi từ 9 kỹ sư lên khoảng 20, trải trên world simulation, channel modelling và protocol — ba chuyên môn dùng ba bộ từ vựng khác nhau cho cùng một thứ vật lý. Viết bộ từ vựng chung ấy ra giấy hoá ra là một phần của kiến trúc, không phải thứ trang trí.',
           ],
         },
@@ -344,7 +344,7 @@ export const projects: Record<Locale, Project[]> = {
       slug: 'robotics-sim2real',
       name: 'Robotics Sim2Real',
       period: 'Đang triển khai',
-      role: 'Tech Lead',
+      role: 'Tech Lead & Developer',
       oneLiner:
         'Thu hẹp khoảng cách giữa robot mô phỏng và robot thật — bằng đo đạc, và mang xuyên suốt từ virtual prototype tới silicon.',
       sections: [
@@ -372,7 +372,7 @@ export const projects: Record<Locale, Project[]> = {
         {
           heading: 'Vai trò của tôi',
           body: [
-            'Tech lead: methodology, các evaluation gate, và những decision record giữ cho chúng không bị bào mòn âm thầm. Tôi review trực tiếp phần chẩn đoán và các lập luận vật lý — ở chương trình này, phân biệt được một cái gap thật với một câu chuyện nghe rất hợp lý về gap chính là toàn bộ công việc.',
+            'Tech Lead & Developer: methodology, các evaluation gate, và những decision record giữ cho chúng không bị bào mòn âm thầm. Tôi review trực tiếp phần chẩn đoán và các lập luận vật lý, đồng thời phát triển những tính năng giúp các phép kiểm ấy dùng được.',
           ],
         },
       ],

@@ -1,0 +1,73 @@
+---
+import ProjectCatalogEntry from './ProjectCatalogEntry.astro';
+import ProjectCatalogIcon from './ProjectCatalogIcon.astro';
+import type { ProjectCatalogCategory as Category, ProjectCatalogLabels } from '../data/projectCatalog';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  category: Category;
+  locale: Locale;
+  labels: ProjectCatalogLabels;
+}
+
+const { category, locale, labels } = Astro.props;
+---
+
+<section class:list={['catalog-group', `${category.id}-group`]} aria-labelledby={`${category.id}-title`}>
+  <header class="catalog-group-head">
+    <ProjectCatalogIcon name={category.icon} />
+    <h2 id={`${category.id}-title`}>{category.title}</h2>
+    <p>{category.description}</p>
+  </header>
+  <div class="entries">
+    {category.entries.map((entry) => <ProjectCatalogEntry entry={entry} locale={locale} labels={labels} />)}
+  </div>
+</section>
+
+<style>
+  .catalog-group {
+    display: grid;
+    grid-template-columns: minmax(10rem, 13rem) minmax(0, 1fr);
+    gap: 2rem;
+    margin-top: 4rem;
+  }
+  .catalog-group + .catalog-group {
+    margin-top: 5rem;
+  }
+  .catalog-group-head {
+    position: sticky;
+    top: 6rem;
+    align-self: start;
+    margin: 0;
+  }
+  .catalog-group-head h2 {
+    font-size: 1.5rem;
+  }
+  .catalog-group-head p {
+    max-width: 24rem;
+    margin-top: 0.75rem;
+    color: var(--ink-2);
+    font-size: 0.9375rem;
+    line-height: 1.65;
+  }
+  .entries {
+    border-top: 1px solid var(--hairline);
+  }
+  @media (max-width: 900px) {
+    .catalog-group {
+      grid-template-columns: minmax(9rem, 11rem) minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+  }
+  @media (max-width: 700px) {
+    .catalog-group,
+    .catalog-group + .catalog-group {
+      display: block;
+      margin-top: 3.5rem;
+    }
+    .catalog-group-head {
+      position: static;
+      margin-bottom: 1.5rem;
+    }
+  }
+</style>

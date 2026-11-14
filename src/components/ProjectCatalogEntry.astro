@@ -1,0 +1,191 @@
+---
+import ProjectArt from './ProjectArt.astro';
+import type {
+  IndependentCatalogEntry,
+  ProfessionalCatalogEntry,
+  ProjectCatalogEntry,
+  ProjectCatalogLabels,
+} from '../data/projectCatalog';
+import { projectHref } from '../data/projectCatalog';
+import type { Locale } from '../i18n/ui';
+
+interface Props {
+  entry: ProjectCatalogEntry;
+  locale: Locale;
+  labels: ProjectCatalogLabels;
+}
+
+const { entry, locale, labels } = Astro.props;
+const isProfessional = (value: ProjectCatalogEntry): value is ProfessionalCatalogEntry =>
+  value.type === 'professional';
+const isIndependent = (value: ProjectCatalogEntry): value is IndependentCatalogEntry =>
+  value.type === 'independent';
+---
+
+{
+  isProfessional(entry) ? (
+    <article class="catalog-entry professional-entry" data-project-id={entry.project.slug}>
+      <div class="entry-copy">
+        <h3>
+          <a href={projectHref(locale, entry.project)}>{entry.project.name}</a>
+        </h3>
+        <p class="summary">{entry.project.oneLiner}</p>
+        <p class="meta mono">
+          {entry.project.role} · {entry.project.period}
+        </p>
+        <a class="entry-link" href={projectHref(locale, entry.project)}>
+          {labels.viewProject} <span aria-hidden="true">→</span>
+        </a>
+      </div>
+      <div class="work-art" aria-hidden="true">
+        <ProjectArt slug={entry.project.slug} />
+      </div>
+    </article>
+  ) : isIndependent(entry) ? (
+    <article class="catalog-entry independent-entry" data-project-id={entry.project.id}>
+      <div class="logo-panel">
+        <img src={entry.project.logoSrc} width="560" height="160" alt={entry.project.logoAlt} loading="eager" />
+        <p class="mono">{entry.project.kind}</p>
+      </div>
+      <div class="entry-copy">
+        <h3>{entry.project.name}</h3>
+        <p class="summary">{entry.project.summary}</p>
+        <p class="description">{entry.project.description}</p>
+        <ul>
+          {entry.project.features.map((feature) => <li>{feature}</li>)}
+        </ul>
+        <div class="project-actions">
+          {entry.project.links.map((link, index) => (
+            <a class:list={{ 'entry-link': index === 0 }} href={link.href} rel={link.external ? 'noopener' : undefined}>
+              {link.label} {link.external && <span aria-hidden="true">↗</span>}
+            </a>
+          ))}
+        </div>
+        <p class="license mono">{entry.project.license}</p>
+      </div>
+    </article>
+  ) : null
+}
+
+<style>
+  .catalog-entry {
+    display: grid;
+    align-items: center;
+    gap: 1.5rem;
+    padding-block: 2rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .professional-entry {
+    grid-template-columns: minmax(0, 1fr) 16rem;
+    min-height: 15rem;
+  }
+  .independent-entry {
+    grid-template-columns: 16rem minmax(0, 1fr);
+    align-items: start;
+  }
+  .entry-copy {
+    min-width: 0;
+  }
+  h3 {
+    font-size: 1.5rem;
+  }
+  h3 a {
+    color: var(--ink);
+  }
+  h3 a:hover {
+    color: var(--accent);
+  }
+  .summary {
+    margin-top: 0.6rem;
+    max-width: 42rem;
+    color: var(--ink-2);
+  }
+  .meta {
+    margin-top: 0.75rem;
+    color: var(--ink-3);
+    font-size: 0.75rem;
+  }
+  .entry-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 0.5rem;
+    min-height: 44px;
+    font-size: 0.9rem;
+  }
+  .work-art {
+    min-width: 0;
+  }
+  .work-art :global(svg) {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .logo-panel {
+    padding-top: 0.25rem;
+  }
+  .logo-panel img {
+    display: block;
+    width: 100%;
+    height: auto;
+    border-radius: 10px;
+  }
+  .logo-panel p {
+    margin-top: 0.75rem;
+    color: var(--ink-3);
+    font-size: 0.7rem;
+  }
+  .description {
+    margin-top: 1rem;
+    color: var(--ink-2);
+  }
+  ul {
+    margin: 1rem 0;
+    padding-left: 1.2rem;
+    color: var(--ink-2);
+    font-size: 0.95rem;
+  }
+  li + li {
+    margin-top: 0.4rem;
+  }
+  li::marker {
+    color: var(--accent);
+  }
+  .project-actions {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 0.5rem 1.5rem;
+    font-size: 0.9rem;
+  }
+  .project-actions > a {
+    display: inline-flex;
+    align-items: center;
+    min-height: 44px;
+  }
+  .license {
+    margin-top: 0.5rem;
+    color: var(--ink-3);
+    font-size: 0.72rem;
+  }
+  @media (max-width: 900px) {
+    .professional-entry {
+      grid-template-columns: minmax(0, 1fr) 14rem;
+    }
+    .independent-entry {
+      grid-template-columns: 14rem minmax(0, 1fr);
+    }
+  }
+  @media (max-width: 700px) {
+    .professional-entry,
+    .independent-entry {
+      grid-template-columns: minmax(0, 1fr);
+      gap: 1.5rem;
+    }
+    .work-art {
+      max-width: 20rem;
+    }
+    .logo-panel {
+      max-width: 20rem;
+    }
+  }
+</style>
