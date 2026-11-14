@@ -6,33 +6,30 @@ lang: vi
 key: xem-lai-city-of-ember-sau-7-nam
 tags: ['my-snippets']
 ---
+Xem lại bộ phim cũ,
+Cảm nhận thời gian trôi…
+Cũng chính bộ phim này.
+Trước 7 năm có lẻ…
+Từ một cậu học sinh
+Thành một sinh viên trẻ.
 
-Xem lại bộ phim cũ,\
-Cảm nhận thời gian trôi…\
-Cũng chính bộ phim này.\
-Trước 7 năm có lẻ…\
-Từ một cậu học sinh\
-Thành một sinh viên trẻ.\
-Vài trải nghiệm trong đời\
-Thử làm bài thơ "ghẻ".
-
-Dòng thời gian cứ trôi…\
-Biết bao nhiêu năm nữa\
-Lại xem và nhìn lại\
-Những kỉ niệm đã qua\
-Chắc sẽ ngồi tự hỏi\
-Mình có được những gì\
-Làm được thêm điều gì\
-Để không phải hối hận\
-Với những người xung quanh\
-Với người thân, bố mẹ\
+Dòng thời gian cứ trôi…
+Biết qua bao năm nữa
+Ngồi xem và nhìn lại
+Những kỉ niệm đã qua
+Chắc sẽ ngồi tự hỏi
+Mình có được những gì
+Làm được thêm điều gì
+Để không phải hối hận
+Với những người xung quanh
+Với người thân, bố mẹ
 Và chính bản thân mình
 
-Tự ngồi và tự kỉ…\
-Như một thằng thần kinh\
-Nhớ lại về quá khứ\
-Cũng nghĩ tới tương lai\
-Cảm thấy hơi mờ mịt\
-Như nấp dưới sương mù…
+Tự ngồi và tự kỉ…
+Như một thằng thần kinh
+Nhớ lại chuyện quá khứ
+Suy ngẫm về tương lai
+Mông lung và mờ mịt
+Như nấp dưới sương mai ...
 
 *Trung Nguyen*

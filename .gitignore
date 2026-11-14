@@ -4,4 +4,6 @@ dist/
 npm-debug.log*
 .DS_Store
 raw/
-.impeccable/config.local.json
+.impeccable/
+AGENTS.md
+CLAUDE.md
