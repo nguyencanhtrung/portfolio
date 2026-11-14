@@ -4,7 +4,6 @@ export const ui = {
   en: {
     'nav.journey': 'Journey',
     'nav.projects': 'Projects',
-    'nav.blog': 'Blog',
     'nav.about': 'About',
     'footer.rights': 'Canh-Trung Nguyen',
     'footer.builtwith': 'Built with Astro · hosted on GitHub Pages',
@@ -35,7 +34,6 @@ export const ui = {
   vi: {
     'nav.journey': 'Hành trình',
     'nav.projects': 'Dự án',
-    'nav.blog': 'Blog',
     'nav.about': 'Giới thiệu',
     'footer.rights': 'Nguyễn Cảnh Trung',
     'footer.builtwith': 'Dựng bằng Astro · host trên GitHub Pages',

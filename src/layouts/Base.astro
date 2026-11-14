@@ -23,7 +23,6 @@ const path = Astro.url.pathname;
 const nav = [
   { href: localePath(locale, '/'), label: t(locale, 'nav.journey') },
   { href: localePath(locale, '/projects/'), label: t(locale, 'nav.projects') },
-  { href: localePath(locale, '/blog/'), label: t(locale, 'nav.blog') },
   { href: localePath(locale, '/about/'), label: t(locale, 'nav.about') },
 ];
 
@@ -49,7 +48,6 @@ const isActive = (href: string) =>
         </>
       )
     }
-    <link rel="alternate" type="application/rss+xml" title="Canh-Trung Nguyen" href="/rss.xml" />
     <meta property="og:title" content={title} />
     <meta property="og:description" content={description} />
     <meta property="og:type" content="website" />
@@ -107,9 +105,6 @@ const isActive = (href: string) =>
           </a>
           <a href="https://www.linkedin.com/in/nguyencanhtrung" rel="me noopener" aria-label="LinkedIn" title="linkedin.com/in/nguyencanhtrung">
             <ContactIcon name="linkedin" />
-          </a>
-          <a href="/rss.xml" aria-label="RSS" title="RSS">
-            <ContactIcon name="rss" />
           </a>
         </div>
         <p class="mono footer-meta">

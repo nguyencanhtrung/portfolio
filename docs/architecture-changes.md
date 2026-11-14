@@ -9,3 +9,13 @@
 - Prototype archive: Approved snapshots and the throwaway prototype are preserved on `prototype/projects-c-approved` at commit `6cd4439544b87db8ed24ea88979a2c3a6719dbee`; the main branch does not include the preview middleware or prototype files.
 - Follow-ups: Add future independent projects to both locale arrays in `src/data/projectCatalog.ts`, including a stable `id`, localized copy, and links.
 - Tag: architecture, design. Target document: this file.
+
+## Archive Blog routes without deleting content
+
+- Problem: Blog index, pagination, post routes, and RSS were public even though this release closes the Blog surface. The About copy also promised a visible blog, and Pagefind could index the rendered posts.
+- Design decision: Move the seven route source modules from `src/pages/blog`, `src/pages/vi/blog`, and `src/pages/rss.xml.js` to the matching `src/archived-pages` paths. Astro therefore stops generating those routes while the content collection, Blog components, and image files remain available for restoration. Remove Blog/RSS links and feed metadata from the shared shell and remove the About claim.
+- Trade-offs and rejected options: Content was not deleted, and the route modules were not commented out or hidden with middleware; relocation keeps restoration explicit and reversible. Blog components and translation strings remain because they are the preserved implementation boundary, not public discovery.
+- Verification evidence: `/tmp/portfolio-production-run/blog-closure-build.log` records the normal Astro build generating only the remaining public routes and Pagefind output. `/tmp/portfolio-production-run/blog-closure-check.log` records absence of Blog/RSS paths and references in `dist`, preservation of the 71 content files and Blog components, and `git diff --check`.
+- Restoration: Move the modules back from `src/archived-pages` to their original `src/pages` paths, restore the shell nav/feed links and About copy, then run the normal build and verify the generated routes before publishing.
+- Follow-ups: Keep archived route modules out of the production route tree until the Blog surface is explicitly reopened.
+- Tag: architecture, content lifecycle. Target document: this file.
