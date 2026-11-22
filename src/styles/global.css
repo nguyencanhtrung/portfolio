@@ -1,7 +1,8 @@
 /* ---------------------------------------------------------------- tokens */
 :root {
+  --font-display: 'Archivo Variable', 'Helvetica Neue', Arial, sans-serif;
   --font-serif: 'Newsreader Variable', Georgia, 'Times New Roman', serif;
-  --font-sans: 'Inter Variable', system-ui, -apple-system, sans-serif;
+  --font-sans: 'Hanken Grotesk Variable', system-ui, -apple-system, sans-serif;
   --font-mono: 'JetBrains Mono', ui-monospace, 'SF Mono', monospace;
 
   --bg: #faf9f7;
@@ -58,11 +59,10 @@ h1,
 h2,
 h3,
 h4 {
-  font-family: var(--font-serif);
-  font-variation-settings: 'opsz' 72;
-  font-weight: 500;
+  font-family: var(--font-display);
+  font-weight: 600;
   line-height: 1.15;
-  letter-spacing: -0.01em;
+  letter-spacing: -0.015em;
   margin: 0;
   text-wrap: balance;
 }

@@ -8,6 +8,8 @@ export interface ProjectSection {
 export interface Project {
   slug: string;
   name: string;
+  /** Short name for home-page cards. */
+  cardName: string;
   period: string;
   role: string;
   oneLiner: string;
@@ -20,6 +22,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'connected-driving',
       name: 'Connected Driving — C-V2X Sidelink',
+      cardName: 'Connected Driving',
       period: 'Ongoing',
       role: 'Tech Lead & Developer',
       oneLiner:
@@ -65,6 +68,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'v2x-protocol-stack',
       name: 'V2X Protocol Stack',
+      cardName: '5G Protocol Stack',
       period: 'Ongoing',
       role: 'Tech Lead & Developer',
       oneLiner:
@@ -111,6 +115,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'digital-twin-channel-sim',
       name: 'Digital Twin & Channel Simulation',
+      cardName: 'Digital Twins',
       period: 'Ongoing',
       role: 'Program Lead / Tech Lead & Developer',
       oneLiner:
@@ -158,6 +163,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'robotics-sim2real',
       name: 'Robotics Sim2Real',
+      cardName: 'Robotics & Physical AI',
       period: 'Ongoing',
       role: 'Tech Lead & Developer',
       oneLiner:
@@ -205,6 +211,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'connected-driving',
       name: 'Connected Driving — C-V2X Sidelink',
+      cardName: 'Connected Driving',
       period: 'Đang triển khai',
       role: 'Tech Lead & Developer',
       oneLiner:
@@ -250,6 +257,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'v2x-protocol-stack',
       name: 'V2X Protocol Stack',
+      cardName: '5G Protocol Stack',
       period: 'Đang triển khai',
       role: 'Tech Lead & Developer',
       oneLiner:
@@ -296,6 +304,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'digital-twin-channel-sim',
       name: 'Digital Twin & Channel Simulation',
+      cardName: 'Digital Twins',
       period: 'Đang triển khai',
       role: 'Program Lead / Tech Lead & Developer',
       oneLiner:
@@ -343,6 +352,7 @@ export const projects: Record<Locale, Project[]> = {
     {
       slug: 'robotics-sim2real',
       name: 'Robotics Sim2Real',
+      cardName: 'Robotics & Physical AI',
       period: 'Đang triển khai',
       role: 'Tech Lead & Developer',
       oneLiner:

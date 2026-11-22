@@ -1,0 +1,228 @@
+---
+// Animated card thumbnails for the home-page rails. No text in the drawings;
+// ink strokes plus one accent; dashed = simulated, solid = real.
+// Motion is off under prefers-reduced-motion and the still frame stays complete.
+interface Props {
+  slug: string;
+}
+
+const { slug } = Astro.props;
+
+const bars = [8, 18, 30, 22, 40, 26, 14, 34, 20, 10];
+const lines: [number, number][] = [
+  [74, 280],
+  [92, 262],
+  [110, 276],
+  [128, 244],
+];
+---
+
+{
+  slug === 'connected-driving' && (
+    <svg class="pa cd" viewBox="0 0 320 200" role="img" aria-label="Two cars on a road exchanging messages directly">
+      <path class="k3" d="M20 62H300M20 138H300" />
+      <path class="k3 dash lane" d="M20 100H300" />
+      <rect class="k bg" x="56" y="70" width="70" height="24" rx="7" />
+      <path class="k3" d="M108 73v18" />
+      <rect class="k bg" x="194" y="106" width="70" height="24" rx="7" />
+      <path class="k3" d="M246 109v18" />
+      <path class="a dash link" d="M130 84C166 84 158 116 190 116" />
+      <path class="a w1" d="M136 72a14 14 0 0 1 0 24" />
+      <path class="a w2" d="M143 65a22 22 0 0 1 0 38" />
+      <path class="a w1 late" d="M184 104a14 14 0 0 0 0 24" />
+      <path class="a w2 late" d="M177 97a22 22 0 0 0 0 38" />
+    </svg>
+  )
+}
+
+{
+  slug === 'v2x-protocol-stack' && (
+    <svg class="pa ps" viewBox="0 0 320 200" role="img" aria-label="A packet passing down a four-layer protocol stack">
+      <path class="a wash" d="M160 128L240 152L160 176L80 152Z" />
+      <path class="k bg ly l3" d="M160 100L240 124L160 148L80 124Z" />
+      <path class="k bg ly l2" d="M160 72L240 96L160 120L80 96Z" />
+      <path class="k bg ly l1" d="M160 44L240 68L160 92L80 68Z" />
+      <path class="k3" d="M262 60V156M256 148l6 8 6-8" />
+      <rect class="pk" x="258" y="56" width="8" height="8" rx="1" />
+    </svg>
+  )
+}
+
+{
+  slug === 'robotics-sim2real' && (
+    <svg class="pa hb" viewBox="0 0 320 200" role="img" aria-label="A humanoid robot waving; its simulated arm leads the real one">
+      <path class="k3" d="M90 184H230" />
+      <g class="body">
+        <rect class="k bg" x="146" y="24" width="28" height="24" rx="8" />
+        <rect class="a bg" x="151" y="32" width="18" height="7" rx="3.5" />
+        <rect class="eye" x="153" y="34" width="5" height="3" rx="1.5" />
+        <path class="k" d="M160 48V55" />
+        <path class="k" d="M138 62L127 90L130 114" />
+        <circle class="k bg" cx="127" cy="90" r="3.5" />
+        <circle class="k bg" cx="130" cy="116" r="3" />
+        <rect class="k bg" x="138" y="55" width="44" height="50" rx="9" />
+        <circle class="dot core" cx="160" cy="72" r="3" />
+        <path class="k3" d="M148 90H172" />
+        <rect class="k bg" x="144" y="105" width="32" height="12" rx="4" />
+        <path class="k" d="M152 117L150 148L150 178M168 117L170 148L170 178" />
+        <circle class="k bg" cx="150" cy="148" r="3.5" />
+        <circle class="k bg" cx="170" cy="148" r="3.5" />
+        <path class="k" d="M141 181H157M165 181H181" />
+      </g>
+      <g class="ua sim">
+        <path class="k3 dash" d="M182 62L196 88" />
+        <g class="fa">
+          <path class="k3 dash" d="M196 88L204 112" />
+          <circle class="k3 bg dash" cx="205" cy="115" r="3" />
+        </g>
+      </g>
+      <g class="ua real">
+        <path class="k" d="M182 62L196 88" />
+        <circle class="k bg" cx="196" cy="88" r="3.5" />
+        <g class="fa">
+          <path class="k" d="M196 88L204 112" />
+          <circle class="k bg" cx="205" cy="115" r="3" />
+        </g>
+      </g>
+      <circle class="k bg" cx="182" cy="62" r="4" />
+    </svg>
+  )
+}
+
+{
+  slug === 'digital-twin-channel-sim' && (
+    <svg class="pa dt" viewBox="0 0 320 200" role="img" aria-label="Radio rays travelling between buildings from a transmitter to a receiver">
+      <g class="k3 bg">
+        <rect x="28" y="28" width="66" height="40" />
+        <rect x="104" y="28" width="58" height="40" />
+        <rect x="172" y="28" width="48" height="40" />
+        <rect x="230" y="28" width="62" height="40" />
+        <rect x="28" y="132" width="52" height="40" />
+        <rect x="90" y="132" width="84" height="40" />
+        <rect x="184" y="132" width="40" height="40" />
+        <rect x="234" y="132" width="58" height="40" />
+      </g>
+      <path class="a faint" d="M42 100H278" />
+      <path class="a faint" d="M42 100L124 68L204 132L278 100" />
+      <path class="a faint" d="M42 100L136 132L226 68L278 100" />
+      <path class="a ray" d="M42 100H278" />
+      <path class="a ray r1" d="M42 100L124 68L204 132L278 100" />
+      <path class="a ray r2" d="M42 100L136 132L226 68L278 100" />
+      <circle class="a bg tx" cx="42" cy="100" r="7" />
+      <circle class="dot" cx="42" cy="100" r="3" />
+      <circle class="k bg" cx="278" cy="100" r="6" />
+    </svg>
+  )
+}
+
+{
+  slug === 'asr-studio' && (
+    <svg class="pa asr" viewBox="26 32 272 170" role="img" aria-label="Speech turning into a transcript with timestamps">
+      {bars.map((h, i) => (
+        <path class="k bar" style={`animation-delay:-${((i * 0.37) % 1.3).toFixed(2)}s`} d={`M${40 + i * 10} ${100 - h}V${100 + h}`} />
+      ))}
+      <path class="k3" d="M152 100h22M168 94l6 6-6 6" />
+      {lines.map(([y, x], i) => (
+        <>
+          <path class="a" d={`M192 ${y}h8`} />
+          <path class="k3 tl" style={`animation-delay:${(0.5 + i * 0.45).toFixed(2)}s`} pathLength="1" d={`M206 ${y}H${x}`} />
+        </>
+      ))}
+    </svg>
+  )
+}
+
+<style>
+  .pa {
+    display: block;
+    width: 100%;
+    height: auto;
+  }
+  .pa * {
+    fill: none;
+    stroke-width: 1.5;
+    stroke-linecap: round;
+    stroke-linejoin: round;
+    vector-effect: non-scaling-stroke;
+  }
+  .k { stroke: var(--ink-2); }
+  .k3 { stroke: var(--ink-3); }
+  .a { stroke: var(--accent); }
+  .bg { fill: var(--surface); }
+  .wash { fill: color-mix(in oklch, var(--accent) 22%, var(--surface)); }
+  .dot, .eye, .pk { fill: var(--accent); stroke: none; }
+  .dash { stroke-dasharray: 5 5; }
+  .faint { opacity: 0.18; }
+  .hb .ua { transform-box: view-box; transform-origin: 182px 62px; }
+  .hb .fa { transform-box: view-box; transform-origin: 196px 88px; }
+  .asr .bar { transform-box: fill-box; transform-origin: center; }
+  .asr .tl { stroke-dasharray: 1 1; }
+  .dt .tx { transform-box: fill-box; transform-origin: center; }
+
+  @media (prefers-reduced-motion: reduce) {
+    .ray { display: none; }
+    .faint { opacity: 0.6; }
+  }
+
+  @media (prefers-reduced-motion: no-preference) {
+    /* Connected Driving: road scrolls, PC5 arcs pulse car to car */
+    .cd .lane { animation: lane 1.2s linear infinite; }
+    .cd .link { animation: link 1s linear infinite; }
+    .cd .w1, .cd .w2 { opacity: 0; animation: wave 2s ease-out infinite; }
+    .cd .w2 { animation-delay: 0.35s; }
+    .cd .late.w1 { animation-delay: 1s; }
+    .cd .late.w2 { animation-delay: 1.35s; }
+
+    /* 5G Protocol Stack: a packet drops, each layer lights as it passes */
+    .ps .pk { animation: drop 3.2s cubic-bezier(0.5, 0, 0.3, 1) infinite; }
+    .ps .ly { animation: lit 3.2s linear infinite; }
+    .ps .l1 { animation-delay: 0.25s; }
+    .ps .l2 { animation-delay: 0.95s; }
+    .ps .l3 { animation-delay: 1.65s; }
+
+    /* Robotics & Physical AI: simulated arm leads, real arm follows */
+    .hb .ua { animation: hb-ua 4.8s ease-in-out infinite; }
+    .hb .fa { animation: hb-fa 4.8s ease-in-out infinite; }
+    .hb .real, .hb .real .fa { animation-delay: 0.35s; }
+    .hb .eye { animation: hb-eye 4.8s ease-in-out infinite; }
+    .hb .core { animation: pulse 2.4s ease-in-out infinite; }
+    .hb .body { animation: bob 4.8s ease-in-out infinite; }
+
+    /* Digital Twins: rays travel TX to RX */
+    .dt .ray { stroke-width: 2; stroke-dasharray: 14 400; stroke-dashoffset: 14; animation: ray 2.6s linear infinite; }
+    .dt .r1 { animation-delay: 0.5s; }
+    .dt .r2 { animation-delay: 1s; }
+    .dt .tx { animation: tx 2.6s ease-out infinite; }
+
+    /* ASR Studio: voice bars breathe, transcript lines write in */
+    .asr .bar { animation: bar 1.3s ease-in-out infinite; }
+    .asr .tl { stroke-dashoffset: 1; animation: write 4s ease-out infinite; }
+  }
+
+  @keyframes lane { to { stroke-dashoffset: 10; } }
+  @keyframes link { to { stroke-dashoffset: -10; } }
+  @keyframes wave { 0% { opacity: 0; } 20% { opacity: 1; } 70%, 100% { opacity: 0; } }
+  @keyframes drop {
+    0% { transform: translateY(0); opacity: 0; }
+    8% { opacity: 1; }
+    85% { transform: translateY(88px); opacity: 1; }
+    100% { transform: translateY(88px); opacity: 0; }
+  }
+  @keyframes lit { 0%, 18%, 100% { stroke: var(--ink-2); } 6%, 12% { stroke: var(--accent); } }
+  @keyframes hb-ua { 0%, 8% { transform: rotate(0); } 26%, 74% { transform: rotate(-115deg); } 92%, 100% { transform: rotate(0); } }
+  @keyframes hb-fa {
+    0%, 28% { transform: rotate(0); }
+    36% { transform: rotate(24deg); }
+    45% { transform: rotate(-18deg); }
+    54% { transform: rotate(24deg); }
+    63% { transform: rotate(-18deg); }
+    72%, 100% { transform: rotate(0); }
+  }
+  @keyframes hb-eye { 0%, 20% { transform: translateX(0); } 35%, 70% { transform: translateX(9px); } 85%, 100% { transform: translateX(0); } }
+  @keyframes pulse { 0%, 100% { opacity: 1; } 50% { opacity: 0.35; } }
+  @keyframes bob { 0%, 100% { transform: translateY(0); } 50% { transform: translateY(-1.5px); } }
+  @keyframes ray { to { stroke-dashoffset: -400; } }
+  @keyframes tx { 0% { transform: scale(1); opacity: 1; } 60% { transform: scale(1.8); opacity: 0; } 100% { opacity: 0; } }
+  @keyframes bar { 0%, 100% { transform: scaleY(0.35); } 50% { transform: scaleY(1); } }
+  @keyframes write { 0% { stroke-dashoffset: 1; } 18%, 80% { stroke-dashoffset: 0; } 92%, 100% { stroke-dashoffset: 1; } }
+</style>

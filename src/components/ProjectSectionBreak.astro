@@ -32,6 +32,8 @@ const labels = locale === 'vi'
   .echo { stroke: var(--ink-3); opacity: .22; stroke-dasharray: 3 5; }
   .wave-toggle { position: absolute; right: 0; bottom: 0; display: grid; place-items: center; width: 32px; height: 32px; padding: 6px; background: var(--bg); color: var(--ink-3); border: 1px solid var(--hairline); border-radius: 4px; cursor: pointer; }
   .wave-toggle[hidden] { display: none; }
+  /* Play/pause hidden for now: the wave always runs (reduced motion still stops it). */
+  .wave-toggle { display: none !important; }
   .wave-toggle:hover { color: var(--accent); border-color: var(--accent); }
   .wave-toggle svg { width: 18px; height: 18px; }
   .wave-toggle[aria-pressed='false'] .play-icon, .wave-toggle[aria-pressed='true'] .pause-icon { display: none; }

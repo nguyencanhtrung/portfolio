@@ -12,26 +12,25 @@ colors:
   hairline: "#e5e2dc"
   code-paper: "#f2f0eb"
 typography:
-  display:
+  name:
     fontFamily: "Newsreader Variable, Georgia, Times New Roman, serif"
-    fontSize: "clamp(2.6rem, 7vw, 4.2rem)"
+    fontSize: "clamp(2.6rem, min(5.6vw, 8.6vh), 4.6rem)"
     fontWeight: 500
-    lineHeight: 1.15
+    lineHeight: 1.12
     letterSpacing: "-0.01em"
-    fontVariation: "'opsz' 72"
   headline:
-    fontFamily: "Newsreader Variable, Georgia, Times New Roman, serif"
+    fontFamily: "Archivo Variable, Helvetica Neue, Arial, sans-serif"
     fontSize: "1.8rem"
-    fontWeight: 500
+    fontWeight: 600
     lineHeight: 1.15
-    letterSpacing: "-0.01em"
+    letterSpacing: "-0.015em"
   title:
-    fontFamily: "Newsreader Variable, Georgia, Times New Roman, serif"
-    fontSize: "1.15rem"
-    fontWeight: 500
+    fontFamily: "Archivo Variable, Helvetica Neue, Arial, sans-serif"
+    fontSize: "1rem"
+    fontWeight: 600
     lineHeight: 1.15
   body:
-    fontFamily: "Inter Variable, system-ui, sans-serif"
+    fontFamily: "Hanken Grotesk Variable, system-ui, sans-serif"
     fontSize: "1.0625rem"
     fontWeight: 400
     lineHeight: 1.65
@@ -51,16 +50,16 @@ spacing:
   section: "5rem"
 components:
   button-cta:
-    textColor: "{colors.ink-secondary}"
+    textColor: "{colors.ink}"
     typography: "{typography.label}"
-    rounded: "{rounded.pill}"
-    padding: "0.65rem 1.3rem"
+    rounded: "0"
+    padding: "0.7rem 1.2rem"
   button-cta-hover:
-    textColor: "{colors.oxblood}"
+    backgroundColor: "{colors.oxblood}"
   card:
     backgroundColor: "{colors.surface-white}"
-    rounded: "{rounded.lg}"
-    padding: "1.4rem 1.5rem 2.4rem"
+    rounded: "0"
+    padding: "0 0 0.9rem"
   chip-metric:
     backgroundColor: "{colors.code-paper}"
     textColor: "{colors.ink-secondary}"
@@ -80,8 +79,8 @@ Density is generous and editorial: one column of measured text (44rem), wide hai
 
 **Key Characteristics:**
 - Warm paper ground (#faf9f7) with true-white surfaces only for raised cards and code frames.
-- One accent (Oxblood) applied as punctuation, never as area.
-- Three typefaces with strict roles: serif narrates, sans explains, mono measures.
+- One accent (Oxblood) applied as punctuation; its only area is the current chapter on the hero die.
+- Four faces with strict roles: Newsreader for the name, Archivo for headings, Hanken Grotesk for text, JetBrains Mono for measurements.
 - Hairline (1px) borders carry all structure; no shadows anywhere.
 - Hand-drawn schematic SVG line-art; dashed = simulated, solid = real.
 - Full light/dark mirror driven entirely by CSS custom properties.
@@ -104,14 +103,15 @@ An ink-on-warm-paper palette with a single dark-red seal.
 - **Code Paper** (#f2f0eb): code blocks, inline code, and metric chips (#1f1f28 in dark).
 
 ### Named Rules
-**The Stamp Rule.** Oxblood is a stamp, not a paint. It appears on strokes, glyphs, dots, and text — never as a large fill or background. If a surface is turning red, it's wrong.
+**The Stamp Rule.** Oxblood is a stamp, not a paint. It appears on strokes, glyphs, dots, and text. The one sanctioned area is the current-chapter block on the hero die (mixed toward the surface: 88% light, 58% dark). Any other red surface is wrong.
 
 **The Two-Theme Mirror Rule.** Every color exists only as a CSS custom property with a light and a dark value; components never hard-code a hex. New work must land in both themes at once.
 
 ## Typography
 
-**Display Font:** Newsreader Variable (with Georgia fallback), optical size 72 for headings, 40 + italic for taglines
-**Body Font:** Inter Variable (with system-ui fallback)
+**Name Font:** Newsreader Variable (Georgia fallback), 500, text optical size; also italic taglines and blockquotes
+**Heading Font:** Archivo Variable (Helvetica Neue fallback), 600, all `h1`–`h4` except the hero name
+**Body Font:** Hanken Grotesk Variable (system-ui fallback)
 **Label/Mono Font:** JetBrains Mono (with ui-monospace fallback), Vietnamese subset loaded
 
 **Character:** A literary serif doing the storytelling over a quiet, efficient sans — the pairing of a memoir set by an engineer. The mono face is the instrument readout: small, tracked wide, often uppercase, and always attached to a fact.
@@ -125,7 +125,7 @@ An ink-on-warm-paper palette with a single dark-red seal.
 - **Tagline** (italic serif, `opsz` 40, clamp(1.25rem, 3vw, 1.6rem), Ink Secondary): the one italic voice, used for the hero epigraph and blockquotes.
 
 ### Named Rules
-**The Three Hands Rule.** Serif narrates, sans explains, mono measures. A heading is never sans, running text is never serif, and a number worth believing is set in mono.
+**The Four Hands Rule.** Newsreader names, Archivo heads, Hanken Grotesk explains, mono measures. Running text is never serif or display, and a number worth believing is set in mono.
 
 ## Layout
 
@@ -135,7 +135,9 @@ Sections open with a **section label**: mono, 0.75rem, uppercase, 0.14em trackin
 
 The home timeline is the signature layout: a **square-wave** — a dashed 1px line that runs down the outer edge of each chapter spread (left for odd, right for even), then crosses the full width like a clock edge, enclosing art and text in alternating cells. Below 900px it collapses to a single continuous left spine and the body reorders (era → title → org → art → story → metrics) via `display: contents`.
 
-Cards sit in a 2-column grid (1rem gap) collapsing to one column at 700px. Blog lists are hairline-ruled rows (date column, 8rem) collapsing at 640px. The header wraps its nav to a second row on small screens rather than hiding it behind a menu.
+The hero is one screen: the **die** (career as a chip floorplan), the intro row on the die's 12-column grid, and HeroScene at the bottom as the separator. The die has a name cell and one block per chapter; tone deepens with time; blocks link to their chapters. Below 760px the die becomes two columns (name, current chapter, then 2×2).
+
+Home project sections are **card rails**: one row, up to four cards side by side (min 180px). With more cards than fit, the row scrolls by swipe, mouse drag, or ← → buttons; the buttons appear only then. Blog lists are hairline-ruled rows (date column, 8rem) collapsing at 640px. The header stays one row at every width; nav gaps tighten instead of wrapping.
 
 ## Elevation & Depth
 
@@ -146,7 +148,7 @@ Cards sit in a 2-column grid (1rem gap) collapsing to one column at 700px. Blog 
 
 ## Shapes
 
-Rectangles with quiet corners, in a fixed radius scale: **4px** (inline code, small controls like the language/theme toggles), **8px** (code blocks, search field, FPGA package in the art), **10px** (cards, framed images), and **999px** (pills: the CTA button and metric chips). Every shape is bounded by a 1px hairline border; borders are the system's structure, not decoration.
+Rectangles with quiet corners, in a fixed radius scale: **0** (hero die, its blocks, the CTA, home cards), **4px** (inline code, language/theme toggles), **8px** (code blocks, search field, FPGA package in the art), **10px** (catalog cards, framed images), and **999px** (metric chips). Square home elements echo the die; a 1px outline offset 3–6px is the die's seal ring and marks the CTA and the current chapter. Every shape is bounded by a 1px hairline border; borders are the system's structure, not decoration.
 
 The line-art carries its own form language: 1.1–1.7px strokes with round caps and joins, `vector-effect: non-scaling-stroke`, ink-toned strokes with Oxblood reserved for the signal being talked about.
 
@@ -156,10 +158,10 @@ The line-art carries its own form language: 1.1–1.7px strokes with round caps 
 ## Components
 
 ### Buttons
-The system has exactly one button shape: the pill CTA. Refined and restrained — a hairline pill that only reveals its intent on approach.
-- **Shape:** pill (999px), 1px hairline border
-- **Default:** transparent background, mono uppercase label (0.75rem, 0.14em), Ink Secondary, padding 0.65rem 1.3rem
-- **Hover / Focus:** border and text turn Oxblood; the embedded ↓/→ glyph translates 3px in its direction of travel; 0.15s ease
+The system has one button shape: the square CTA, framed like the die.
+- **Shape:** square, 1px ink border (55% toward the ground) plus a hairline outline offset 3px
+- **Default:** transparent background, mono uppercase label (0.75rem, 0.14em), Ink, padding 0.7rem 1.2rem
+- **Hover / Focus:** fills Oxblood with ground-colored text; the embedded ↓/→ glyph translates 3px; 0.2s
 - **Utility controls** (language badge, theme toggle): the same recipe at 4px radius and tighter padding
 
 ### Chips
@@ -174,6 +176,16 @@ The system has exactly one button shape: the pill CTA. Refined and restrained �
 - **Internal Padding:** 1.4rem 1.5rem, extra bottom room for the mono → affordance pinned bottom-right in Oxblood
 - **Card art:** each card opens with its line-art figure over a hairline rule
 
+### Home Rail Cards
+- **Content:** animated ProgramArt over a hairline rule, then the short card name (`cardName`), centered; no excerpt
+- **Shape:** square, Surface White, 1px hairline; border turns Oxblood on hover (no lift)
+- **Rail:** see Layout; the art panel carries a 3% Oxblood tint
+
+### Hero Die (signature)
+- **Frame:** 1px ink-3 border, hairline seal ring offset 6px, bond pads drawn as a dashed band 13px outside
+- **Blocks:** CH.01–04 at 3–15% Oxblood over Surface, each with its own hatch at 5% opacity; titles in Archivo 500, Ink Secondary
+- **Current chapter:** Oxblood fill, 2px Oxblood border, outline offset 3px, and a pulsing `● now` dot replacing "present"
+
 ### Inputs / Fields
 - **Style:** the Pagefind search box, skinned entirely through tokens — Surface White, hairline border, 8px radius, sans type
 - **Highlight:** result marks in Oxblood Wash with Oxblood text, 3px radius
@@ -182,7 +194,7 @@ The system has exactly one button shape: the pill CTA. Refined and restrained �
 ### Navigation
 - **Brand:** `ctn_` in mono, the underscore blinking in Oxblood (1.2s steps)
 - **Links:** sans 0.9rem, Ink Secondary; hover → Ink (no underline); active page → Oxblood
-- **Bar:** sticky, translucent Warm Paper (88%) with 8px backdrop blur, hairline bottom, 3.5rem tall; nav wraps below the brand row on mobile
+- **Bar:** sticky, translucent Warm Paper (88%) with 8px backdrop blur, hairline bottom, 3.5rem tall (3.25rem ≤640px); always one row
 
 ### Prose (long-form)
 - 44rem column, 1.1em block rhythm; serif `h2`/`h3` with generous top margins
@@ -192,7 +204,7 @@ The system has exactly one button shape: the pill CTA. Refined and restrained �
 - Images: framed on Surface White with hairline border, 10px radius, 0.5rem padding; captions in Ink Tertiary; dimmed 12% in dark theme
 
 ### Schematic Line-Art (signature)
-The site draws its own illustrations as datasheet-style SVG: HeroScene (the career as one continuous left-to-right signal), ChapterArt (one schematic per era), ProjectArt (one per project). Strokes use ink tones at 1.1–1.7px with round caps; Oxblood marks the active signal; Oxblood Wash is the only fill; dashed strokes follow The Dashed Twin Rule. All colors are CSS custom properties, so every drawing is theme-aware for free. Never replace these with photography or stock illustration.
+The site draws its own illustrations as datasheet-style SVG: HeroScene (the career as one continuous left-to-right signal), ChapterArt (one schematic per era), ProjectArt (one per project page), ProgramArt (one animated loop per home card, no text, off under reduced motion). Strokes use ink tones at 1.1–1.7px with round caps; Oxblood marks the active signal; Oxblood Wash is the only fill; dashed strokes follow The Dashed Twin Rule. All colors are CSS custom properties, so every drawing is theme-aware for free. Never replace these with photography or stock illustration.
 
 ## Do's and Don'ts
 
@@ -207,8 +219,8 @@ The site draws its own illustrations as datasheet-style SVG: HeroScene (the care
 
 ### Don't:
 - **Don't** add box-shadows, gradients, or glassmorphism beyond the header's existing backdrop blur (The No-Shadow Rule).
-- **Don't** use Oxblood as a background or large fill; it is punctuation (The Stamp Rule).
+- **Don't** use Oxblood as a background or large fill outside the current-chapter block (The Stamp Rule).
 - **Don't** introduce a second accent hue, photographic imagery, or stock icons; the line-art system is the imagery.
 - **Don't** hard-code hex values in components; tokens only.
-- **Don't** set headings in Inter or body copy in Newsreader (The Three Hands Rule).
+- **Don't** set body copy in Newsreader or Archivo (The Four Hands Rule).
 - **Don't** use dashed strokes decoratively; dashed is a semantic claim that the thing is simulated.

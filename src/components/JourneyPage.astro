@@ -3,9 +3,10 @@ import Base from '../layouts/Base.astro';
 import HeroScene from './HeroScene.astro';
 import ChapterArt from './ChapterArt.astro';
 import ChapterIcon from './ChapterIcon.astro';
-import ProjectArt from './ProjectArt.astro';
+import CardRail, { type RailItem } from './CardRail.astro';
 import { journey } from '../data/journey';
 import { projects } from '../data/projects';
+import { getProjectCatalog } from '../data/projectCatalog';
 import { t, localePath, type Locale } from '../i18n/ui';
 
 interface Props {
@@ -16,7 +17,28 @@ const { locale } = Astro.props;
 const c = journey[locale];
 // Newest first: reverse for display, keep original index for the chapter icon.
 const chapters = c.chapters.map((ch, iconIndex) => ({ ch, iconIndex })).reverse();
-const projectCards = projects[locale];
+// The die: one block per chapter, oldest first; the last chapter is current.
+const dieBlocks = c.chapters.map((ch, i) => ({
+  ch,
+  n: i + 1,
+  name: ch.title.split(' — ')[0],
+  current: i === c.chapters.length - 1,
+}));
+const since = (years: string) => years.split(' — ')[0];
+
+// Home rails: card name + animated art only. Order is editorial, not data order.
+const programOrder = ['connected-driving', 'v2x-protocol-stack', 'robotics-sim2real', 'digital-twin-channel-sim'];
+const programs: RailItem[] = programOrder
+  .map((slug) => projects[locale].find((p) => p.slug === slug))
+  .filter((p) => p !== undefined)
+  .map((p) => ({ slug: p.slug, title: p.cardName, href: localePath(locale, `/projects/${p.slug}/`) }));
+const independent: RailItem[] = (
+  getProjectCatalog(locale).categories.find((cat) => cat.id === 'independent')?.entries ?? []
+).flatMap((e) => {
+  if (e.type !== 'independent') return [];
+  const site = e.project.links.find((l) => l.label === 'Website') ?? e.project.links[0];
+  return [{ slug: e.project.id, title: e.project.name, href: site.href, external: site.external }];
+});
 const title =
   locale === 'en'
     ? 'Canh-Trung Nguyen — FPGA, 5G, V2X & Digital Twins'
@@ -27,14 +49,34 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 <Base locale={locale} title={title} description={c.heroIntro} altPath={altPath}>
   <section class="hero">
     <div class="container hero-copy">
-      <div class="hero-grid">
-        <div class="name-col">
+      <div class="die">
+        <span class="pads" aria-hidden="true"></span>
+        <div class="nm">
           <h1>{c.heroName}</h1>
+          <p class="who mono">{c.heroRole}</p>
           <p class="tagline">{c.heroTagline}</p>
         </div>
-        <div class="say-col">
-          <p class="intro">{c.heroIntro}</p>
-          <p class="role mono">{c.heroRole}</p>
+        {
+          dieBlocks.map(({ ch, n, name, current }) => (
+            <a class:list={['blk', `t${n}`]} href={`#ch-${n}`} style={`grid-area: c${n}`}>
+              <span class="code mono">
+                {ch.era} ·{' '}
+                {current ? (
+                  <>
+                    {since(ch.years)} — <span class="now"><i aria-hidden="true" />{t(locale, 'hero.now')}</span>
+                  </>
+                ) : (
+                  ch.years
+                )}
+              </span>
+              <b>{name}</b>
+            </a>
+          ))
+        }
+      </div>
+      <div class="intro-row">
+        <p class="intro">{c.heroIntro}</p>
+        <div class="go">
           <a class="cta mono" href="#journey">{t(locale, 'hero.cta')} <span class="arrow">↓</span></a>
         </div>
       </div>
@@ -49,7 +91,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     <ol class="chapters">
       {
         chapters.map(({ ch, iconIndex }) => (
-          <li class="chapter">
+          <li class="chapter" id={`ch-${iconIndex + 1}`}>
             <div class="art" aria-hidden="true">
               <ChapterArt index={iconIndex} />
             </div>
@@ -80,23 +122,8 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     </ol>
   </section>
 
-  <section class="current container">
-    <h2 class="section-label mono">{c.currentLabel}</h2>
-    <div class="cards">
-      {
-        projectCards.map((p) => (
-          <a class="card" href={localePath(locale, `/projects/${p.slug}/`)}>
-            <div class="card-art">
-              <ProjectArt slug={p.slug} />
-            </div>
-            <h3>{p.name}</h3>
-            <p>{p.oneLiner}</p>
-            <span class="more mono">→</span>
-          </a>
-        ))
-      }
-    </div>
-  </section>
+  <CardRail locale={locale} label={c.currentLabel} items={programs} />
+  {independent.length > 0 && <CardRail locale={locale} label={c.independentLabel} items={independent} />}
 </Base>
 
 <style>
@@ -116,52 +143,220 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     display: flex;
     flex-direction: column;
     justify-content: center;
-    padding-top: 1.5rem;
-    /* Sit above the optical centre: dead-centre copy reads as floating. */
-    padding-bottom: clamp(1rem, 6vh, 5rem);
+    padding-top: clamp(10px, 2.5vh, 32px);
+    padding-bottom: clamp(0.5rem, 3vh, 2.5rem);
     /* A flex item with auto inline margins shrinks to fit and centres itself,
        drifting off the page frame — force it to fill the 62rem container so
        the copy shares its left edge with the journey below. */
     width: 100%;
   }
-  /* Name left, explanation right — the copy fills the same frame as the
-     panorama and the timeline instead of stopping two thirds across.
-     Below 900px it stacks, keeping the reading order of the markup. */
-  .hero-grid {
+  /* ---- The die: the career as a chip floorplan. Name cell + one block per
+     chapter; tone deepens with time and the current chapter carries the
+     accent, a double frame and a live "now" marker. */
+  .die {
+    position: relative;
     display: grid;
-    gap: 2.5rem 3rem;
+    gap: 8px;
+    padding: 14px;
+    border: 1px solid color-mix(in oklch, var(--ink-3) 70%, var(--bg));
+    outline: 1px solid color-mix(in oklch, var(--hairline) 80%, var(--bg));
+    outline-offset: 6px;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    grid-template-rows:
+      minmax(clamp(64px, 11vh, 120px), auto)
+      minmax(clamp(40px, 6vh, 64px), auto)
+      minmax(clamp(84px, 13vh, 128px), auto);
+    grid-template-areas:
+      'nm nm nm nm nm nm nm c5 c5 c5 c5 c5'
+      'nm nm nm nm nm nm nm c5 c5 c5 c5 c5'
+      'c1 c1 c1 c2 c2 c2 c2 c3 c3 c4 c4 c4';
   }
-  .name-col,
-  .say-col {
-    max-width: var(--w-content);
+  /* Bond pads around the seal ring. */
+  .pads {
+    position: absolute;
+    inset: -13px;
+    pointer-events: none;
+    opacity: 0.4;
+    --pad: repeating-linear-gradient(90deg, var(--ink-3) 0 5px, transparent 5px 22px);
+    --padv: repeating-linear-gradient(0deg, var(--ink-3) 0 5px, transparent 5px 22px);
+    background:
+      var(--pad) top / 100% 3px no-repeat,
+      var(--pad) bottom / 100% 3px no-repeat,
+      var(--padv) left / 3px 100% no-repeat,
+      var(--padv) right / 3px 100% no-repeat;
   }
-  @media (min-width: 900px) {
-    .hero-grid {
-      grid-template-columns: minmax(0, 0.9fr) minmax(0, 1.1fr);
-      align-items: start;
+  .nm {
+    grid-area: nm;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    padding: 6px 8px 4px;
+  }
+  /* The name keeps the literary serif at text optical size. */
+  h1 {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    letter-spacing: -0.01em;
+    line-height: 1.12;
+    font-size: clamp(2.6rem, min(5.6vw, 8.6vh), 4.6rem);
+  }
+  .who {
+    margin-top: 14px;
+    font-size: 0.8rem;
+    line-height: 1.4;
+    letter-spacing: 0.04em;
+    color: var(--accent);
+  }
+  .tagline {
+    margin-top: 8px;
+    font-size: clamp(1rem, 1.5vw, 1.15rem);
+    color: var(--ink-2);
+  }
+  .blk {
+    position: relative;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-end;
+    gap: 2px;
+    padding: 10px 12px;
+    color: var(--ink);
+    border: 1px solid color-mix(in oklch, var(--accent) 18%, var(--hairline));
+    transition: background-color 0.25s, border-color 0.25s;
+  }
+  .blk:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+  }
+  .blk::before {
+    content: '';
+    position: absolute;
+    inset: 0;
+    opacity: 0.05;
+    pointer-events: none;
+  }
+  .blk > * {
+    position: relative;
+  }
+  .blk .code {
+    margin-bottom: auto;
+    font-size: 0.7rem;
+    line-height: 1.3;
+    color: var(--ink-2);
+    font-variant-numeric: tabular-nums;
+  }
+  .blk b {
+    font: 500 clamp(0.95rem, 1.3vw, 1.12rem) / 1.2 var(--font-display);
+    color: var(--ink-2);
+  }
+  .blk:not(.t5):hover {
+    background: color-mix(in oklch, var(--accent) 24%, var(--surface));
+  }
+  .blk:not(.t5):hover b {
+    color: var(--ink);
+  }
+  /* Past chapters recede: a shallow ramp and a different hatch each. */
+  .t1 { background: color-mix(in oklch, var(--accent) 3%, var(--surface)); }
+  .t2 { background: color-mix(in oklch, var(--accent) 6%, var(--surface)); }
+  .t3 { background: color-mix(in oklch, var(--accent) 10%, var(--surface)); }
+  .t4 { background: color-mix(in oklch, var(--accent) 15%, var(--surface)); }
+  :global([data-theme='dark']) .t1 { background: color-mix(in oklch, var(--accent) 4%, var(--surface)); }
+  :global([data-theme='dark']) .t2 { background: color-mix(in oklch, var(--accent) 7%, var(--surface)); }
+  :global([data-theme='dark']) .t4 { background: color-mix(in oklch, var(--accent) 14%, var(--surface)); }
+  .t1::before { background: repeating-linear-gradient(90deg, var(--ink) 0 1px, transparent 1px 6px); }
+  .t2::before { background: repeating-linear-gradient(0deg, var(--ink) 0 1px, transparent 1px 6px); }
+  .t3::before { background: repeating-linear-gradient(45deg, var(--ink) 0 1px, transparent 1px 7px); }
+  .t4::before { background: radial-gradient(var(--ink) 1px, transparent 1.3px) 0 0 / 6px 6px; }
+  /* Current chapter: the only accent area on the page. */
+  .t5 {
+    color: var(--bg);
+    background: color-mix(in oklch, var(--accent) 88%, var(--surface));
+    border: 2px solid var(--accent);
+    outline: 1px solid color-mix(in oklch, var(--accent) 45%, var(--surface));
+    outline-offset: 3px;
+  }
+  .t5::before {
+    background: repeating-linear-gradient(-45deg, var(--bg) 0 1px, transparent 1px 8px);
+    opacity: 0.14;
+  }
+  .t5 .code {
+    color: color-mix(in oklch, var(--bg) 78%, var(--accent));
+  }
+  .t5 b {
+    color: inherit;
+    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    font-weight: 700;
+  }
+  :global([data-theme='dark']) .t5 {
+    color: var(--ink);
+    background: color-mix(in oklch, var(--accent) 58%, var(--surface));
+  }
+  :global([data-theme='dark']) .t5 .code {
+    color: color-mix(in oklch, var(--ink) 85%, var(--accent));
+  }
+  :global([data-theme='dark']) .t5::before {
+    background: repeating-linear-gradient(-45deg, var(--ink) 0 1px, transparent 1px 8px);
+    opacity: 0.07;
+  }
+  .now {
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+  }
+  .now i {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: currentColor;
+  }
+  @media (prefers-reduced-motion: no-preference) {
+    .now i {
+      animation: now-pulse 2.4s ease-out infinite;
     }
-    .name-col,
-    .say-col {
-      max-width: none;
-    }
+  }
+  @keyframes now-pulse {
+    0% { box-shadow: 0 0 0 0 color-mix(in oklch, currentColor 60%, transparent); }
+    70%, 100% { box-shadow: 0 0 0 7px transparent; }
+  }
+
+  /* ---- Intro on the die's 12-column grid: bio under the name, CTA under
+     the current chapter. */
+  .intro-row {
+    display: grid;
+    grid-template-columns: repeat(12, minmax(0, 1fr));
+    gap: 0 8px;
+    padding-inline: 15px;
+    margin-top: clamp(36px, 7vh, 72px);
+    align-items: center;
+  }
+  .intro {
+    grid-column: 1 / 8;
+    padding-left: 8px;
+    padding-right: clamp(8px, 3vw, 40px);
+    font-size: clamp(0.98rem, 1.9vh, 1.08rem);
+    line-height: 1.6;
+    max-width: 62ch;
+  }
+  .go {
+    grid-column: 8 / 13;
+    padding-left: 12px;
   }
   .cta {
     display: inline-block;
-    align-self: flex-start;
-    margin-top: 1.75rem;
-    padding: 0.65rem 1.3rem;
-    border: 1px solid var(--hairline);
-    border-radius: 999px;
+    padding: 0.7rem 1.2rem;
+    border: 1px solid color-mix(in oklch, var(--ink) 55%, var(--bg));
+    outline: 1px solid var(--hairline);
+    outline-offset: 3px;
     font-size: 0.75rem;
     letter-spacing: 0.14em;
     text-transform: uppercase;
-    color: var(--ink-2);
-    transition: border-color 0.15s ease, color 0.15s ease;
+    color: var(--ink);
+    transition: background-color 0.2s, color 0.2s, border-color 0.2s;
   }
   .cta:hover {
     text-decoration: none;
+    background: var(--accent);
     border-color: var(--accent);
-    color: var(--accent);
+    color: var(--bg);
   }
   .cta .arrow {
     display: inline-block;
@@ -170,6 +365,70 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   .cta:hover .arrow {
     transform: translateY(3px);
   }
+  @media (max-width: 760px) {
+    .die {
+      grid-template-columns: repeat(2, minmax(0, 1fr));
+      grid-template-rows: auto;
+      grid-auto-rows: minmax(48px, auto);
+      grid-template-areas: 'nm nm' 'c5 c5' 'c4 c3' 'c2 c1';
+      gap: 5px;
+      padding: 8px;
+    }
+    .nm {
+      padding-bottom: 8px;
+    }
+    h1 {
+      font-size: clamp(2.2rem, 10.5vw, 2.8rem);
+    }
+    .who {
+      margin-top: 10px;
+      font-size: 0.76rem;
+    }
+    .tagline {
+      margin-top: 6px;
+      font-size: 0.95rem;
+    }
+    .blk {
+      padding: 8px 10px;
+    }
+    .blk .code {
+      font-size: 0.64rem;
+    }
+    .blk b {
+      font-size: 0.9rem;
+    }
+    .t5 b {
+      font-size: 1.2rem;
+    }
+    .intro-row {
+      grid-template-columns: minmax(0, 1fr);
+      row-gap: 26px;
+      padding-inline: 0;
+      margin-top: 40px;
+    }
+    .intro,
+    .go {
+      grid-column: 1;
+      padding: 0;
+    }
+    .intro {
+      font-size: 0.94rem;
+      line-height: 1.5;
+    }
+  }
+  @media (max-height: 760px) and (min-width: 761px) {
+    h1 {
+      font-size: clamp(2rem, 7.6vh, 4rem);
+    }
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .blk,
+    .cta,
+    .cta .arrow {
+      transition: none;
+    }
+  }
+
   .scene {
     /* The panorama lives in the same 62rem frame as the copy and the journey:
        its ground line ends where the section hairlines end. */
@@ -179,33 +438,21 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     padding-inline: 1.25rem;
     flex-shrink: 0;
   }
-  /* The drawing's top third is empty sky — let it rise behind the CTA
-     so the copy stands on the scene. Skip on small screens where the
-     scaled-down sky band is too shallow to clear the text. */
+  /* Full width at its natural ratio, like the journey art; only wide-and-short
+     screens cap its height (never below 150px) so the hero stays one screen. */
+  .scene :global(.hero-scene) {
+    max-height: max(25vh, 150px);
+  }
+  /* The drawing's top third is empty sky — let it rise behind the copy. */
   @media (min-width: 900px) {
     .scene {
       margin-top: clamp(-7rem, -8vh, -2rem);
     }
   }
-  h1 {
-    font-size: clamp(2.6rem, 7vw, 4.2rem);
-  }
-  .tagline {
-    font-family: var(--font-serif);
-    font-variation-settings: 'opsz' 40;
-    font-style: italic;
-    font-size: clamp(1.25rem, 3vw, 1.6rem);
-    color: var(--ink-2);
-    margin: 0.75rem 0 0;
-  }
-  .intro {
-    font-size: 1.1rem;
-  }
-  .role {
-    margin-top: 1.25rem;
-    color: var(--accent);
-    font-size: 0.75rem;
-    text-wrap: balance;
+  @media (max-width: 760px) {
+    .scene {
+      margin-top: -5vw;
+    }
   }
 
   .section-label {
@@ -229,6 +476,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
      spread — left for odd chapters, right for even — then crosses the full
      width to the other side, enclosing art and text like a clock signal. */
   .chapter {
+    scroll-margin-top: 4rem;
     position: relative;
     display: grid;
     grid-template-columns: minmax(0, 1fr) minmax(0, 1fr);
@@ -408,49 +656,4 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     padding: 0.25rem 0.7rem;
   }
 
-  .cards {
-    display: grid;
-    grid-template-columns: repeat(2, 1fr);
-    gap: 1rem;
-    margin-top: 1.5rem;
-  }
-  @media (max-width: 700px) {
-    .cards {
-      grid-template-columns: 1fr;
-    }
-  }
-  .card {
-    position: relative;
-    display: block;
-    background: var(--surface);
-    border: 1px solid var(--hairline);
-    border-radius: 10px;
-    padding: 1.4rem 1.5rem 2.4rem;
-    color: inherit;
-    transition: border-color 0.15s ease, transform 0.15s ease;
-  }
-  .card:hover {
-    text-decoration: none;
-    border-color: var(--accent);
-    transform: translateY(-2px);
-  }
-  .card-art {
-    border-bottom: 1px solid var(--hairline);
-    margin: -0.4rem 0 1rem;
-    padding-bottom: 0.5rem;
-  }
-  .card h3 {
-    font-size: 1.15rem;
-  }
-  .card p {
-    margin-top: 0.6rem;
-    font-size: 0.9rem;
-    color: var(--ink-2);
-  }
-  .more {
-    position: absolute;
-    right: 1.25rem;
-    bottom: 1rem;
-    color: var(--accent);
-  }
 </style>

@@ -9,6 +9,8 @@ interface Props {
 
 const { locale, altPath } = Astro.props;
 const other: Locale = locale === 'en' ? 'vi' : 'en';
+// Vietnamese is hidden from the UI for now; /vi/ pages still build. Set true to restore the switch.
+const showLangSwitch = false;
 const path = Astro.url.pathname;
 const nav = [
   { href: localePath(locale, '/'), label: t(locale, 'nav.journey') },
@@ -27,7 +29,7 @@ const isActive = (href: string) =>
     </nav>
     <div class="controls">
       {
-        altPath ? (
+        !showLangSwitch ? null : altPath ? (
           <a class="lang mono" href={altPath} rel="alternate" hreflang={other}>
             {other.toUpperCase()}
           </a>
@@ -124,21 +126,32 @@ const isActive = (href: string) =>
     color: var(--accent);
     border-color: var(--accent);
   }
+  /* One row at every width: brand, nav, controls. Tighten instead of wrapping. */
   @media (max-width: 640px) {
     .header-inner {
-      flex-wrap: wrap;
-      height: auto;
-      padding-block: 0.55rem;
-      row-gap: 0.1rem;
-      gap: 1rem;
-    }
-    .controls {
-      margin-left: auto;
+      gap: 0.9rem;
+      height: 3.25rem;
     }
     nav {
-      order: 3;
-      flex-basis: 100%;
-      gap: 0.85rem;
+      min-width: 0;
+      gap: 0.8rem;
+    }
+    .controls {
+      flex-shrink: 0;
+    }
+  }
+  @media (max-width: 360px) {
+    .header-inner {
+      gap: 0.55rem;
+    }
+    nav {
+      gap: 0.6rem;
+    }
+    nav a {
+      font-size: 0.84rem;
+    }
+    .controls {
+      gap: 0.35rem;
     }
   }
 </style>

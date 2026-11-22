@@ -1,0 +1,215 @@
+---
+// A titled row of project cards (animated art + name). Up to four fit side by
+// side; with more, the row scrolls: swipe, mouse drag, or the arrow buttons.
+import ProgramArt from './ProgramArt.astro';
+import { t, type Locale } from '../i18n/ui';
+
+export interface RailItem {
+  slug: string;
+  title: string;
+  href: string;
+  external?: boolean;
+}
+
+interface Props {
+  locale: Locale;
+  label: string;
+  items: RailItem[];
+}
+
+const { locale, label, items } = Astro.props;
+---
+
+<section class="rail container" data-rail>
+  <div class="rail-head">
+    <h2 class="section-label mono">{label}</h2>
+    <div class="rail-nav" hidden>
+      <button type="button" class="mono" data-dir="-1" aria-label={t(locale, 'rail.prev')}>←</button>
+      <button type="button" class="mono" data-dir="1" aria-label={t(locale, 'rail.next')}>→</button>
+    </div>
+  </div>
+  <div class="cards">
+    {
+      items.map((item) => (
+        <a class="card" href={item.href} rel={item.external ? 'noopener' : undefined}>
+          <div class="card-art">
+            <ProgramArt slug={item.slug} />
+          </div>
+          <h3>{item.title}</h3>
+        </a>
+      ))
+    }
+  </div>
+</section>
+
+<script>
+  for (const rail of document.querySelectorAll<HTMLElement>('[data-rail]')) {
+    const cards = rail.querySelector<HTMLElement>('.cards')!;
+    const nav = rail.querySelector<HTMLElement>('.rail-nav')!;
+    const [prev, next] = nav.querySelectorAll<HTMLButtonElement>('button');
+    const step = () => (cards.querySelector('.card')?.getBoundingClientRect().width ?? 300) + 16;
+
+    const sync = () => {
+      const over = cards.scrollWidth > cards.clientWidth + 2;
+      nav.hidden = !over;
+      cards.classList.toggle('overflowing', over);
+      prev.disabled = cards.scrollLeft < 4;
+      next.disabled = cards.scrollLeft + cards.clientWidth > cards.scrollWidth - 4;
+    };
+    for (const b of [prev, next]) {
+      b.addEventListener('click', () => cards.scrollBy({ left: Number(b.dataset.dir) * step(), behavior: 'smooth' }));
+    }
+
+    // Mouse drag; touch and trackpads already scroll natively.
+    let down = false;
+    let moved = false;
+    let x0 = 0;
+    let left0 = 0;
+    cards.addEventListener('pointerdown', (e) => {
+      if (!cards.classList.contains('overflowing') || e.pointerType !== 'mouse' || e.button !== 0) return;
+      down = true;
+      moved = false;
+      x0 = e.clientX;
+      left0 = cards.scrollLeft;
+    });
+    window.addEventListener('pointermove', (e) => {
+      if (!down) return;
+      const dx = e.clientX - x0;
+      if (!moved && Math.abs(dx) > 5) {
+        moved = true;
+        cards.classList.add('dragging');
+      }
+      if (moved) cards.scrollLeft = left0 - dx;
+    });
+    window.addEventListener('pointerup', () => {
+      if (!down) return;
+      down = false;
+      if (!moved) return;
+      // Snap to the nearest card; near the end, snap to the end itself.
+      const s = step();
+      const max = cards.scrollWidth - cards.clientWidth;
+      const left = cards.scrollLeft > max - s / 2 ? max : Math.round(cards.scrollLeft / s) * s;
+      cards.classList.remove('dragging');
+      cards.scrollTo({ left, behavior: 'smooth' });
+    });
+    // A drag must not open the card it ended on.
+    cards.addEventListener(
+      'click',
+      (e) => {
+        if (moved) {
+          e.preventDefault();
+          e.stopPropagation();
+          moved = false;
+        }
+      },
+      true,
+    );
+    cards.addEventListener('dragstart', (e) => e.preventDefault());
+    cards.addEventListener('scroll', sync, { passive: true });
+    window.addEventListener('resize', sync);
+    sync();
+  }
+</script>
+
+<style>
+  .rail-head {
+    display: flex;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 12px;
+    margin-top: 5rem;
+    border-bottom: 1px solid var(--hairline);
+  }
+  .section-label {
+    scroll-margin-top: 5rem;
+    font-size: 0.75rem;
+    font-weight: 400;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-3);
+    padding-bottom: 0.6rem;
+  }
+  .rail-nav {
+    display: flex;
+    gap: 6px;
+    padding-bottom: 0.5rem;
+  }
+  .rail-nav[hidden] {
+    display: none;
+  }
+  .rail-nav button {
+    width: 34px;
+    height: 30px;
+    border: 1px solid var(--hairline);
+    background: transparent;
+    color: var(--ink);
+    font-size: 1rem;
+    cursor: pointer;
+  }
+  .rail-nav button:hover:not(:disabled) {
+    border-color: var(--accent);
+    color: var(--accent);
+  }
+  .rail-nav button:disabled {
+    opacity: 0.35;
+    cursor: default;
+  }
+  .cards {
+    display: flex;
+    gap: 16px;
+    margin-top: 1.25rem;
+    padding-block: 4px 8px;
+    overflow-x: auto;
+    overscroll-behavior-x: contain;
+    scroll-snap-type: x mandatory;
+    scrollbar-width: none;
+  }
+  .cards::-webkit-scrollbar {
+    display: none;
+  }
+  .cards.overflowing {
+    cursor: grab;
+  }
+  .cards.dragging {
+    cursor: grabbing;
+    scroll-snap-type: none;
+    user-select: none;
+  }
+  .cards.dragging .card {
+    pointer-events: none;
+  }
+  .card {
+    flex: 0 0 calc((100% - 48px) / 4);
+    min-width: 180px;
+    scroll-snap-align: start;
+    display: block;
+    background: var(--surface);
+    border: 1px solid var(--hairline);
+    color: inherit;
+    text-align: center;
+    padding-bottom: 0.9rem;
+    transition: border-color 0.15s ease;
+  }
+  .card:hover {
+    text-decoration: none;
+    border-color: var(--accent);
+  }
+  .card-art {
+    padding: 0.75rem 1.25rem;
+    margin-bottom: 0.85rem;
+    border-bottom: 1px solid var(--hairline);
+    background: color-mix(in oklch, var(--accent) 3%, var(--surface));
+  }
+  .card h3 {
+    padding-inline: 1rem;
+    font-size: 1rem;
+  }
+  @media (max-width: 640px) {
+    .rail-head {
+      margin-top: 4rem;
+    }
+    .card {
+      flex-basis: 78%;
+    }
+  }
+</style>

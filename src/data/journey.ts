@@ -16,6 +16,7 @@ export interface JourneyContent {
   heroRole: string;
   journeyLabel: string;
   currentLabel: string;
+  independentLabel: string;
   chapters: Chapter[];
 }
 
@@ -24,10 +25,11 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Canh-Trung Nguyen',
     heroTagline: 'From logic gates to digital twins.',
     heroIntro:
-      'For a decade, I engineered radio systems in silicon—developing 5G physical layers and bringing O-RAN RUs and DUs up on the bench. Today, I lead a group building the digital twins used to test those very systems, extending their application across robotics, automotive, drones, and 5G/6G. My edge lies in the intersection: simulation engineers rarely build hardware, and hardware engineers rarely build simulators.',
-    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, USA - Hanoi Office',
+      'I spent ten years building 5G radios in FPGAs and bringing O‑RAN units up on the lab bench. Now I lead a team that builds digital twins to test that same kind of system, for cars, drones, robots and 5G/6G networks. Having built both the hardware and the simulators helps me see where the two disagree.',
+    heroRole: 'Manager · SoC.one, USA',
     journeyLabel: 'The journey',
     currentLabel: 'Programs I lead today',
+    independentLabel: 'Independent projects',
     chapters: [
       {
         era: 'CH.01',
@@ -116,10 +118,11 @@ export const journey: Record<Locale, JourneyContent> = {
     heroName: 'Nguyễn Cảnh Trung',
     heroTagline: 'Từ cổng logic đến digital twin.',
     heroIntro:
-      'Trong mười năm đầu sự nghiệp, tôi tập trung vào lĩnh vực xử lý tín hiệu số trên nền tảng FPGA: từ việc tối ưu hóa (offload) lớp vật lý 5G cho đến phát triển mẫu thử nghiệm (prototype) O-RU and O-DU đầu tiên tại Việt Nam. Hiện tại, tôi đang dẫn dắt một nhóm kỹ sư phát triển các hệ thống bản sao số (digital twin) để kiểm thử những nền tảng trên — đồng thời ứng dụng chúng vào robotics, xe tự hành, drone và mạng 5G/6G. Tôi tin rằng giá trị cốt lõi nằm ở sự giao thoa này: bởi người làm mô phỏng hiếm khi có kinh nghiệm làm phần cứng thực tế, còn kỹ sư phần cứng lại ít khi tự xây dựng được hệ thống giả lập.',
-    heroRole: 'Manager & Tech Lead, Verticals Group — SoC.one, USA - Hanoi Office',
+      'Tôi dành mười năm làm vô tuyến 5G trên FPGA và đưa các thiết bị O‑RAN chạy được trên bàn lab. Giờ tôi dẫn dắt một nhóm xây dựng digital twin để kiểm thử chính những hệ thống như vậy, cho ô tô, drone, robot và mạng 5G/6G. Đã làm cả phần cứng lẫn bộ mô phỏng nên tôi thấy được hai bên lệch nhau ở đâu.',
+    heroRole: 'Manager · SoC.one, USA',
     journeyLabel: 'Hành trình',
     currentLabel: 'Những chương trình tôi đang dẫn dắt',
+    independentLabel: 'Dự án cá nhân',
     chapters: [
       {
         era: 'CH.01',
