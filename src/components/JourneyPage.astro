@@ -244,8 +244,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     color: var(--ink-2);
     font-variant-numeric: tabular-nums;
   }
+  /* Die labels read like a floorplan/EDA view: code font, not display. */
   .blk b {
-    font: 500 clamp(0.95rem, 1.3vw, 1.12rem) / 1.2 var(--font-display);
+    font: 400 clamp(0.82rem, 1.1vw, 0.95rem) / 1.25 var(--font-mono);
+    letter-spacing: -0.01em;
     color: var(--ink-2);
   }
   .blk:not(.t5):hover {
@@ -283,7 +285,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   }
   .t5 b {
     color: inherit;
-    font-size: clamp(1.3rem, 2.2vw, 1.9rem);
+    font-size: clamp(1.1rem, 1.8vw, 1.5rem);
     font-weight: 700;
   }
   :global([data-theme='dark']) .t5 {
@@ -395,10 +397,10 @@ const altPath = locale === 'en' ? '/vi/' : '/';
       font-size: 0.64rem;
     }
     .blk b {
-      font-size: 0.9rem;
+      font-size: 0.8rem;
     }
     .t5 b {
-      font-size: 1.2rem;
+      font-size: 1.05rem;
     }
     .intro-row {
       grid-template-columns: minmax(0, 1fr);
