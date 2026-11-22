@@ -208,8 +208,22 @@ const { locale, label, items } = Astro.props;
     .rail-head {
       margin-top: 4rem;
     }
+    /* Two cards and a peek of the third, so the rail reads as a row. */
+    .cards {
+      gap: 10px;
+    }
     .card {
-      flex-basis: 78%;
+      flex-basis: calc((100% - 20px) / 2.3);
+      min-width: 0;
+      padding-bottom: 0.7rem;
+    }
+    .card-art {
+      padding: 0.5rem 0.6rem;
+      margin-bottom: 0.6rem;
+    }
+    .card h3 {
+      padding-inline: 0.5rem;
+      font-size: 0.85rem;
     }
   }
 </style>

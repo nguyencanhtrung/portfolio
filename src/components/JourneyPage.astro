@@ -88,7 +88,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
 
   <section class="journey container">
     <h2 class="section-label mono" id="journey">{c.journeyLabel}</h2>
-    <ol class="chapters">
+    <ol class="chapters" data-trace>
       {
         chapters.map(({ ch, iconIndex }) => (
           <li class="chapter" id={`ch-${iconIndex + 1}`}>
@@ -125,6 +125,28 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   <CardRail locale={locale} label={c.currentLabel} items={programs} />
   {independent.length > 0 && <CardRail locale={locale} label={c.independentLabel} items={independent} />}
 </Base>
+
+<script>
+  // Arc-length offsets for the journey trace, so one clock drives every
+  // segment continuously. Re-run on resize; layout decides what is drawn.
+  const list = document.querySelector<HTMLElement>('[data-trace]');
+  if (list) {
+    const measure = () => {
+      let s = 0;
+      [...list.children].forEach((li, i) => {
+        const el = li as HTMLElement;
+        el.style.setProperty('--v', `${s}px`);
+        s += parseFloat(getComputedStyle(el, '::before').height) || 0;
+        const after = getComputedStyle(el, '::after');
+        if (after.display === 'none') return;
+        const w = parseFloat(after.width) || 0;
+        el.style.setProperty('--h', `${i % 2 ? s + w : s}px`);
+        s += w;
+      });
+    };
+    new ResizeObserver(measure).observe(list);
+  }
+</script>
 
 <style>
   /* Full-viewport hero. The copy centres in the "sky" above the panorama
@@ -327,7 +349,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     grid-template-columns: repeat(12, minmax(0, 1fr));
     gap: 0 8px;
     padding-inline: 15px;
-    margin-top: clamp(36px, 7vh, 72px);
+    margin-top: clamp(36px, 7vh, 140px);
     align-items: center;
   }
   .intro {
@@ -486,23 +508,67 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     align-items: center;
     padding: 2.5rem 3rem 3.25rem;
   }
-  .chapter::before {
-    content: '';
-    position: absolute;
-    top: 0;
-    bottom: 0;
-    left: 0;
-    border-left: 1px dashed var(--ink-3);
-    opacity: 0.5;
+  /* The trace moves as one signal: every segment shares one clock
+     (--trace-t) and is phase-shifted by its arc-length offset (--v, --h, set
+     by the script below), so dashes and pulses flow across the corners
+     without a seam. Patterns are symmetric around 0 so the right-to-left
+     segments (mirrored) still line up. */
+  .chapters {
+    --trace: color-mix(in oklch, var(--ink-3) 50%, transparent);
+    --pulse: transparent;
+    --dash: linear-gradient(var(--trace) 1.5px, transparent 1.5px 4.5px, var(--trace) 4.5px);
   }
+  .chapter {
+    --v: 0px;
+    --h: 0px;
+  }
+  .chapter::before,
   .chapter::after {
     content: '';
     position: absolute;
+  }
+  .chapter::before {
+    top: 0;
     bottom: 0;
+    left: -1px;
+    width: 3px;
+    background:
+      linear-gradient(var(--pulse), transparent 70px calc(100% - 70px), var(--pulse))
+        0 calc(var(--trace-t) - var(--v)) / 100% 420px repeat-y,
+      var(--dash) 1px calc(var(--trace-t) - var(--v)) / 1px 6px repeat-y;
+  }
+  .chapter::after {
     left: 0;
     right: 0;
-    border-top: 1px dashed var(--ink-3);
-    opacity: 0.5;
+    bottom: -1px;
+    height: 3px;
+    --dash: linear-gradient(90deg, var(--trace) 1.5px, transparent 1.5px 4.5px, var(--trace) 4.5px);
+    background:
+      linear-gradient(90deg, var(--pulse), transparent 70px calc(100% - 70px), var(--pulse))
+        calc(var(--trace-t) - var(--h)) 0 / 420px 100% repeat-x,
+      var(--dash) calc(var(--trace-t) - var(--h)) 1px / 6px 1px repeat-x;
+  }
+  /* Right-to-left segments: --h is the arc length at their right end. */
+  .chapter:nth-child(even)::after {
+    background-position:
+      calc(var(--h) - var(--trace-t)) 0,
+      calc(var(--h) - var(--trace-t)) 1px;
+  }
+  @property --trace-t {
+    syntax: '<length>';
+    inherits: false;
+    initial-value: 0px;
+  }
+  /* One period (420px) per cycle keeps the loop seamless. */
+  @keyframes trace-run { to { --trace-t: 420px; } }
+  @media (prefers-reduced-motion: no-preference) {
+    .chapters {
+      --pulse: var(--accent);
+    }
+    .chapter::before,
+    .chapter::after {
+      animation: trace-run 3s linear infinite;
+    }
   }
   .chapter:first-child::before {
     top: 2.7rem;
@@ -524,7 +590,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
   }
   .chapter:nth-child(even)::before {
     left: auto;
-    right: 0;
+    right: -1px;
   }
   .chapter:nth-child(even) .body {
     grid-column: 2;
@@ -572,7 +638,7 @@ const altPath = locale === 'en' ? '/vi/' : '/';
     .metrics { order: 6; }
     /* One continuous left spine on small screens — no room for the wave. */
     .chapter:nth-child(even)::before {
-      left: 0;
+      left: -1px;
       right: auto;
     }
     .chapter::after {
